@@ -62,7 +62,7 @@ But my understanding is that we want to calculate statistical power for each emp
 # Importing raw data
 raw_m1_1 <- read.csv(file = "./dataset/raw_m1_1.csv", header = TRUE) #sep=";"
 view(raw_m1_1)
-raw_data <- m1_1_raw
+raw_data <- raw_m1_1
 
 # Renames the column names
   names(raw_data)[str_detect(names(raw_data), c("T.mean|T.sd|T.N|C.mean|C.sd|C.N"))] <- c("T_mean", "T_sd", "T_N", "C_mean", "C_sd", "C_N")
@@ -119,7 +119,7 @@ raw_data <- m1_1_raw
 
 ### Power analysis for meta-analytic case
 
-```{r modeling}
+```{r meta-analytic estimate as true effect}
 
 # fit meta-analytic model
 ## RR
@@ -146,9 +146,8 @@ model_m1_1_VR <- with(dat_m1_1, rma.mv(yi = VR,
 
 
 
-# power calculating
-## get estimate and corresponding error
 
+# get estimate (mu) and corresponding error (SE)
 model_m1_1 <- list(model_m1_1_RR,model_m1_1_CVR,model_m1_1_VR)
 
 est <- data.frame(es.type=c("RR","CVR","VR"),
@@ -157,19 +156,24 @@ est <- data.frame(es.type=c("RR","CVR","VR"),
                   p_value=sapply(model_m1_1, function(x) x$pval)
                   )
 
+# Stanley's approach power calculating
 ## Stanley's formula to creat function to calculate power for meta-analytic estimate
 power.ma_Stanley <- function(mu, SE) {
-  if_else(mu>0, (1-pnorm(qnorm(0.975)-mu/SE)), pnorm(qnorm(0.975)-mu/SE))
+  1-pnorm(qnorm(0.975)-abs(mu)/SE)
   }
 
 
 est$power.Stanley_formula <- power.ma_Stanley(mu=est$mu,SE=est$SE)
 
 
+# Shinichi's approach power calculating
+
 ## Shinichi's function to creat function to calculate power for meta-analytic estimate
+
 ### two-tailed power
 power.ma_Shinichi_two.tail <- function(mu, SE) {
-  if_else(mu>0, (2-pnorm(qnorm(0.975)-mu/SE)-pnorm(qnorm(0.975)+mu/SE)), (pnorm(qnorm(0.975)-mu/SE)+pnorm(qnorm(0.975)+mu/SE)))}
+  2-pnorm(qnorm(0.975)-abs(mu)/SE)-pnorm(qnorm(0.975)+abs(mu)/SE)
+  }
 
 ### get two-tailed power
 est$power.Shinichi_two.tail <- power.ma_Shinichi_two.tail(mu=est$mu,SE=est$SE)
@@ -177,13 +181,15 @@ est$power.Shinichi_two.tail <- power.ma_Shinichi_two.tail(mu=est$mu,SE=est$SE)
 
 ### one-tailed power
 power.ma_Shinichi_one.tail <- function(mu, SE) {
-  if_else(mu>0, (1-pnorm(qnorm(0.95)-mu/SE)), (pnorm(qnorm(0.95)-mu/SE)))}
+  1-pnorm(qnorm(0.95)-abs(mu)/SE)
+  }
 
 ### get one-tailed power
 est$power.Shinichi_one.tail <- power.ma_Shinichi_one.tail(mu=est$mu,SE=est$SE)
 
 
-write.csv(est, file = "./power_results.csv")
+# save
+write.csv(est, file = "./ma.power_results.csv", row.names = FALSE)
 
 ```
 
@@ -193,59 +199,76 @@ write.csv(est, file = "./power_results.csv")
 
 
 
+### Power analysis for individual data point within meta-analytic case
 
-The following is my previous approach. I have not fixed them according your approach
+```{r individual data point}
 
-### Power analysis for individual study within meta-analytic case
+# Stanley's approach for power calculating
 
-```{r modeling}
-
-# creating function for calculating variance for effect size
-## RR
-V.RR<-function(CMean, CSD, CN, EMean, ESD, EN){
-	EVar<-ESD^2
-	CVar<-CSD^2
-	V<- (CVar / (CN * (CMean^2))) + (EVar / (EN * (EMean^2)))
-	return(V)
-} ## or we can directly use variance of lnRR from escalc() function
-
-## calculating variance for RR
-
-dat_m1_1$V.RR <- V.RR(CMean=dat_m1_1$C_mean, CSD=dat_m1_1$C_sd, CN=dat_m1_1$C_N, EMean=dat_m1_1$T_mean, ESD=dat_m1_1$T_sd, EN=dat_m1_1$T_N)
-
-
-## CVR
-V.CVR<-function(CMean, CSD, CN, EMean, ESD, EN){
-		mvcorr<-cor.test(log(c(CMean, EMean)), log(c(CSD, ESD)))$estimate
-		V<- CSD^2 / (CN * (CMean^2)) + 1 / (2 * (CN - 1)) - 2 * mvcorr * sqrt((CSD^2 / (CN * (CMean^2))) * (1 / (2 * (CN - 1)))) + ESD^2 / (EN * (EMean^2)) + 1 / (2 * (EN - 1)) - 2 * mvcorr * sqrt((ESD^2 / (EN * (EMean^2))) * (1 / (2 * (EN - 1))))
-	return(V)
-}  ## or we can directly use variance of lnCVR from escalc() function
-
-		
-dat_m1_1$V.CVR <- V.CVR(CMean=dat_m1_1$C_mean, CSD=dat_m1_1$C_sd, CN=dat_m1_1$C_N, EMean=dat_m1_1$T_mean, ESD=dat_m1_1$T_sd, EN=dat_m1_1$T_N)		
-
-
-
-# power calculating
-## creating function for power analysis for empirical study
-power.empirical <- function(mu, se) {
-  if_else(mu>0, 1-pnorm(1.96-mu/se), pnorm(1.96-mu/se))
+## creating function for power analysis for empirical data point
+power.empirical_Stanley <- function(mu, se) {
+  if_else(mu>0, (1-pnorm(qnorm(0.975)-mu/se)), pnorm(qnorm(0.975)-mu/se))
   }
 
-## power based on observed effect size
-dat_m1_1$observed_power_RR <- power.empirical(mu=dat_m1_1$RR, se=sqrt(dat_m1_1$V.RR))
+## using individual effect size as true effect size, to calculate power for individual data point
 
-dat_m1_1$observed_power_CVR <- power.empirical(mu=dat_m1_1$CVR, se=sqrt(dat_m1_1$V.CVR))
+### RR
+dat_m1_1$individual_power.Stanley_RR <- power.empirical_Stanley(mu=dat_m1_1$RR, se=sqrt(dat_m1_1$VRR))
 
+### CVR
+dat_m1_1$individual_power.Stanley_CVR <- power.empirical_Stanley(mu=dat_m1_1$CVR, se=sqrt(dat_m1_1$VCVR))
 
-## power based on meta-analytic estimate as true effect size
-dat_m1_1$true_power_RR <- power.empirical(mu=rep(est$mu[1], length(dat_m1_1$V.RR)), se=sqrt(dat_m1_1$V.RR))
-
-dat_m1_1$true_power_CVR <- power.empirical(mu=rep(est$mu[1], length(dat_m1_1$V.CVR)), se=sqrt(dat_m1_1$V.CVR))
-
-
+### VR
+dat_m1_1$individual_power.Stanley_VR <- power.empirical_Stanley(mu=dat_m1_1$VR, se=sqrt(dat_m1_1$VVR))
 
 
+## using meta-analytic estimate as true effect size, to calculate power for individual data point
+dat_m1_1$true_power.Stanley_RR <-power.empirical_Stanley(mu=rep(est$mu[1], length(dat_m1_1$VRR)), se=sqrt(dat_m1_1$VRR))
+
+dat_m1_1$true_power.Stanley_CVR <-power.empirical_Stanley(mu=rep(est$mu[2], length(dat_m1_1$VCVR)), se=sqrt(dat_m1_1$VCVR))
+
+dat_m1_1$true_power.Stanley_VR <-power.empirical_Stanley(mu=rep(est$mu[3], length(dat_m1_1$VVR)), se=sqrt(dat_m1_1$VVR))
+
+
+# Shinichi's approach for power calculating
+
+## creating function for power analysis for empirical data point
+
+### two-tailed power
+power.empirical_Shinichi_two.tail <- function(mu, se) {
+  2-pnorm(qnorm(0.975)-abs(mu)/se)-pnorm(qnorm(0.975)+abs(mu)/se)}
+
+### using individual effect size as true effect size, to calculate power for individual data point
+#### RR
+dat_m1_1$individual_power.two.tail.Shinichi_RR <- power.empirical_Shinichi_two.tail(mu=dat_m1_1$RR, se=sqrt(dat_m1_1$VRR))
+
+#### CVR
+dat_m1_1$individual_power.two.tail.Shinichi_CVR <- power.empirical_Shinichi_two.tail(mu=dat_m1_1$CVR, se=sqrt(dat_m1_1$VCVR))
+
+#### VR
+dat_m1_1$individual_power.two.tail.Shinichi_VR <- power.empirical_Shinichi_two.tail(mu=dat_m1_1$VR, se=sqrt(dat_m1_1$VVR))
+
+
+
+### one-tailed power
+power.empirical_Shinichi_one.tail <- function(mu, se) {
+  1-pnorm(qnorm(0.95)-abs(mu)/se)}
+
+### using individual effect size as true effect size, to calculate power for individual data point
+#### RR
+dat_m1_1$individual_power.one.tail.Shinichi_RR <- power.empirical_Shinichi_one.tail(mu=dat_m1_1$RR, se=sqrt(dat_m1_1$VRR))
+
+#### CVR
+dat_m1_1$individual_power.one.tail.Shinichi_CVR <- power.empirical_Shinichi_one.tail(mu=dat_m1_1$CVR, se=sqrt(dat_m1_1$VCVR))
+
+
+#### VR
+dat_m1_1$individual_power.one.tail.Shinichi_VR <- power.empirical_Shinichi_one.tail(mu=dat_m1_1$VR, se=sqrt(dat_m1_1$VVR))
+
+
+
+# save
+write.csv(dat_m1_1, file = "./individual_power_results.csv", row.names = FALSE)
 
 ```
 
