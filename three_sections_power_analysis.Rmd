@@ -43,7 +43,7 @@ Section 1: power analysis for 36 lnRR meta-analyses and corresponding  power ana
 
 Section 2: power analysis for 12 lnCVR and lnVR meta-analyses and corresponding  power analysis for individual data point within each meta-analysis
 
-Section3: using three three weighting schemes (i.e. WAAP, PET-PEESE, http://environmentalcomputing.net/meta-analysis/) to evaluate publication
+Section3: using three three weighting schemes (i.e. WAAP, PET-PEESE, http://environmentalcomputing.net/meta-analysis/) to evaluate publication bias
 
 
 
@@ -245,9 +245,9 @@ dat_m1_1$precision <- 1/sqrt(dat_m1_1$VRR)
 PET.m1_1_2 <- lm(t~precision, data=dat_m1_1)
 
 
-# PET-PEESE model - same results with PET model
-PET_PEESE.m1_1 <- lm(RR~SE**2, weights =(1/SE)**2,data=dat_m1_1)
-summary(PET_PEESE.m1_1) # intercept rather than slope is our expected estimate
+# PET-PEESE model - quadratic model rather than linear model
+PET_PEESE.m1_1 <- lm(RR~VRR, weights =(1/SE)**2,data=dat_m1_1)
+summary(PET_PEESE.m1_1) 
 
 
 
