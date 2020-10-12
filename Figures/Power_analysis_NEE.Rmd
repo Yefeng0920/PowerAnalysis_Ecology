@@ -1,0 +1,653 @@
+---
+title: "Power analysis Helmut's Nature Ecol Evol paper"
+author: "Yefeng"
+date: "2020/9/21"
+output: html_document
+subtitle: "check for Shinichi"
+---
+
+
+## Setup
+
+```{r setup, echo = FALSE}
+# Tidy
+ # rm(list=ls())
+ # graphics.off()
+
+# Preparing workspace
+knitr::opts_chunk$set(echo = TRUE, include = TRUE)
+
+# Loading packages
+pacman::p_load(knitr, # knit markdown
+               readxl, 
+               readr, 
+               metafor, 
+               dplyr, 
+               tidyverse, 
+               janitor, # generate 1-, 2-way table
+               patchwork, # layout of plots
+               cowplot, 
+               ggpubr,
+               gridExtra,
+               orchaRd, # forest-like plot
+               gridGraphics # Redraw Base Graphics Using 'grid' Graphics. `gridGraphics` is required to handle base-R plots.
+               )
+```
+
+
+
+## My understanding 
+
+I have a good understanding of Stanley's paper. But I am a bit confused about what we are goding to do.
+
+(a) Stanley's paper focused on statistical power for meta-analytic cases (he had 200 cases). He used 3 method to estimate average effect size (i.e. assumped true effect). Then use true effect size and corresponding variance to calculate power for each of 200 meta-analyses. However, Stanley may do this improperly. He neglected between-study heterogeneity when calculating power for meta-analysis. In other word, he used sampling variance as SE to calculate power for meta-analysis. Actually, SE of estimated effect size (i.e. meta-analysis SE) should include both sampling variance and between-study variance (tau2).
+
+(b) I am not very much sure whether we should use the same thing as Stanley or not. If yes, statistical power has nothing to do with effect size type (e.g., hedge's d, response ratio, CVR). We just use the following formula 1-pnorm(1.96-mu/SE) to calculate power, where mu is the meta-analytic estimate and SE is corrsponding standatd error (i.e. sqrt(variance)). 
+
+But my understanding is that we want to calculate statistical power for each empirical data point rather than meta-analytic cases (i.e. 12 MA for lnCVR and 36 for lnRR). In other word, power analysis for individual studies included by meta-analyses. This is different from Stanley's paper, which focuses on power analysis for meta-analysis. 
+
+(c) If my understanding of (b) is correct. Check the following approach . To compute power for each empirical data point, we need true effect size and standard error of true effect size. The ture effect size is unknown, so we gonna use meta-analytic estimates (i.e. intercept from meta-analytic model) as (estimated) true effect. But we still use standard error of empirical effect size, rather than standard error of meta-analytic estimate. 
+
+(d) Anyway, I provided both type power analysis (i.e. meta-analysis and empirical study). I am not sure whether my approach is correct.
+
+
+
+
+
+## Pilot for one case (case ma1.1)
+
+### Preprocessing data
+
+```{r import raw data}
+# Importing raw data
+raw_m1_1 <- read.csv(file = "./dataset/raw_m1_1.csv", header = TRUE) #sep=";"
+view(raw_m1_1)
+raw_data <- raw_m1_1
+
+# Renames the column names
+  names(raw_data)[str_detect(names(raw_data), c("T.mean|T.sd|T.N|C.mean|C.sd|C.N"))] <- c("T_mean", "T_sd", "T_N", "C_mean", "C_sd", "C_N")
+
+
+    
+# Calculating 3 type of effect size statistics
+  
+## lnRR
+  lnRR <- with(raw_data, escalc(measure = "ROM",
+                                m1i = T_mean,
+                                m2i = C_mean,
+                                sd1i = T_sd,
+                                sd2i = C_sd,
+                                n1i = T_N,
+                                n2i = C_N))
+
+## lnCVR
+  lnCVR <- with(raw_data, escalc(measure = "CVR",
+                                 m1i = T_mean,
+                                 m2i = C_mean,
+                                 sd1i = T_sd,
+                                 sd2i = C_sd,
+                                 n1i = T_N,
+                                 n2i = C_N))
+## lnVR
+  lnVR <- with(raw_data, escalc(measure = "VR",
+                                sd1i = T_sd,
+                                sd2i = C_sd,
+                                n1i = T_N,
+                                n2i = C_N))
+
+
+## combination 
+  metrics <- data.frame(RR = lnRR$yi, VRR = lnRR$vi, CVR = lnCVR$yi, VCVR = lnCVR$vi, VR = lnVR$yi, VVR = lnVR$vi)
+  dat_m1_1 <- cbind(raw_data, metrics)
+
+
+# clean NA
+  dat_m1_1 <- dat_m1_1[!is.na(dat_m1_1$RR),] 
+  dat_m1_1 <- dat_m1_1[!is.na(dat_m1_1$VRR),] 
+  dat_m1_1 <- dat_m1_1[!is.na(dat_m1_1$CVR),]
+  dat_m1_1 <- dat_m1_1[!is.na(dat_m1_1$VCVR),]
+  
+  dat_m1_1[dat_m1_1 == "-Inf"] <- NA
+  dat_m1_1[dat_m1_1 == "Inf"] <- NA  
+    
+```
+
+
+
+
+
+
+### Power analysis for meta-analytic case
+
+```{r meta-analytic estimate as true effect}
+
+# fit meta-analytic model
+## RR
+model_m1_1_RR <- with(dat_m1_1, rma.mv(yi = RR,
+                                        V = VRR,
+                                        random = list(~1|Study, ~1|Unit_ID),
+                                        method = "REML",
+                                        test = "z"))
+
+
+## CVR
+model_m1_1_CVR <- with(dat_m1_1, rma.mv(yi = CVR,
+                                        V = VCVR,
+                                        random = list(~1|Study, ~1|Unit_ID),
+                                        method = "REML",
+                                        test = "z"))
+
+## VR
+model_m1_1_VR <- with(dat_m1_1, rma.mv(yi = VR,
+                                        V = VVR,
+                                        random = list(~1|Study, ~1|Unit_ID),
+                                        method = "REML",
+                                        test = "z"))
+
+
+
+
+# get estimate (mu) and corresponding error (SE)
+model_m1_1 <- list(model_m1_1_RR,model_m1_1_CVR,model_m1_1_VR)
+
+est <- data.frame(es.type=c("RR","CVR","VR"),
+                  mu=sapply(model_m1_1, function(x) x$beta),
+                  SE=sapply(model_m1_1, function(x) x$se),
+                  p_value=sapply(model_m1_1, function(x) x$pval)
+                  )
+
+# Stanley's approach power calculating
+## Stanley's formula to creat function to calculate power for meta-analytic estimate
+power.ma_Stanley <- function(mu, SE) {
+  1-pnorm(qnorm(0.975)-abs(mu)/SE)
+  }
+
+
+est$power.Stanley_formula <- power.ma_Stanley(mu=est$mu,SE=est$SE)
+
+
+s_power <- function(se, true_effect, sig_level) {
+(1 - stats::pnorm(stats::qnorm(1 - sig_level/2) * se, abs(true_effect), se)) +
+stats::pnorm(stats::qnorm(sig_level/2) * se, abs(true_effect), se)
+}
+
+est$power.new <- s_power(se=est$SE,true_effect=est$mu,sig_level=0.05)
+
+# Shinichi's approach power calculating
+
+## Shinichi's function to creat function to calculate power for meta-analytic estimate
+
+### two-tailed power
+power.ma_Shinichi_two.tail <- function(mu, SE) {
+  2-pnorm(qnorm(0.975)-abs(mu)/SE)-pnorm(qnorm(0.975)+abs(mu)/SE)
+  }
+
+### get two-tailed power
+est$power.Shinichi_two.tail <- power.ma_Shinichi_two.tail(mu=est$mu,SE=est$SE)
+
+
+### one-tailed power
+power.ma_Shinichi_one.tail <- function(mu, SE) {
+  1-pnorm(qnorm(0.95)-abs(mu)/SE)
+  }
+
+### get one-tailed power
+est$power.Shinichi_one.tail <- power.ma_Shinichi_one.tail(mu=est$mu,SE=est$SE)
+
+
+# save
+write.csv(est, file = "./ma.power_results.csv", row.names = FALSE)
+
+```
+
+
+
+
+
+
+
+### Power analysis for individual data point within meta-analytic case
+
+```{r individual data point}
+
+# Stanley's approach for power calculating
+
+## creating function for power analysis for empirical data point
+power.empirical_Stanley <- function(mu, se) {
+  if_else(mu>0, (1-pnorm(qnorm(0.975)-mu/se)), pnorm(qnorm(0.975)-mu/se))
+  }
+
+## using individual effect size as true effect size, to calculate power for individual data point
+
+### RR
+dat_m1_1$individual_power.Stanley_RR <- power.empirical_Stanley(mu=dat_m1_1$RR, se=sqrt(dat_m1_1$VRR))
+
+### CVR
+dat_m1_1$individual_power.Stanley_CVR <- power.empirical_Stanley(mu=dat_m1_1$CVR, se=sqrt(dat_m1_1$VCVR))
+
+### VR
+dat_m1_1$individual_power.Stanley_VR <- power.empirical_Stanley(mu=dat_m1_1$VR, se=sqrt(dat_m1_1$VVR))
+
+
+## using meta-analytic estimate as true effect size, to calculate power for individual data point
+dat_m1_1$true_power.Stanley_RR <-power.empirical_Stanley(mu=rep(est$mu[1], length(dat_m1_1$VRR)), se=sqrt(dat_m1_1$VRR))
+
+dat_m1_1$true_power.Stanley_CVR <-power.empirical_Stanley(mu=rep(est$mu[2], length(dat_m1_1$VCVR)), se=sqrt(dat_m1_1$VCVR))
+
+dat_m1_1$true_power.Stanley_VR <-power.empirical_Stanley(mu=rep(est$mu[3], length(dat_m1_1$VVR)), se=sqrt(dat_m1_1$VVR))
+
+
+### 20% differences
+dat_m1_1$d20_power.Stanley_RR <-power.empirical_Stanley(mu=rep(  log(120/100), length(dat_m1_1$VRR)), se=sqrt(dat_m1_1$VRR))
+
+dat_m1_1$d20_power.Stanley_CVR <-power.empirical_Stanley(mu=rep(  log(120/100), length(dat_m1_1$VCVR)), se=sqrt(dat_m1_1$VCVR))
+
+dat_m1_1$d20_power.Stanley_VR <-power.empirical_Stanley(mu=rep(  log(120/100), length(dat_m1_1$VVR)), se=sqrt(dat_m1_1$VVR))
+
+# Shinichi's approach for power calculating
+
+## creating function for power analysis for empirical data point
+
+### two-tailed power
+power.empirical_Shinichi_two.tail <- function(mu, se) {
+  2-pnorm(qnorm(0.975)-abs(mu)/se)-pnorm(qnorm(0.975)+abs(mu)/se)}
+
+### using individual effect size as true effect size, to calculate power for individual data point
+#### RR
+dat_m1_1$individual_power.two.tail.Shinichi_RR <- power.empirical_Shinichi_two.tail(mu=dat_m1_1$RR, se=sqrt(dat_m1_1$VRR))
+
+#### CVR
+dat_m1_1$individual_power.two.tail.Shinichi_CVR <- power.empirical_Shinichi_two.tail(mu=dat_m1_1$CVR, se=sqrt(dat_m1_1$VCVR))
+
+#### VR
+dat_m1_1$individual_power.two.tail.Shinichi_VR <- power.empirical_Shinichi_two.tail(mu=dat_m1_1$VR, se=sqrt(dat_m1_1$VVR))
+
+
+
+### one-tailed power
+power.empirical_Shinichi_one.tail <- function(mu, se) {
+  1-pnorm(qnorm(0.95)-abs(mu)/se)}
+
+### using individual effect size as true effect size, to calculate power for individual data point
+#### RR
+dat_m1_1$individual_power.one.tail.Shinichi_RR <- power.empirical_Shinichi_one.tail(mu=dat_m1_1$RR, se=sqrt(dat_m1_1$VRR))
+
+#### CVR
+dat_m1_1$individual_power.one.tail.Shinichi_CVR <- power.empirical_Shinichi_one.tail(mu=dat_m1_1$CVR, se=sqrt(dat_m1_1$VCVR))
+
+
+#### VR
+dat_m1_1$individual_power.one.tail.Shinichi_VR <- power.empirical_Shinichi_one.tail(mu=dat_m1_1$VR, se=sqrt(dat_m1_1$VVR))
+
+
+
+## using meta-analytic estimate as true effect size, to calculate power for individual data point
+### two_tailed power
+### RR
+dat_m1_1$true_power.two.tail.Shinichi_RR <-power.empirical_Shinichi_two.tail(mu=rep(est$mu[1], length(dat_m1_1$VRR)), se=sqrt(dat_m1_1$VRR))
+
+### CVR
+dat_m1_1$true_power.two.tail.Shinichi_CVR <-power.empirical_Shinichi_two.tail(mu=rep(est$mu[1], length(dat_m1_1$VCVR)), se=sqrt(dat_m1_1$VCVR))
+
+### VR
+dat_m1_1$true_power.two.tail.Shinichi_VR <-power.empirical_Shinichi_two.tail(mu=rep(est$mu[1], length(dat_m1_1$VVR)), se=sqrt(dat_m1_1$VVR))
+
+
+### one_tailed power
+### RR
+dat_m1_1$true_power.one.tail.Shinichi_RR <-power.empirical_Shinichi_one.tail(mu=rep(est$mu[1], length(dat_m1_1$VRR)), se=sqrt(dat_m1_1$VRR))
+
+### CVR
+dat_m1_1$true_power.one.tail.Shinichi_CVR <-power.empirical_Shinichi_one.tail(mu=rep(est$mu[1], length(dat_m1_1$VCVR)), se=sqrt(dat_m1_1$VCVR))
+
+### VR
+dat_m1_1$true_power.one.tail.Shinichi_VR <-power.empirical_Shinichi_one.tail(mu=rep(est$mu[1], length(dat_m1_1$VVR)), se=sqrt(dat_m1_1$VVR))
+
+
+### 20% difference
+
+dat_m1_1$d20_power.two.tail.Shinichi_RR <-power.empirical_Shinichi_two.tail(mu=rep(log(120/100), length(dat_m1_1$VRR)), se=sqrt(dat_m1_1$VRR))
+
+dat_m1_1$d20_power.two.tail.Shinichi_CVR <-power.empirical_Shinichi_two.tail(mu=rep(log(120/100), length(dat_m1_1$VCVR)), se=sqrt(dat_m1_1$VCVR))
+
+dat_m1_1$d20_power.two.tail.Shinichi_VR <-power.empirical_Shinichi_two.tail(mu=rep(log(120/100), length(dat_m1_1$VVR)), se=sqrt(dat_m1_1$VVR))
+
+
+dat_m1_1$d20_power.one.tail.Shinichi_RR <-power.empirical_Shinichi_one.tail(mu=rep(log(120/100), length(dat_m1_1$VRR)), se=sqrt(dat_m1_1$VRR))
+
+dat_m1_1$d20_power.one.tail.Shinichi_CVR <-power.empirical_Shinichi_one.tail(mu=rep(log(120/100), length(dat_m1_1$VCVR)), se=sqrt(dat_m1_1$VCVR))
+
+dat_m1_1$d20_power.one.tail.Shinichi_VR <-power.empirical_Shinichi_one.tail(mu=rep(log(120/100), length(dat_m1_1$VVR)), se=sqrt(dat_m1_1$VVR))
+
+
+# save
+write.csv(dat_m1_1, file = "./individual_power_results.csv", row.names = FALSE)
+
+
+
+
+
+```
+
+
+
+
+### Pilot visualization - Power-based funnel plot
+```{r}
+
+power_RR <- plot(dat_m1_1$RR, dat_m1_1$true_power.two.tail.Shinichi_RR, xlab = "RR", ylab = "Power", main = "Funnel plot using power of lnRR", ylim = c(0,1))
+power_RR <- recordPlot() # clean up device 
+plot.new() 
+
+power_CVR <- plot(dat_m1_1$CVR, dat_m1_1$true_power.two.tail.Shinichi_CVR, xlab = "CVR", ylab = "Power", main = "Funnel plot using power of lnCVR", ylim = c(0,1))
+power_CVR <- recordPlot()
+plot.new() 
+
+power_VR <- plot(dat_m1_1$VR, dat_m1_1$true_power.two.tail.Shinichi_VR, xlab = "VR", ylab = "Power", main = "Funnel plot using power of lnVR", ylim = c(0,1))
+power_VR <- recordPlot()
+plot.new()
+
+
+png(filename = "./power_all.png", height = 5, width = 15, units = "in", type = "windows", res = 400)
+par(mfrow=c(1,3)) # set the plotting area into a 1*3 array
+plot(dat_m1_1$RR, dat_m1_1$true_power.two.tail.Shinichi_RR, xlab = "RR", ylab = "Power", main = "Funnel plot using power of lnRR", ylim = c(0,1))
+plot(dat_m1_1$CVR, dat_m1_1$true_power.two.tail.Shinichi_CVR, xlab = "CVR", ylab = "Power", main = "Funnel plot using power of lnCVR", ylim = c(0,1))
+plot(dat_m1_1$VR, dat_m1_1$true_power.two.tail.Shinichi_VR, xlab = "VR", ylab = "Power", main = "Funnel plot using power of lnVR", ylim = c(0,1))
+dev.off()
+
+
+
+
+
+
+png(filename = "./power_RR.png", height = 5, width = 5, units = "in", type = "windows", res = 400)
+power_RR
+dev.off()  
+
+png(filename = "./power_CVR.png", height = 5, width = 5, units = "in", type = "windows", res = 400)
+power_CVR
+dev.off()  
+
+png(filename = "./power_VR.png", height = 5, width = 5, units = "in", type = "windows", res = 400)
+power_VR
+dev.off() 
+
+
+model_power_RR <- rma.mv(data=dat_m1_1, yi=RR, V=VRR, random=list(~1|Study, ~1|Unit_ID), method="REML", test="z") 
+
+
+pred.power_RR <- predict.rma(model_power_RR)
+
+
+dat_m1_1 %>% mutate(ymin = pred.power_RR$ci.lb, 
+                    ymax = pred.power_RR$ci.ub, 
+                    ymin2 = pred.power_RR$cr.lb, 
+                    ymax2 = pred.power_RR$cr.ub, 
+                    pred =pred.power_RR$pred) %>% ggplot(aes(x = true_power.two.tail.Shinichi_RR, y = RR, size = 1/sqrt(VRR))) + 
+  geom_point(shape = 21, fill = '#009E73', alpha = 0.5) + 
+  geom_smooth(aes(y = ymin2), method = "loess", se = FALSE, lty = "dotted", lwd = 0.6, colour = "#0072B2") + 
+  geom_smooth(aes(y = ymax2), method = "loess", se = FALSE, lty = "dotted", lwd = 0.6, colour = "#0072B2") + 
+  geom_smooth(aes(y = ymin), method = "loess", se = FALSE, lty = "dotted", lwd = 0.6, colour = "#D55E00") + 
+  geom_smooth(aes(y = ymax), method = "loess", se = FALSE, lty = "dotted", lwd = 0.6, colour = "#D55E00") + 
+  geom_smooth(aes(y = pred), method = "loess", se = FALSE, lty = 2, lwd = 0.6, colour = "black") + 
+  labs(x = "Power", y = 'lnRR', size = expression(paste('Precision (1/SE)')), title = "Nature_2004 (ma1.1), Power vs. lnRR") + 
+  scale_x_continuous(labels = scales::number_format(accuracy = 0.1)) + # need "scales" package
+  guides(fill = "none", colour = "none") + 
+  theme_bw() + 
+  theme(legend.position = c(0, 1), legend.justification = c(0, 1)) + 
+  theme(legend.direction = "horizontal") + 
+  theme(legend.background = element_blank()) + 
+  theme(axis.title = element_text(size = 16, colour = "black"),
+        axis.text.x =  element_text(size = 16, colour = "black"),
+        axis.text.y =  element_text(size = 16, colour = "black"),
+        legend.text = element_text(size = 14, colour = "black"),
+        legend.title = element_text(size = 14, colour = "black"),
+        panel.grid = element_blank(),
+        axis.ticks = element_line(size = 1, colour = "black"),
+        axis.ticks.length = unit(0.15, "cm"),
+        panel.border = element_rect(size = 1.2, colour = "black", fill = NA)) -> power_m1_1_RR
+
+
+
+png(filename = './power_m1_1_RR.png', height = 5, width = 5, units = "in", type = "windows", res = 400)
+power_m1_1_RR
+dev.off()
+
+
+```
+
+
+**Contents**
+We have three sections. 
+
+Section 1: power analysis for 36 lnRR meta-analyses and corresponding  power analysis for individual data point within each meta-analysis
+
+Section 2: power analysis for 12 lnCVR and lnVR meta-analyses and corresponding  power analysis for individual data point within each meta-analysis
+
+Section3: using three three weighting schemes (i.e. WAAP, PET-PEESE, http://environmentalcomputing.net/meta-analysis/) to evaluate publication
+
+
+
+### Section 1 & 2 - power analysis for lnRR (Section 1), lnCVR and lnVR (Section 2)
+
+Using multi-level meta-analysis estimate as true effect, we want to calculate two-tailed power for (i) 36 lnRR meta-analytic cases and individual empirical study within each meta-analysis; (ii) 12 lnCVR and lnVR meta-analytic cases 
+
+In addition, we also want to calculate power using three hypothetical true effects (i.e. 5%, 10%, 20% mean differences)
+
+For a pilot, I did Section 1 & 2 simutanelously, and did 1 case for check
+
+```{r}
+#***************************************************************#
+#             power for 36 meta-analytic cases                  #
+#***************************************************************#
+
+# Importing raw data
+raw_m1_1 <- read.csv(file = "./dataset/raw_m1_1.csv", header = TRUE) #sep=";"
+view(raw_m1_1)
+raw_data <- raw_m1_1
+
+# Renames the column names
+  names(raw_data)[str_detect(names(raw_data), c("T.mean|T.sd|T.N|C.mean|C.sd|C.N"))] <- c("T_mean", "T_sd", "T_N", "C_mean", "C_sd", "C_N")
+
+
+    
+# Calculating 3 type of effect size statistics
+  
+## lnRR
+  lnRR <- with(raw_data, escalc(measure = "ROM",
+                                m1i = T_mean,
+                                m2i = C_mean,
+                                sd1i = T_sd,
+                                sd2i = C_sd,
+                                n1i = T_N,
+                                n2i = C_N))
+
+## lnCVR
+  lnCVR <- with(raw_data, escalc(measure = "CVR",
+                                 m1i = T_mean,
+                                 m2i = C_mean,
+                                 sd1i = T_sd,
+                                 sd2i = C_sd,
+                                 n1i = T_N,
+                                 n2i = C_N))
+## lnVR
+  lnVR <- with(raw_data, escalc(measure = "VR",
+                                sd1i = T_sd,
+                                sd2i = C_sd,
+                                n1i = T_N,
+                                n2i = C_N))
+
+
+## combination 
+  metrics <- data.frame(RR = lnRR$yi, VRR = lnRR$vi, CVR = lnCVR$yi, VCVR = lnCVR$vi, VR = lnVR$yi, VVR = lnVR$vi)
+  dat_m1_1 <- cbind(raw_data, metrics)
+
+
+# clean NA
+  dat_m1_1 <- dat_m1_1[!is.na(dat_m1_1$RR),] 
+  dat_m1_1 <- dat_m1_1[!is.na(dat_m1_1$VRR),] 
+  dat_m1_1 <- dat_m1_1[!is.na(dat_m1_1$CVR),]
+  dat_m1_1 <- dat_m1_1[!is.na(dat_m1_1$VCVR),]
+  
+  dat_m1_1[dat_m1_1 == "-Inf"] <- NA
+  dat_m1_1[dat_m1_1 == "Inf"] <- NA  
+
+
+# Fit multi-level meta-analytic model
+## RR
+model_m1_1_RR <- with(dat_m1_1, rma.mv(yi = RR,
+                                        V = VRR,
+                                        random = list(~1|Study, ~1|Unit_ID),
+                                        method = "REML",
+                                        test = "z"))
+
+
+## CVR
+model_m1_1_CVR <- with(dat_m1_1, rma.mv(yi = CVR,
+                                        V = VCVR,
+                                        random = list(~1|Study, ~1|Unit_ID),
+                                        method = "REML",
+                                        test = "z"))
+
+## VR
+model_m1_1_VR <- with(dat_m1_1, rma.mv(yi = VR,
+                                        V = VVR,
+                                        random = list(~1|Study, ~1|Unit_ID),
+                                        method = "REML",
+                                        test = "z"))
+
+
+
+
+# We want to use meta-analytic mean as ture effect, so we need to get estimate (mu) and corresponding error (SE)
+model_m1_1 <- list(model_m1_1_RR,model_m1_1_CVR,model_m1_1_VR)
+
+est_model_m1_1 <- data.frame(es.type=c("RR","CVR","VR"),
+                  mu=sapply(model_m1_1, function(x) x$beta),
+                  SE=sapply(model_m1_1, function(x) x$se),
+                  p_value=sapply(model_m1_1, function(x) x$pval))
+
+
+
+# Creat function to calculate power
+power.ma_Shinichi <- function(mu, SE) {
+  2-pnorm(qnorm(0.975)-abs(mu)/SE)-pnorm(qnorm(0.975)+abs(mu)/SE)
+  } # two-tailed power
+
+# Get two-tailed power
+est_model_m1_1$MA.power <- power.ma_Shinichi(mu=est_model_m1_1$mu,SE=est_model_m1_1$SE)
+
+
+# Save
+write.csv(est_model_m1_1, file = "./meta-analysis power_m1_1.csv", row.names = FALSE)
+
+
+
+#***************************************************************#
+#       power for individual study within meta-analysis         #
+#***************************************************************#
+
+# Creating function for power analysis for empirical data point
+power.individual_Shinichi <- function(mu, se) {
+  2-pnorm(qnorm(0.975)-abs(mu)/se)-pnorm(qnorm(0.975)+abs(mu)/se)} # two-tailed power
+
+# Using meta-analytic estimate as true effect size, to calculate power for individual data point
+## RR
+dat_m1_1$power_RR <-power.individual_Shinichi(mu=rep(est_model_m1_1$mu[1], length(dat_m1_1$VRR)), se=sqrt(dat_m1_1$VRR))
+
+## CVR
+dat_m1_1$power_CVR <-power.individual_Shinichi(mu=rep(est_model_m1_1$mu[1], length(dat_m1_1$VCVR)), se=sqrt(dat_m1_1$VCVR))
+
+## VR
+dat_m1_1$power_VR <-power.individual_Shinichi(mu=rep(est_model_m1_1$mu[1], length(dat_m1_1$VVR)), se=sqrt(dat_m1_1$VVR))
+
+
+# Using 20% difference as true effect size, to calculate power for individual data point
+
+## RR
+dat_m1_1$d20_power_RR <-power.individual_Shinichi(mu=rep(log(120/100), length(dat_m1_1$VRR)), se=sqrt(dat_m1_1$VRR))
+
+dat_m1_1$d20_power_CVR <-power.individual_Shinichi(mu=rep(log(120/100), length(dat_m1_1$VCVR)), se=sqrt(dat_m1_1$VCVR))
+
+dat_m1_1$d20_power_VR <-power.individual_Shinichi(mu=rep(log(120/100), length(dat_m1_1$VVR)), se=sqrt(dat_m1_1$VVR))
+
+
+# save
+write.csv(dat_m1_1, file = "./individual_power_m1_1.csv", row.names = FALSE)
+
+```
+
+
+
+### Section 3 - three weighting schemes (i.e. WAAP, PET-PEESE, http://environmentalcomputing.net/meta-analysis/) to evaluate publication bias
+
+
+```{r}
+#***************************************************************#
+#                          WAAP approach                        #
+#***************************************************************#
+
+# In our case, we should cal WAAP as random-effects-WAAP, because we do not want to use fixed effects model
+
+# Selecting adequately powered studies
+## We use >80% or SE < 
+WAAP_dat_m1_1 <- dat_m1_1 %>% subset(power_RR > 0.8)
+
+# Evaluating publication using adequately powered studies
+
+WAAP_m1_1_RR <- with(WAAP_dat_m1_1, rma.mv(yi = RR,
+                                         V = VRR,
+                                         mods = ~sqrt(VRR),
+                                         random = list(~1|Study, ~1|Unit_ID),
+                                         method = "REML",
+                                         test = "z"))
+
+summary(WAAP_m1_1_RR)
+
+
+
+
+#***************************************************************#
+#                       PET-PEESE approach                      #
+#***************************************************************#
+
+# Get precision, i.e. 1/SE
+dat_m1_1$SE <- sqrt(dat_m1_1$VRR) # note it is SE rather than variance (V), so we should use sqrt(V)
+
+# PET model - specifing 1/se^2 as weights
+PET.m1_1 <- lm(RR~SE, weights =(1/SE)**2,data=dat_m1_1) # This form (OLS) reverse the intercept and slope coefficient from WLS version. Therefore, intercept from WLS version is the slope from OLS version. So we should not remove intercept (i.e. -1)
+summary(PET.m1_1) # intercept rather than slope is our expected estimate
+
+# Or we can use two-step approach for PET
+dat_m1_1$t <- dat_m1_1$RR/sqrt(dat_m1_1$VRR)
+dat_m1_1$precision <- 1/sqrt(dat_m1_1$VRR)
+# We got same results with the above
+PET.m1_1_2 <- lm(t~precision, data=dat_m1_1)
+
+
+# PET-PEESE model - same results with PET model
+PET_PEESE.m1_1 <- lm(RR~SE**2, weights =(1/SE)**2,data=dat_m1_1)
+summary(PET_PEESE.m1_1) # intercept rather than slope is our expected estimate
+
+
+
+
+
+Note: I am not sure which approachs you want me to use to evaluate publication bias in this website: http://environmentalcomputing.net/meta-analysis/
+  
+Whatever, I used a regular model to evaluate publication, i.e. Egger regression test
+#***************************************************************#
+#                      Egger regression test                    #
+#***************************************************************#
+
+Egger_m1_1_RR <- with(dat_m1_1, rma.mv(yi = RR,
+                                         V = VRR,
+                                         mods = ~sqrt(VRR),
+                                         random = list(~1|Study, ~1|Unit_ID),
+                                         method = "REML",
+                                         test = "z"))
+
+summary(Egger_m1_1_RR)
+
+```
+
