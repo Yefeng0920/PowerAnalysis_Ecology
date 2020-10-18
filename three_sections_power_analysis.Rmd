@@ -45,7 +45,7 @@ power.individual_Shinichi <- function(mu, se) {
   2-pnorm(qnorm(0.975)-abs(mu)/se)-pnorm(qnorm(0.975)+abs(mu)/se)} # two-tailed power
 
 
-
+library(here)
 
 ```
 
@@ -113,9 +113,9 @@ dat_m24_1 <- read.csv(file = "./36_lnRR_data/m24_1.csv", header = TRUE) #sep=";"
 
 
 
-Warning: There should be some mistakes of the effect size corresponding variance (i.e. var.LRR) in the following data set: dat_m17_1, dat_m17_2, dat_m18_1, dat_m19_1, dat_m21_1, dat_m22_1.
-
-That is to say var.LRR values in those dataset are all the same.
+# Warning: There should be some mistakes of the effect size corresponding variance (i.e. var.LRR) in the following data set: dat_m17_1, dat_m17_2, dat_m18_1, dat_m19_1, dat_m21_1, dat_m22_1.
+# 
+# That is to say var.LRR values in those dataset are all the same.
 
 # Make a list of data
 dat_list <- list(dat_m1_1,
@@ -951,51 +951,72 @@ summary(WAAP_m1_1_RR)
 #***************************************************************#
 
 # Get precision, i.e. 1/SE
-dat_m1_1$SE <- sqrt(dat_m1_1$VRR) # note it is SE rather than variance (V), so we should use sqrt(V)
+dat_m1_1$SE <- sqrt(dat_m1_1$var.LRR) # note it is SE rather than variance (V), so we should use sqrt(V)
 
-# PET model - specifing 1/se^2 as weights
-PET.m1_1 <- lm(RR~SE, weights =(1/SE)**2,data=dat_m1_1) # This form (OLS) reverse the intercept and slope coefficient from WLS version. Therefore, intercept from WLS version is the slope from OLS version. So we should not remove intercept (i.e. -1)
-summary(PET.m1_1) # intercept rather than slope is our expected estimate
-
-# Or we can use two-step approach for PET
-dat_m1_1$t <- dat_m1_1$RR/sqrt(dat_m1_1$VRR)
-dat_m1_1$precision <- 1/sqrt(dat_m1_1$VRR)
-# We got same results with the above
-PET.m1_1_2 <- lm(t~precision, data=dat_m1_1)
-
-
-
-# PET-PEESE model - quadratic model rather than linear model
-PET_PEESE.m1_1 <- lm(RR~VRR, weights =(1/SE)**2,data=dat_m1_1)
-summary(PET_PEESE.m1_1) 
+# # PET model - specifing 1/se^2 as weights
+# PET.m1_1 <- lm(RR~SE, weights = (1/SE)**2,data=dat_m1_1) # This form (OLS) reverse the intercept and slope coefficient from WLS version. Therefore, intercept from WLS version is the slope from OLS version. So we should not remove intercept (i.e. -1)
+# summary(PET.m1_1) # intercept rather than slope is our expected estimate
+# 
+# # Or we can use two-step approach for PET
+# dat_m1_1$t <- dat_m1_1$RR/sqrt(dat_m1_1$VRR)
+# dat_m1_1$precision <- 1/sqrt(dat_m1_1$VRR)
+# # We got same results with the above
+# PET.m1_1_2 <- lm(t~precision, data=dat_m1_1)
+# 
+# 
+# 
+# # PET-PEESE model - quadratic model rather than linear model
+# PET_PEESE.m1_1 <- lm(RR~VRR, weights =(1/SE)**2,data=dat_m1_1)
+# summary(PET_PEESE.m1_1) 
 
 
 # Or we can use meta-regression with variances (i.e. SE^2) as moderator
-PET_PEESE.m1_1.2 <- rma.mv(data = dat_m1_1, yi = RR, V = VRR, 
-                          mods = VRR, # using variance rather than SE
+PET_PEESE.m1_0 <- rma.mv(data = dat_m1_1, yi = LRR, V = var.LRR, 
+                          #mods = ~SE, # using variance rather than SE
                           random = list(~1|Study, ~1|Unit_ID),
-                          method = "REML",
-                          test = "z")
+                          method = "REML")
+summary(PET_PEESE.m1_0)
 
-summary(PET_PEESE.m1_1.2)
+PET_PEESE.m1_1 <- rma.mv(data = dat_m1_1, yi = LRR, V = var.LRR, 
+                          mods = ~SE, # using variance rather than SE
+                          random = list(~1|Study, ~1|Unit_ID),
+                          method = "REML")
 
+summary(PET_PEESE.m1_1)
 
+PET_PEESE.m1_2 <- rma.mv(data = dat_m1_1, yi = LRR, V = var.LRR, 
+                          mods = ~ var.LRR, # using variance rather than SE
+                          random = list(~1|Study, ~1|Unit_ID),
+                          method = "REML")
 
-Note: I am not sure which approachs you want me to use to evaluate publication bias in this website: http://environmentalcomputing.net/meta-analysis/
-  
-Whatever, I used a regular model to evaluate publication, i.e. Egger regression test
-#***************************************************************#
+summary(PET_PEESE.m1_2)
+
+# Note: I am not sure which approachs you want me to use to evaluate publication bias in this website: http://environmentalcomputing.net/meta-analysis/
+#   
+# Whatever, I used a regular model to evaluate publication, i.e. Egger regression test
+# #***************************************************************#
 #                      Egger regression test                    #
 #***************************************************************#
 
-Egger_m1_1_RR <- with(dat_m1_1, rma.mv(yi = RR,
-                                         V = VRR,
-                                         mods = ~sqrt(VRR),
-                                         random = list(~1|Study, ~1|Unit_ID),
-                                         method = "REML",
-                                         test = "z"))
+# Egger_m1_1_RR <- with(dat_m1_1, rma.mv(yi = RR,
+#                                          V = VRR,
+#                                          mods = ~sqrt(VRR),
+#                                          random = list(~1|Study, ~1|Unit_ID),
+#                                          method = "REML",
+#                                          test = "z"))
+# 
+# summary(Egger_m1_1_RR) # Note that here we should look at slope, rather than intercept, which is a distinction from PET model
 
-summary(Egger_m1_1_RR) # Note that here we should look at slope, rather than intercept, which is a distinction from PET model
+# alternative model 
+
+alternative_model <- with(dat_m1_1, rma.mv(yi = LRR,
+                                         W = 1/var.LRR,
+                                         V = var.LRR,
+                                         random = list(~1|Study, ~1|Unit_ID),
+                                         method = "REML"))
+
+summary(alternative_model) 
+
 
 ```
 
