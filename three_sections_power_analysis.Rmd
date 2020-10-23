@@ -72,7 +72,7 @@ In addition, we also want to calculate power using three hypothetical true effec
 #***************************************************************#
 #             power for 36 meta-analytic cases                  #
 #***************************************************************#
-
+# TODO - you can do this in one line - consdier using this function list.files() - by using this you can get all the names of files without typing in and loop or spply it through
 # Importing data
 dat_m1_1 <- read.csv(file = "./36_lnRR_data/m1_1.csv", header = TRUE)
 dat_m1_2 <- read.csv(file = "./36_lnRR_data/m1_2.csv", header = TRUE)
@@ -112,6 +112,37 @@ dat_m23_1 <- read.csv(file = "./36_lnRR_data/m23_1.csv", header = TRUE)
 dat_m24_1 <- read.csv(file = "./36_lnRR_data/m24_1.csv", header = TRUE) #sep=";"
 
 
+# TODO  - Shinichi' addition example using 1st
+model1 <- rma.mv(data = dat_m1_1, 
+                 yi = LRR, 
+                 V = var.LRR, 
+                 random = list(~1|Study, ~1|Unit_ID), 
+                 method = "REML")
+
+
+summary(model1)
+
+#predict(model1)
+# this is study and effect specific effects
+blups <- ranef(model1)
+# we need this to get 
+index <- match(as.character(dat_m1_1$Study),rownames(blups$Study))
+
+# effect without sampling eror 
+effect_size <- as.numeric(model1$beta) + blups$Study[index,1] + blups$Unit_ID[,1]
+
+# comparing observed effect size and estiamted effect size from the model
+#par(mfrow=c(1,2))
+qplot(dat_m1_1$LRR, xlim = c(-3.5,1.5))
+qplot(effect_size, xlim = c(-3.5,1.5))
+
+# now comparing
+f_power <- mapply(power.ma_Shinichi, mu=as.numeric(model1$beta), sqrt(dat_m1_1$var.LRR))
+r_power <- mapply(power.ma_Shinichi, mu=effect_size, sqrt(dat_m1_1$var.LRR))
+
+# I am a bit surprised r_power is lower but we need to see this is general
+qplot(f_power)
+qplot(r_power)
 
 # Warning: There should be some mistakes of the effect size corresponding variance (i.e. var.LRR) in the following data set: dat_m17_1, dat_m17_2, dat_m18_1, dat_m19_1, dat_m21_1, dat_m22_1.
 # 
