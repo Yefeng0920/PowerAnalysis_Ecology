@@ -144,6 +144,11 @@ r_power <- mapply(power.ma_Shinichi, mu=effect_size, sqrt(dat_m1_1$var.LRR))
 qplot(f_power)
 qplot(r_power)
 
+mean(f_power)
+mean(r_power)
+
+qplot(effect_size, r_power)
+
 # Warning: There should be some mistakes of the effect size corresponding variance (i.e. var.LRR) in the following data set: dat_m17_1, dat_m17_2, dat_m18_1, dat_m19_1, dat_m21_1, dat_m22_1.
 # 
 # That is to say var.LRR values in those dataset are all the same.
