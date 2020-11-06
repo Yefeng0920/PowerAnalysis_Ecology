@@ -32,7 +32,9 @@ pacman::p_load(knitr, # knit markdown
                orchaRd, # forest-like plot
                gridGraphics # Redraw Base Graphics Using 'grid' Graphics. `gridGraphics` is required to handle base-R plots.
                )
+install.packages("D:/Program Files (x86)/R packages source/retrodesign_0.1.0.zip", repos = NULL, type="source") 
 
+library(retrodesign)
 
 # Function to calculate power for meta-analysis
 power.ma_Shinichi <- function(mu, SE) {
@@ -64,15 +66,18 @@ Section3: using three three weighting schemes (i.e. WAAP, PET-PEESE, http://envi
 
 
 ### Section 1 - power analysis for mean-effect (i.e. lnRR or LRR)
-Assuming multi-level meta-analysis estimate as true effect, we want to calculate two-tailed power for 36 lnRR meta-analytic cases.
+Assuming multi-level meta-analysis estimate as true effect, we  calculate two-tailed power for 36 lnRR meta-analytic cases.
 
-In addition, we also want to calculate power using three hypothetical true effects (i.e. 5%, 10%, 20%, 40% mean differences).
+In addition, we also calculate power using four hypothetical true effects (i.e. 5%, 10%, 20%, 40% mean differences).
 
 ```{r}
 #***************************************************************#
 #             power for 36 meta-analytic cases                  #
 #***************************************************************#
 # TODO - you can do this in one line - consdier using this function list.files() - by using this you can get all the names of files without typing in and loop or spply it through
+
+# my try - list.files(path = "./36_lnRR_data")
+
 # Importing data
 dat_m1_1 <- read.csv(file = "./36_lnRR_data/m1_1.csv", header = TRUE)
 dat_m1_2 <- read.csv(file = "./36_lnRR_data/m1_2.csv", header = TRUE)
@@ -118,18 +123,20 @@ model1 <- rma.mv(data = dat_m1_1,
                  V = var.LRR, 
                  random = list(~1|Study, ~1|Unit_ID), 
                  method = "REML")
-
-
 summary(model1)
+
 
 #predict(model1)
 # this is study and effect specific effects
 blups <- ranef(model1)
 # we need this to get 
 index <- match(as.character(dat_m1_1$Study),rownames(blups$Study))
-
 # effect without sampling eror 
 effect_size <- as.numeric(model1$beta) + blups$Study[index,1] + blups$Unit_ID[,1]
+
+effect_size_ub <- as.numeric(model1$ci.ub) +  blups$Study[index,4] + blups$Unit_ID[,4]
+effect_size_lb <- as.numeric(model1$ci.lb) + blups$Study[index,3] + blups$Unit_ID[,3]
+effect_size_se <- (effect_size_ub-effect_size_lb)/(2*1.96)
 
 # comparing observed effect size and estiamted effect size from the model
 #par(mfrow=c(1,2))
@@ -137,21 +144,30 @@ qplot(dat_m1_1$LRR, xlim = c(-3.5,1.5))
 qplot(effect_size, xlim = c(-3.5,1.5))
 
 # now comparing
-f_power <- mapply(power.ma_Shinichi, mu=as.numeric(model1$beta), sqrt(dat_m1_1$var.LRR))
+f_power <- mapply(power.ma_Shinichi, mu=as.numeric(rep(model1$beta,length(dat_m1_1$var.LRR))), sqrt(dat_m1_1$var.LRR))
 r_power <- mapply(power.ma_Shinichi, mu=effect_size, sqrt(dat_m1_1$var.LRR))
+
+r_power2 <- mapply(power.ma_Shinichi, mu=effect_size, sqrt(effect_size_se))
+
+r_power3 <- mapply(type_m, A=effect_size, s=sqrt(dat_m1_1$var.LRR)) # not list(effect_size)
+
+r_power4 <- unlist(r_power3) %>% data.frame()
+
+which(r_power4<4) # select studies whose exaggeration ratio is lower than 4, then use these studies to run meta-analysis. Something like PET-PEESP, which selects powered studies to perform meta-analysis
+
 
 # I am a bit surprised r_power is lower but we need to see this is general
 qplot(f_power)
 qplot(r_power)
-
 mean(f_power)
 mean(r_power)
+mean(r_power2)
 
-qplot(effect_size, r_power)
+  qplot(effect_size, r_power)
 
-# Warning: There should be some mistakes of the effect size corresponding variance (i.e. var.LRR) in the following data set: dat_m17_1, dat_m17_2, dat_m18_1, dat_m19_1, dat_m21_1, dat_m22_1.
-# 
-# That is to say var.LRR values in those dataset are all the same.
+
+Warning: There are some mising values of effect size corresponding variance (i.e. var.LRR) in the following data set: dat_m17_1, dat_m17_2, dat_m18_1, dat_m19_1, dat_m21_1, dat_m22_1. These datasets can not be used to calculate power
+
 
 # Make a list of data
 dat_list <- list(dat_m1_1,
@@ -193,13 +209,20 @@ dat_list <- list(dat_m1_1,
 
 
 # Prepare "ture" effect of mean (i.e. lnRR) for power analysis - fit multi-level meta-analytic models
-model_list_RR <- NA
+model_list_RR <- list() # rep(NA, length(dat_list))
 for (i in 1:length(dat_list)) {
  model_list_RR[i] <- rma.mv(data = dat_list[[i]], yi = LRR, V = var.LRR, random = list(~1|Study, ~1|Unit_ID), method = "REML", test = "z") %>% list()
 }
 
+# Calculate the number of total effect sizes - total sample size
+ES_number <- NA
+ES_number <- mapply(unique, sapply(dat_list, function(x) x$Unit_ID)) 
+unlist(ES_number) %>% length() # 4601 this is to show how many global change experiments we use in our analysis 
 
-# We assume meta-analytic mean as ture effect, so we need to get estimate (mu) and corresponding error (SE)
+
+
+
+# As we assume meta-analytic mean as the ture effect, we need to get estimate (mu) and corresponding error (SE)
 model_est_RR <- data.frame(MA_case=c("m1_1",
                                       "m1_2",
                                       "m2_1",
@@ -236,9 +259,9 @@ model_est_RR <- data.frame(MA_case=c("m1_1",
                                       "m22_1",
                                       "m23_1",
                                       "m24_1"),
-                  mu_RR=sapply(model_list, function(x) x$beta),
-                  SE_RR=sapply(model_list, function(x) x$se),
-                  p_value=sapply(model_list, function(x) x$pval))
+                  mu_RR=sapply(model_list_RR, function(x) x$beta),
+                  SE_RR=sapply(model_list_RR, function(x) x$se),
+                  p_value=sapply(model_list_RR, function(x) x$pval))
 
 
 # Get two-tailed power for meta-analyses
@@ -445,7 +468,7 @@ dev.off()
 
 
 
-### Section 2 - power analysis for variation-effect (i.e. lnCVR and lnVR)
+### Section 2 - power analysis for variance-effect (i.e. lnCVR and lnVR)
 Assuming multi-level meta-analysis estimate as true effect, we want to calculate two-tailed power for 12 lnCVR and lnVR meta-analytic cases - relative variation and absolute variation.
 
 In addition, we also want to calculate power using three hypothetical true effects (i.e. 5%, 10%, 20%, 40% mean differences).
@@ -502,6 +525,12 @@ dat_list_variation <- list(raw_m1_1,
                            raw_m6_5,
                            raw_m9_1,
                            raw_m11_1)
+
+# Calculate the number of total effect sizes - sample size
+ES_number <- NA
+ES_number <- mapply(unique, sapply(dat_list_variation, function(x) x$Unit_ID)) 
+unlist(ES_number) %>% length()
+
 
 # Calculate 3 type of effect size statistics (i.e. lnRR, lnCVR and lnVR)
 lnRR <- NA
@@ -959,36 +988,25 @@ dev.off()
 #***************************************************************#
 #                          WAAP approach                        #
 #***************************************************************#
-
 # In our case, my understanding is we should call WAAP as random-effects-WAAP, because we do not want to use fixed effects model
-
 # Selecting adequately powered studies
 ## We only use studies with power >80% or SE < 2.8
 WAAP_dat_m1_1_RR <- dat_m1_1 %>% subset(power_RR > 0.8)
 WAAP_dat_m1_1_CVR <- dat_m1_1 %>% subset(power_CVR > 0.8) # none data
 WAAP_dat_m1_1_VR <- dat_m1_1 %>% subset(power_VR > 0.8) # none data
-
 # Evaluating publication using adequately powered studies
-
 WAAP_m1_1_RR <- with(WAAP_dat_m1_1_RR, rma.mv(yi = RR,
                                          V = VRR,
                                          mods = ~sqrt(VRR),
                                          random = list(~1|Study, ~1|Unit_ID),
                                          method = "REML",
                                          test = "z"))
-
 summary(WAAP_m1_1_RR)
-
-
-
-
 #***************************************************************#
 #                       PET-PEESE approach                      #
 #***************************************************************#
-
 # Get precision, i.e. 1/SE
 dat_m1_1$SE <- sqrt(dat_m1_1$var.LRR) # note it is SE rather than variance (V), so we should use sqrt(V)
-
 # # PET model - specifing 1/se^2 as weights
 # PET.m1_1 <- lm(RR~SE, weights = (1/SE)**2,data=dat_m1_1) # This form (OLS) reverse the intercept and slope coefficient from WLS version. Therefore, intercept from WLS version is the slope from OLS version. So we should not remove intercept (i.e. -1)
 # summary(PET.m1_1) # intercept rather than slope is our expected estimate
@@ -1004,36 +1022,28 @@ dat_m1_1$SE <- sqrt(dat_m1_1$var.LRR) # note it is SE rather than variance (V), 
 # # PET-PEESE model - quadratic model rather than linear model
 # PET_PEESE.m1_1 <- lm(RR~VRR, weights =(1/SE)**2,data=dat_m1_1)
 # summary(PET_PEESE.m1_1) 
-
-
 # Or we can use meta-regression with variances (i.e. SE^2) as moderator
 PET_PEESE.m1_0 <- rma.mv(data = dat_m1_1, yi = LRR, V = var.LRR, 
                           #mods = ~SE, # using variance rather than SE
                           random = list(~1|Study, ~1|Unit_ID),
                           method = "REML")
 summary(PET_PEESE.m1_0)
-
 PET_PEESE.m1_1 <- rma.mv(data = dat_m1_1, yi = LRR, V = var.LRR, 
                           mods = ~SE, # using variance rather than SE
                           random = list(~1|Study, ~1|Unit_ID),
                           method = "REML")
-
 summary(PET_PEESE.m1_1)
-
 PET_PEESE.m1_2 <- rma.mv(data = dat_m1_1, yi = LRR, V = var.LRR, 
                           mods = ~ var.LRR, # using variance rather than SE
                           random = list(~1|Study, ~1|Unit_ID),
                           method = "REML")
-
 summary(PET_PEESE.m1_2)
-
 # Note: I am not sure which approachs you want me to use to evaluate publication bias in this website: http://environmentalcomputing.net/meta-analysis/
 #   
 # Whatever, I used a regular model to evaluate publication, i.e. Egger regression test
 # #***************************************************************#
 #                      Egger regression test                    #
 #***************************************************************#
-
 # Egger_m1_1_RR <- with(dat_m1_1, rma.mv(yi = RR,
 #                                          V = VRR,
 #                                          mods = ~sqrt(VRR),
@@ -1042,18 +1052,13 @@ summary(PET_PEESE.m1_2)
 #                                          test = "z"))
 # 
 # summary(Egger_m1_1_RR) # Note that here we should look at slope, rather than intercept, which is a distinction from PET model
-
 # alternative model 
-
 alternative_model <- with(dat_m1_1, rma.mv(yi = LRR,
                                          W = 1/var.LRR,
                                          V = var.LRR,
                                          random = list(~1|Study, ~1|Unit_ID),
                                          method = "REML"))
-
 summary(alternative_model) 
-
-
 ```
 
 
