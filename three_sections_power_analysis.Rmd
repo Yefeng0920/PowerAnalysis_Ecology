@@ -289,18 +289,63 @@ for (i in 1:length(power_RR)) {
 
 
 
-# Use predicted values as true effect sizes for each individual study, to calculate power for each individual study
-# This is what Helmut want to do, to account for the heterogeneity of true effect in each study
+# Use effects without random effects as true effect sizes for each individual study, to calculate power for each individual study
+# This is what Helmut suggest to do, to account for random effects of each study
+
+# best linear unbiased estimate - study specific effects
+blups.list_RR <- NA
+for (i in 1:length(model_list_RR)) {
+  blups.list[i] <- ranef(model_list_RR[[i]]) %>% list()
+}
+
+# get study index
+index.list_RR <- NA # list()
+for (i in 1:length(model_list_RR)) {
+  index.list_RR[i] <- match(as.character(dat_list[[i]]$Study),rownames(blups.list[[i]]$Study)) %>% list()
+}
+
+# effects geting rid of random effects
+effect.p_RR <- list()
+for (i in 1:length(model_list_RR)) {
+  effect.p_RR[i] <- mapply(sum, model_list_RR[[i]]$beta, blups.list[[i]]$Study[index.list[[i]],1], blups.list[[i]]$Unit_ID[,1]) %>% list()
+}
+
 power_RR2 <- NA
 for (i in 1:length(dat_list)) {
-  power_RR2[i] <- power.individual_Shinichi(mu=fitted.rma(model_list_RR[[i]]), se=sqrt(dat_list[[i]]$var.LRR)) %>% list()}
+  power_RR2[i] <- power.individual_Shinichi(mu=effect.p[[i]], se=sqrt(dat_list[[i]]$var.LRR)) %>% list()}
 
+# plot(power_RR[[1]]-power_RR2[[1]]) - check discrepancy
 # Allocate each set of power into corresponding dataset
-for (i in 1:length(power_RR)) {
+for (i in 1:length(power_RR2)) {
   dat_list[[i]]$power_RR2 <- power_RR2[[i]]
 } 
 
-# Note that we got the same power with the power using meta-analytic as true effect. This is because meta-analytic model only has one predicted/fitted value for each individual study. While Meta-regression's fitted values are dependent on the level of moderator (i.e. independent variable)
+# Note that meta-analytic model only has one predicted/fitted value - fixed effect. While Meta-regression's fitted values are dependent on the level of moderator (i.e. independent variable)
+
+# type S (sign) error
+power_S <- NA
+for (i in 1:length(dat_list)) {
+  power_S[i] <- mapply(type_s, A=effect.p[[i]], s=sqrt(dat_list[[i]]$var.LRR), alpha=0.05) %>% list()
+}
+
+for (i in 1:length(power_S)) {
+  power_S[i] <- mapply(unlist, power_S[[i]]) %>% data.frame()
+} # convert into dataframe - early format contains column names
+
+
+  
+# type M (magnitude) error
+power_M <- NA
+for (i in 1:length(dat_list)) {
+  power_M[i] <- mapply(type_m, A=effect.p[[i]], s=sqrt(dat_list[[i]]$var.LRR), alpha=0.05, df=Inf, n.sims=10000) %>% list()
+}  
+
+for (i in 1:length(power_M)) {
+  power_M[i] <- mapply(unlist, power_M[[i]]) %>% data.frame()
+} # convert into dataframe - early format contains column names
+
+
+
 
 
 
@@ -392,8 +437,8 @@ power_summary_RR$se.d40_mean <- se.d40_mean
 
 
 
-# delete se=0 - mistakes in the original data
-power_summary_RR_correct_se <- power_summary_RR %>% subset(power_summary_RR$se.mean !=0) 
+# delete se=0 - some original datasets were lacking sampling errors
+power_summary_RR_correct_se <- power_summary_RR %>% subset(power_summary_RR$se.mean !=0) # filter()
 
 power_summary_RR_correct_se.d40 <- power_summary_RR %>% subset(power_summary_RR$se.d40_mean !=0) 
 
