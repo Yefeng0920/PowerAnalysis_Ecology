@@ -1,0 +1,1769 @@
+---
+title: "Power analysis Helmut's Nature Ecol Evol paper"
+author: "Yefeng"
+date: "2020/9/21"
+output: html_document
+subtitle: "check for Shinichi"
+---
+
+
+## Setup
+
+```{r setup, echo = FALSE}
+# Tidy
+ # rm(list=ls())
+ # graphics.off()
+
+# Preparing workspace
+knitr::opts_chunk$set(echo = TRUE, include = TRUE)
+
+# Loading packages
+pacman::p_load(knitr, # knit markdown
+               readxl, 
+               readr, 
+               metafor, 
+               dplyr, 
+               tidyverse, 
+               janitor, # generate 1-, 2-way table
+               patchwork, # layout of plots
+               cowplot, 
+               ggpubr,
+               gridExtra,
+               orchaRd, # forest-like plot
+               gridGraphics # Redraw Base Graphics Using 'grid' Graphics. `gridGraphics` is required to handle base-R plots.
+               )
+# install.packages("D:/Program Files (x86)/R packages source/retrodesign_0.1.0.zip", repos = NULL, type="source") 
+
+library(retrodesign)
+
+# Function to calculate power for meta-analysis
+power.ma_Shinichi <- function(mu, SE) {
+  2-pnorm(qnorm(0.975)-abs(mu)/SE)-pnorm(qnorm(0.975)+abs(mu)/SE)
+  } # two-tailed power
+
+
+# Function for power analysis for empirical data point
+power.individual_Shinichi <- function(mu, se) {
+  2-pnorm(qnorm(0.975)-abs(mu)/se)-pnorm(qnorm(0.975)+abs(mu)/se)} # two-tailed power
+
+
+library(here)
+
+```
+
+
+
+**Contents**
+We have three sections. 
+
+Section 1: power analysis for 36 lnRR meta-analyses and corresponding  power analysis for individual data point within each meta-analysis
+
+Section 2: power analysis for 12 lnCVR and lnVR meta-analyses and corresponding  power analysis for individual data point within each meta-analysis
+
+Section3: using three three weighting schemes (i.e. WAAP, PET-PEESE, http://environmentalcomputing.net/meta-analysis/) to evaluate publication bias
+
+
+
+
+### Section 1 - power analysis for mean-effect (i.e. lnRR or LRR)
+Assuming multi-level meta-analysis estimate as true effect, we  calculate two-tailed power for 36 lnRR meta-analytic cases.
+
+In addition, we also calculate power using four hypothetical true effects (i.e. 5%, 10%, 20%, 40% mean differences).
+
+```{r}
+#***************************************************************#
+#             power for 36 meta-analytic cases                  #
+#***************************************************************#
+# TODO - you can do this in one line - consdier using this function list.files() - by using this you can get all the names of files without typing in and loop or spply it through
+
+# my try - list.files(path = "./36_lnRR_data")
+
+# Importing data
+dat_m1_1 <- read.csv(file = "./36_lnRR_data/m1_1.csv", header = TRUE)
+dat_m1_2 <- read.csv(file = "./36_lnRR_data/m1_2.csv", header = TRUE)
+dat_m2_1 <- read.csv(file = "./36_lnRR_data/m2_1.csv", header = TRUE)
+dat_m2_2 <- read.csv(file = "./36_lnRR_data/m2_2.csv", header = TRUE)
+dat_m3_1 <- read.csv(file = "./36_lnRR_data/m3_1.csv", header = TRUE)
+dat_m4_1 <- read.csv(file = "./36_lnRR_data/m4_1.csv", header = TRUE)
+dat_m5_1 <- read.csv(file = "./36_lnRR_data/m5_1.csv", header = TRUE)
+dat_m6_1 <- read.csv(file = "./36_lnRR_data/m6_1.csv", header = TRUE)
+dat_m6_2 <- read.csv(file = "./36_lnRR_data/m6_2.csv", header = TRUE)
+dat_m6_3 <- read.csv(file = "./36_lnRR_data/m6_3.csv", header = TRUE)
+dat_m6_4 <- read.csv(file = "./36_lnRR_data/m6_4.csv", header = TRUE)
+dat_m6_5 <- read.csv(file = "./36_lnRR_data/m6_5.csv", header = TRUE)
+dat_m7_1 <- read.csv(file = "./36_lnRR_data/m7_1.csv", header = TRUE)
+dat_m7_2 <- read.csv(file = "./36_lnRR_data/m7_2.csv", header = TRUE)
+dat_m8_1 <- read.csv(file = "./36_lnRR_data/m8_1.csv", header = TRUE)
+dat_m9_1 <- read.csv(file = "./36_lnRR_data/m9_1.csv", header = TRUE)
+dat_m10_1 <- read.csv(file = "./36_lnRR_data/m10_1.csv", header = TRUE)
+dat_m11_1 <- read.csv(file = "./36_lnRR_data/m11_1.csv", header = TRUE)
+dat_m12_1 <- read.csv(file = "./36_lnRR_data/m12_1.csv", header = TRUE)
+dat_m13_1 <- read.csv(file = "./36_lnRR_data/m13_1.csv", header = TRUE)
+dat_m13_2 <- read.csv(file = "./36_lnRR_data/m13_2.csv", header = TRUE)
+dat_m14_1 <- read.csv(file = "./36_lnRR_data/m14_1.csv", header = TRUE)
+dat_m14_2 <- read.csv(file = "./36_lnRR_data/m14_2.csv", header = TRUE)
+dat_m14_3 <- read.csv(file = "./36_lnRR_data/m14_3.csv", header = TRUE)
+dat_m15_1 <- read.csv(file = "./36_lnRR_data/m15_1.csv", header = TRUE)
+dat_m16_1 <- read.csv(file = "./36_lnRR_data/m16_1.csv", header = TRUE)
+dat_m16_2 <- read.csv(file = "./36_lnRR_data/m16_2.csv", header = TRUE)
+dat_m20_1 <- read.csv(file = "./36_lnRR_data/m20_1.csv", header = TRUE)
+dat_m23_1 <- read.csv(file = "./36_lnRR_data/m23_1.csv", header = TRUE)
+dat_m24_1 <- read.csv(file = "./36_lnRR_data/m24_1.csv", header = TRUE) #sep=";"
+
+
+# TODO  - Shinichi' addition example using 1st
+model1 <- rma.mv(data = dat_m1_1, 
+                 yi = LRR, 
+                 V = var.LRR, 
+                 random = list(~1|Study, ~1|Unit_ID), 
+                 method = "REML")
+summary(model1)
+
+
+#predict(model1)
+# this is study and effect specific effects
+blups <- ranef(model1)
+# we need this to get 
+index <- match(as.character(dat_m1_1$Study),rownames(blups$Study))
+# effect without sampling eror 
+effect_size <- as.numeric(model1$beta) + blups$Study[index,1] + blups$Unit_ID[,1]
+
+
+# comparing observed effect size and estiamted effect size from the model
+#par(mfrow=c(1,2))
+qplot(dat_m1_1$LRR, xlim = c(-3.5,1.5))
+qplot(effect_size, xlim = c(-3.5,1.5))
+
+# now comparing
+f_power <- mapply(power.ma_Shinichi, mu=as.numeric(rep(model1$beta,length(dat_m1_1$var.LRR))), sqrt(dat_m1_1$var.LRR))
+r_power <- mapply(power.ma_Shinichi, mu=effect_size, sqrt(dat_m1_1$var.LRR))
+
+
+
+r_power3 <- mapply(type_m, A=effect_size, s=sqrt(dat_m1_1$var.LRR)) # not list(effect_size)
+
+r_power4 <- unlist(r_power3) %>% data.frame()
+
+which(r_power4<4) # select studies whose exaggeration ratio is lower than 4, then use these studies to run meta-analysis. Something like PET-PEESP, which selects powered studies to perform meta-analysis
+
+
+# I am a bit surprised r_power is lower but we need to see this is general
+qplot(f_power)
+qplot(r_power)
+mean(f_power)
+mean(r_power)
+mean(r_power2)
+
+  qplot(effect_size, r_power)
+
+
+Warning: There are some mising values of effect size corresponding variance (i.e. var.LRR) in the following data set: dat_m17_1, dat_m17_2, dat_m18_1, dat_m19_1, dat_m21_1, dat_m22_1. These datasets can not be used to calculate power
+
+
+#***************************************************************#
+#                    power for meta-analytic cases              #
+#***************************************************************#
+
+# Make a list of data
+dat_list <- list(dat_m1_1,
+                 dat_m1_2,
+                 dat_m2_1,
+                 dat_m2_2,
+                 dat_m3_1,
+                 dat_m4_1,
+                 dat_m5_1,
+                 dat_m6_1,
+                 dat_m6_2,
+                 dat_m6_3,
+                 dat_m6_4,
+                 dat_m6_5,
+                 dat_m7_1,
+                 dat_m7_2,
+                 dat_m8_1,
+                 dat_m9_1,
+                 dat_m10_1,
+                 dat_m11_1,
+                 dat_m12_1,
+                 dat_m13_1,
+                 dat_m13_2,
+                 dat_m14_1,
+                 dat_m14_2,
+                 dat_m14_3,
+                 dat_m15_1,
+                 dat_m16_1,
+                 dat_m16_2,
+                 dat_m20_1,
+                 dat_m23_1,
+                 dat_m24_1)
+
+
+# Prepare "ture" effect of mean (i.e. lnRR) for power analysis - fit multi-level meta-analytic models
+model_list_RR <- list() # rep(NA, length(dat_list))
+for (i in 1:length(dat_list)) {
+ model_list_RR[i] <- rma.mv(data = dat_list[[i]], yi = LRR, V = var.LRR, random = list(~1|Study, ~1|Unit_ID), method = "REML", test = "z") %>% list()
+}
+
+# Calculate the number of total effect sizes - total sample size
+ES_number <- NA
+ES_number <- mapply(unique, sapply(dat_list, function(x) x$Unit_ID)) 
+unlist(ES_number) %>% length() # 3850 this is to show how many global change experiments we use in our analysis 
+
+
+
+
+# As we assume meta-analytic mean as the ture effect, we need to get estimate (mu) and corresponding error (SE)
+model_est_RR <- data.frame(MA_case=c("m1_1",
+                                      "m1_2",
+                                      "m2_1",
+                                      "m2_2",
+                                      "m3_1",
+                                      "m4_1",
+                                      "m5_1",
+                                      "m6_1",
+                                      "m6_2",
+                                      "m6_3",
+                                      "m6_4",
+                                      "m6_5",
+                                      "m7_1",
+                                      "m7_2",
+                                      "m8_1",
+                                      "m9_1",
+                                      "m10_1",
+                                      "m11_1",
+                                      "m12_1",
+                                      "m13_1",
+                                      "m13_2",
+                                      "m14_1",
+                                      "m14_2",
+                                      "m14_3",
+                                      "m15_1",
+                                      "m16_1",
+                                      "m16_2",
+                                      "m20_1",
+                                      "m23_1",
+                                      "m24_1"),
+                  mu_RR=sapply(model_list_RR, function(x) x$beta),
+                  SE_RR=sapply(model_list_RR, function(x) x$se),
+                  p_value=sapply(model_list_RR, function(x) x$pval))
+
+
+# Get two-tailed power for meta-analyses
+model_est_RR$MA.power <- power.ma_Shinichi(mu=model_est_RR$mu,SE=model_est_RR$SE)
+
+# Get type S error for meta-analyses
+MA.power.S <- NA
+for (i in 1:length(model_est_RR$MA_case)) {
+  MA.power.S[i] <- type_s(A=model_est_RR$mu[i],s=model_est_RR$SE[i],alpha=0.05) %>% unlist()
+}
+
+model_est_RR$MA.power.S <- MA.power.S
+
+
+# Get type M error for meta-analyses
+MA.power.M <- NA
+for (i in 1:length(model_est_RR$MA_case)) {
+  MA.power.M[i] <- type_m(A=model_est_RR$mu[i],s=model_est_RR$SE[i],alpha=0.05,df=Inf) %>% unlist()
+}
+
+model_est_RR$MA.power.M <- MA.power.M
+
+# Save
+write.csv(model_est_RR, file = "./meta-analysis power_RR.csv", row.names = FALSE)
+
+
+
+#***************************************************************#
+#       power for individual study within meta-analysis         #
+#***************************************************************#
+
+# Use meta-analytic estimate as true effect, to calculate power for individual data point
+power.F_RR <- NA
+for (i in 1:length(dat_list)) {
+  power.F_RR[i] <- power.individual_Shinichi(mu=rep(model_list_RR[[i]]$beta, length(dat_list[[i]]$var.LRR)), se=sqrt(dat_list[[i]]$var.LRR)) %>% list()}
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(power.F_RR)) {
+  dat_list[[i]]$power.F_RR <- power.F_RR[[i]]
+}
+
+
+# Use effects without random effects as true effect sizes for each individual study, to calculate power for each individual study
+# This is what Helmut suggest to do, to account for random effects of each study
+
+# best linear unbiased estimate - study specific effects
+blups.list_RR <- NA
+for (i in 1:length(model_list_RR)) {
+  blups.list_RR[i] <- ranef(model_list_RR[[i]]) %>% list()
+}
+
+# get study index
+index.list_RR <- NA # list()
+for (i in 1:length(model_list_RR)) {
+  index.list_RR[i] <- match(as.character(dat_list[[i]]$Study),rownames(blups.list_RR[[i]]$Study)) %>% list()
+}
+
+
+# effects geting rid of random effects
+effect.R_RR <-NA
+for (i in 1:length(model_list_RR)) {
+  effect.R_RR[i] <- mapply(sum, model_list_RR[[i]]$beta, blups.list_RR[[i]]$Study[index.list_RR[[i]],1], blups.list_RR[[i]]$Unit_ID[,1]) %>% list()
+}
+
+
+power.R_RR <- NA
+for (i in 1:length(dat_list)) {
+  power.R_RR[i] <- power.individual_Shinichi(mu=effect.R_RR[[i]], se=sqrt(dat_list[[i]]$var.LRR)) %>% list()}
+
+# plot(power_RR[[1]]-power_RR2[[1]]) - check discrepancy
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(power.R_RR)) {
+  dat_list[[i]]$power.R_RR <- power.R_RR[[i]]
+} 
+
+# Note that meta-analytic model only has one predicted/fitted value - fixed effect. While Meta-regression's fitted values are dependent on the level of moderator (i.e. independent variable)
+
+# type S (sign) error
+power.S_RR <- NA
+for (i in 1:length(dat_list)) {
+  power.S_RR[i] <- mapply(type_s, A=effect.R_RR[[i]], s=sqrt(dat_list[[i]]$var.LRR), alpha=0.05) %>% list()
+}
+
+for (i in 1:length(power.S_RR)) {
+  power.S_RR[i] <- mapply(unlist, power.S_RR[[i]]) %>% data.frame()
+} # convert into dataframe - early format contains column names
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(power.S_RR)) {
+  dat_list[[i]]$power.S_RR <- power.S_RR[[i]]
+}
+
+
+# type M (magnitude) error
+power.M_RR <- NA
+for (i in 1:length(dat_list)) {
+  power.M_RR[i] <- mapply(type_m, A=effect.R_RR[[i]], s=sqrt(dat_list[[i]]$var.LRR), alpha=0.05, df=Inf, n.sims=10000) %>% list()
+}  
+
+for (i in 1:length(power.M_RR)) {
+  power.M_RR[i] <- mapply(unlist, power.M_RR[[i]]) %>% data.frame()
+} # convert into dataframe - early format contains column names
+
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(power.M_RR)) {
+  dat_list[[i]]$power.M_RR <- power.M_RR[[i]]
+}
+
+
+
+#***************************************************************#
+#   power calculation based on hypothetical mean differences    #
+#***************************************************************#
+
+# Use 5% mean differences as true effect size, to calculate power for individual data point
+d5_power_RR <- NA
+for (i in 1:length(dat_list)) {
+  d5_power_RR[i] <- power.individual_Shinichi(mu=rep(log(105/100), length(dat_list[[i]]$var.LRR)), se=sqrt(dat_list[[i]]$var.LRR)) %>% list()
+  }
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(d5_power_RR)) {
+  dat_list[[i]]$d5_power_RR <- d5_power_RR[[i]]
+}
+
+# Use 10% mean differences as true effect size, to calculate power for individual data point
+d10_power_RR <- NA
+for (i in 1:length(dat_list)) {
+  d10_power_RR[i] <- power.individual_Shinichi(mu=rep(log(110/100), length(dat_list[[i]]$var.LRR)), se=sqrt(dat_list[[i]]$var.LRR)) %>% list()
+  }
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(d10_power_RR)) {
+  dat_list[[i]]$d10_power_RR <- d10_power_RR[[i]]
+}
+
+# Use 20% mean differences as true effect size, to calculate power for individual data point
+d20_power_RR <- NA
+for (i in 1:length(dat_list)) {
+  d20_power_RR[i] <- power.individual_Shinichi(mu=rep(log(120/100), length(dat_list[[i]]$var.LRR)), se=sqrt(dat_list[[i]]$var.LRR)) %>% list()
+  } # This following function also can calculate individuai power, d20_power_RR <- sapply(dat_list, function(x) power.individual_Shinichi(mu=rep(log(120/100), length(x$var.LRR)), se=sqrt(x$var.LRR)))
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(d20_power_RR)) {
+  dat_list[[i]]$d20_power_RR <- d20_power_RR[[i]]
+}
+
+# Use 40% mean differences as true effect size, to calculate power for individual data point
+d40_power_RR <- NA
+for (i in 1:length(dat_list)) {
+  d40_power_RR[i] <- power.individual_Shinichi(mu=rep(log(140/100), length(dat_list[[i]]$var.LRR)), se=sqrt(dat_list[[i]]$var.LRR)) %>% list()} 
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(d40_power_RR)) {
+  dat_list[[i]]$d40_power_RR <- d40_power_RR[[i]]
+}
+
+
+# Summary of individual power using different "true" effect
+# individual power using meta-analytic mean as true effect
+power.F_summary_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$power.F_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$power.F_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$power.F_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$power.F_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$power.F_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$power.F_RR))[6,])  # early version, sapply(mapply(summary, sapply(dat_list, function(x) x$power_RR)), function(x) x[2])
+
+
+# individual power using study specific effect as true effect
+power.R_summary_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$power.R_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$power.R_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$power.R_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$power.R_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$power.R_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$power.R_RR))[6,])
+
+
+
+# individual type S error using study specific effect as true effect
+power.S_summary_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$power.S_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$power.S_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$power.S_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$power.S_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$power.S_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$power.S_RR))[6,])
+
+
+# individual type M error using study specific effect as true effect
+power.M_summary_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$power.M_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$power.M_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$power.M_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$power.M_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$power.M_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$power.M_RR))[6,])
+
+
+
+# individual power using 40% mean differences as true effect
+power_summary_d40_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$d40_power_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$d40_power_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$d40_power_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$d40_power_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$d40_power_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$d40_power_RR))[6,])
+
+
+
+
+# Calculate standard error
+# Based on averaged power (variable power.F_RR)
+se.F_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.F_mean[i] <- sd(dat_list[[i]]$power.F_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$power.F_RR[!is.na(dat_list[[i]]$power.F_RR)]))
+}
+
+power.F_summary_RR$se.F_mean <- se.F_mean
+
+
+# Based on averaged power (variable power.R_RR)
+se.R_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.R_mean[i] <- sd(dat_list[[i]]$power.R_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$power.R_RR[!is.na(dat_list[[i]]$power.R_RR)]))
+}
+
+power.R_summary_RR$se.R_mean <- se.R_mean
+
+
+
+# Based on averaged power (variable power.S_RR)
+se.S_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.S_mean[i] <- sd(dat_list[[i]]$power.S_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$power.S_RR[!is.na(dat_list[[i]]$power.S_RR)]))
+}
+
+power.S_summary_RR$se.S_mean <- se.S_mean
+
+
+# Based on averaged power (variable power.M_RR)
+se.M_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.M_mean[i] <- sd(dat_list[[i]]$power.M_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$power.M_RR[!is.na(dat_list[[i]]$power.M_RR)]))
+}
+
+power.M_summary_RR$se.M_mean <- se.M_mean
+
+
+# Based on 40% mean differences (variable d40_power_RR)
+se.d40_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.d40_mean[i] <- sd(dat_list[[i]]$d40_power_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$d40_power_RR[!is.na(dat_list[[i]]$d40_power_RR)]))
+}
+
+power_summary_d40_RR$se.d40_mean <- se.d40_mean
+
+
+
+# meta-meta-analysis on power
+MMA_power.F_RR <- with(power.F_summary_RR, rma.mv(yi = Mean, V = se.F_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.R_RR <- with(power.R_summary_RR, rma.mv(yi = Mean, V = se.R_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.S_RR <- with(power.S_summary_RR, rma.mv(yi = Mean, V = se.S_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+# some meta-analytic cases have very large type M error, we consider them as potential outlier
+power.M_summary_RR2 <- power.M_summary_RR %>% subset(power.M_summary_RR$se.M_mean < 100) # remove potential outlier
+MMA_power.M_RR <- with(power.M_summary_RR2, rma.mv(yi = Mean, V = se.M_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+MMA_power_RR_d40 <- with(power_summary_d40_RR, rma.mv(yi = Mean, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+
+
+# Retrieving estimates
+  table.MMA_power.F_RR <- mod_results(MMA_power.F_RR, mod = 'Int')
+  table.MMA_power.R_RR <- mod_results(MMA_power.R_RR, mod = 'Int')
+  table.MMA_power.S_RR <- mod_results(MMA_power.S_RR, mod = 'Int')
+  table.MMA_power.M_RR <- mod_results(MMA_power.M_RR, mod = 'Int')
+  
+  table.MMA_power_RR_d40 <- mod_results(MMA_power_RR_d40, mod = 'Int')
+
+ # Plotting
+  #myorchard.plot1 <- edit(orchard_plot) # use edit() to tailor orchard_plot(): color - black; geom_point (size = 6), annotate ('text', size = 7)
+  
+# meta-analytic mean
+  myorchard.plot1(table.MMA_power.F_RR, mod = "Int", xlab = "Mean power for lnRR", transfm = "none", angle = 90) +
+  #scale_colour_manual(values = c('grey40')) +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by=0.2)) +
+  scale_y_discrete(labels = c('Estimate of mean power')) +
+  theme(panel.grid = element_blank(),
+        panel.border = element_rect(size = 1.2, colour = "black", fill = NA),
+        axis.ticks = element_line(size = 0.9, color = 'black'),
+        axis.ticks.length = unit(0.15, 'cm'), 
+        axis.text.x = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=9,r=0,b=0,l=0)),
+        #axis.ticks.x = element_blank(),
+        axis.title.x = element_text(colour = 'black', face = 'bold', size = 20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=0,r=9,b=0,l=0)),
+        #axis.ticks.y = element_blank(),
+        plot.title = element_text(colour = 'black', size = 20, face = 'bold', hjust = 0.0),
+        #legend.text = element_text(size = 20),
+        #legend.title = element_text(size = 20),
+        legend.position = c(0, 1), legend.justification = c(0, 1)) +
+    ggtitle('Second order meta-analysis of power') + xlab("Mean power for lnRR (fixed effect)") -> power.F.RR
+
+png(filename = "./Figures/power.F.RR.png", width = 7, height = 7, units = "in", type = "windows", res = 400)
+power.F.RR
+dev.off()
+
+
+# study specific effects
+myorchard.plot1(table.MMA_power.R_RR, mod = "Int", xlab = "Mean power for lnRR", transfm = "none", angle = 90) +
+  #scale_colour_manual(values = c('grey40')) +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by=0.2)) +
+  scale_y_discrete(labels = c('Estimate of mean power')) +
+  theme(panel.grid = element_blank(),
+        panel.border = element_rect(size = 1.2, colour = "black", fill = NA),
+        axis.ticks = element_line(size = 0.9, color = 'black'),
+        axis.ticks.length = unit(0.15, 'cm'), 
+        axis.text.x = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=9,r=0,b=0,l=0)),
+        #axis.ticks.x = element_blank(),
+        axis.title.x = element_text(colour = 'black', face = 'bold', size = 20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=0,r=9,b=0,l=0)),
+        #axis.ticks.y = element_blank(),
+        plot.title = element_text(colour = 'black', size = 20, face = 'bold', hjust = 0.0),
+        #legend.text = element_text(size = 20),
+        #legend.title = element_text(size = 20),
+        legend.position = c(0, 1), legend.justification = c(0, 1)) +
+    ggtitle('Second order meta-analysis of power') + xlab("Mean power for lnRR (fixed & random effect)") -> power.R.RR
+
+png(filename = "./Figures/power.R.RR.png", width = 7, height = 7, units = "in", type = "windows", res = 400)
+power.R.RR
+dev.off()
+
+
+# type S error
+myorchard.plot1(table.MMA_power.S_RR, mod = "Int", xlab = "Mean power for lnRR", transfm = "none", angle = 90) +
+  #scale_colour_manual(values = c('grey40')) +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by=0.2)) +
+  scale_y_discrete(labels = c('Estimate of mean power')) +
+  theme(panel.grid = element_blank(),
+        panel.border = element_rect(size = 1.2, colour = "black", fill = NA),
+        axis.ticks = element_line(size = 0.9, color = 'black'),
+        axis.ticks.length = unit(0.15, 'cm'), 
+        axis.text.x = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=9,r=0,b=0,l=0)),
+        #axis.ticks.x = element_blank(),
+        axis.title.x = element_text(colour = 'black', face = 'bold', size = 20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=0,r=9,b=0,l=0)),
+        #axis.ticks.y = element_blank(),
+        plot.title = element_text(colour = 'black', size = 20, face = 'bold', hjust = 0.0),
+        #legend.text = element_text(size = 20),
+        #legend.title = element_text(size = 20),
+        legend.position = c(0, 1), legend.justification = c(0, 1)) +
+    ggtitle('Second order meta-analysis of power') + xlab("Type S error for lnRR") -> power.S.RR
+
+png(filename = "./Figures/power.S.RR.png", width = 7, height = 7, units = "in", type = "windows", res = 400)
+power.S.RR
+dev.off()
+
+
+
+# type M error
+myorchard.plot1(table.MMA_power.M_RR, mod = "Int", xlab = "Mean power for lnRR", transfm = "none", angle = 90) +
+  #scale_colour_manual(values = c('grey40')) +
+  #scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by=0.2)) +
+  scale_y_discrete(labels = c('Estimate of mean power')) +
+  theme(panel.grid = element_blank(),
+        panel.border = element_rect(size = 1.2, colour = "black", fill = NA),
+        axis.ticks = element_line(size = 0.9, color = 'black'),
+        axis.ticks.length = unit(0.15, 'cm'), 
+        axis.text.x = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=9,r=0,b=0,l=0)),
+        #axis.ticks.x = element_blank(),
+        axis.title.x = element_text(colour = 'black', face = 'bold', size = 20), 
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=0,r=9,b=0,l=0)),
+        #axis.ticks.y = element_blank(),
+        plot.title = element_text(colour = 'black', size = 20, face = 'bold', hjust = 0.0),
+  
+        #legend.text = element_text(size = 20),
+        #legend.title = element_text(size = 20),
+        legend.position = c(0, 1), legend.justification = c(0, 1)) +
+    ggtitle('Second order meta-analysis of power') + xlab("Type M error for lnRR") -> power.M.RR
+
+png(filename = "./Figures/power.M.RR.png", width = 7, height = 7, units = "in", type = "windows", res = 400)
+power.M.RR
+dev.off()
+
+
+
+# 40% differences
+myorchard.plot1(table.MMA_power_RR_d40, mod = "Int", xlab = "Hypothetical 40% lnRR differences", transfm = "none", angle = 90) +
+  #scale_colour_manual(values = c('grey40')) +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by=0.2)) +
+  scale_y_discrete(labels = c('Estimate of mean power')) +
+  theme(panel.grid = element_blank(),
+        panel.border = element_rect(size = 1.2, colour = "black", fill = NA),
+        axis.ticks = element_line(size = 0.9, color = 'black'),
+        axis.ticks.length = unit(0.15, 'cm'), 
+        axis.text.x = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=9,r=0,b=0,l=0)),
+        #axis.ticks.x = element_blank(),
+        axis.title.x = element_text(colour = 'black', face = 'bold', size = 20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=0,r=9,b=0,l=0)),
+        #axis.ticks.y = element_blank(),
+        plot.title = element_text(colour = 'black', size = 20, face = 'bold', hjust = 0.0),
+        #legend.text = element_text(size = 20),
+        #legend.title = element_text(size = 20),
+        legend.position = c(0, 1), legend.justification = c(0, 1)) +
+    ggtitle('Second order meta-analysis of power') + xlab("Hypothetical 40% lnRR differences") -> power.RR_d40
+
+png(filename = "./Figures/power.RR_d40.png", width = 7, height = 7, units = "in", type = "windows", res = 400)
+power.RR_d40
+dev.off()
+
+```
+
+
+
+
+
+### Section 2 - power analysis for variance-effect (i.e. lnCVR and lnVR)
+Assuming multi-level meta-analysis estimate as true effect, we want to calculate two-tailed power for 12 lnCVR and lnVR meta-analytic cases - relative variation and absolute variation.
+
+In addition, we also want to calculate power using three hypothetical true effects (i.e. 5%, 10%, 20%, 40% mean differences).
+
+```{r}
+#***************************************************************#
+#             power for 12 meta-analytic cases                  #
+#***************************************************************#
+
+# Import raw data
+raw_m1_1 <- read.csv(file = "./12_lnCVR_data/raw_m1_1.csv", header = TRUE) #sep=";"
+raw_m1_2 <- read.csv(file = "./12_lnCVR_data/raw_m1_2.csv", header = TRUE) 
+raw_m2_1 <- read.csv(file = "./12_lnCVR_data/raw_m2_1.csv", header = TRUE)
+raw_m2_2 <- read.csv(file = "./12_lnCVR_data/raw_m2_2.csv", header = TRUE) 
+raw_m5_1 <- read.csv(file = "./12_lnCVR_data/raw_m5_1.csv", header = TRUE)
+raw_m6_1 <- read.csv(file = "./12_lnCVR_data/raw_m6_1.csv", header = TRUE)
+raw_m6_2 <- read.csv(file = "./12_lnCVR_data/raw_m6_2.csv", header = TRUE) 
+raw_m6_3 <- read.csv(file = "./12_lnCVR_data/raw_m6_3.csv", header = TRUE)
+raw_m6_4 <- read.csv(file = "./12_lnCVR_data/raw_m6_4.csv", header = TRUE)
+raw_m6_5 <- read.csv(file = "./12_lnCVR_data/raw_m6_5.csv", header = TRUE)
+raw_m9_1 <- read.csv(file = "./12_lnCVR_data/raw_m9_1.csv", header = TRUE)
+raw_m11_1 <- read.csv(file = "./12_lnCVR_data/raw_m11_1.csv", header = TRUE)
+
+
+# Rename the column names of descriptive statistics to standard column names (i.e. "T_mean", "T_sd", "T_N", "C_mean", "C_sd", "C_N")
+names(raw_m1_1)[str_detect(names(raw_m1_1), c("T.mean|T.sd|T.N|C.mean|C.sd|C.N"))] <- c("T_mean", "T_sd", "T_N", "C_mean", "C_sd", "C_N")
+names(raw_m1_2)[str_detect(names(raw_m1_2), c("T.mean|T.sd|T.N|C.mean|C.sd|C.N"))] <- c("T_mean", "T_sd", "T_N", "C_mean", "C_sd", "C_N") 
+
+names(raw_m2_1)[str_detect(names(raw_m2_1), c("con.mn|con.sd|con.n|fert.mn|fert.sd|fert.n"))] <- c( "C_mean", "C_sd", "C_N", "T_mean", "T_sd", "T_N")
+names(raw_m2_2)[str_detect(names(raw_m2_2), c("con.mn|con.sd|con.n|fert.mn|fert.sd|fert.n"))] <- c( "C_mean", "C_sd", "C_N", "T_mean", "T_sd", "T_N")  
+
+names(raw_m5_1)[str_detect(names(raw_m5_1), c("NT|NC|meanT|meanC|sdT|sdC"))] <- c("T_N", "C_N", "T_mean", "C_mean", "T_sd", "C_sd") 
+
+names(raw_m6_1)[str_detect(names(raw_m6_1), c("p.mean|p.sd|p.n|d.mean|d.sd|d.n"))] <- c("C_mean","C_sd","C_N",  "T_mean","T_sd","T_N") 
+names(raw_m6_2)[str_detect(names(raw_m6_2), c("p.mean|p.sd|p.n|d.mean|d.sd|d.n"))] <- c("C_mean","C_sd","C_N",  "T_mean","T_sd","T_N") 
+names(raw_m6_3)[str_detect(names(raw_m6_3), c("p.mean|p.sd|p.n|d.mean|d.sd|d.n"))] <- c("C_mean","C_sd","C_N",  "T_mean","T_sd","T_N") 
+names(raw_m6_4)[str_detect(names(raw_m6_4), c("p.mean|p.sd|p.n|d.mean|d.sd|d.n"))] <- c("C_mean","C_sd","C_N",  "T_mean","T_sd","T_N") 
+names(raw_m6_5)[str_detect(names(raw_m6_5), c("p.mean|p.sd|p.n|d.mean|d.sd|d.n"))] <- c("C_mean","C_sd","C_N",  "T_mean","T_sd","T_N") 
+
+names(raw_m9_1)[str_detect(names(raw_m9_1), c("N2O.trt|SD.N2O.trt|N.N2O.trt|N2O.ctr|SD.N2O.ctr|N.N2O.ctr"))] <- c("T_mean","T_sd","T_N","C_mean","C_sd","C_N")
+names(raw_m11_1)[str_detect(names(raw_m11_1), c("Mean|SD|N|Mean.1|SD.1|N.1"))] <- c("C_mean","C_sd","C_N","T_mean","T_sd","T_N")
+
+
+# Make a list of data
+dat_list_variation <- list(raw_m1_1,
+                           raw_m1_2,
+                           raw_m2_1,
+                           raw_m2_2,
+                           raw_m5_1,
+                           raw_m6_1,
+                           raw_m6_2,
+                           raw_m6_3,
+                           raw_m6_4,
+                           raw_m6_5,
+                           raw_m9_1,
+                           raw_m11_1)
+
+# Calculate the number of total effect sizes - sample size
+ES_number <- NA
+ES_number <- mapply(unique, sapply(dat_list_variation, function(x) x$Unit_ID)) 
+unlist(ES_number) %>% length() # 2004
+
+
+# Calculate 3 type of effect size statistics (i.e. lnRR, lnCVR and lnVR)
+lnRR <- NA
+for (i in 1:length(dat_list_variation)) {
+  lnRR[i] <- escalc(measure = "ROM",
+                    m1i = T_mean,
+                    m2i = C_mean,
+                    sd1i = T_sd,
+                    sd2i = C_sd,
+                    n1i = T_N,
+                    n2i = C_N,
+                    data = dat_list_variation[[i]]) %>% list()
+}
+
+lnCVR <- NA
+for (i in 1:length(dat_list_variation)) {
+  lnCVR[i] <- escalc(measure = "CVR",
+                    m1i = T_mean,
+                    m2i = C_mean,
+                    sd1i = T_sd,
+                    sd2i = C_sd,
+                    n1i = T_N,
+                    n2i = C_N,
+                    data = dat_list_variation[[i]]) %>% list()
+}
+
+lnVR <- NA
+for (i in 1:length(dat_list_variation)) {
+  lnVR[i] <- escalc(measure = "VR",
+                    m1i = T_mean,
+                    m2i = C_mean,
+                    sd1i = T_sd,
+                    sd2i = C_sd,
+                    n1i = T_N,
+                    n2i = C_N,
+                    data = dat_list_variation[[i]]) %>% list()
+} 
+
+
+# clean NA
+for (i in 1:12) {
+  lnCVR[[i]] <- lnCVR[[i]][!is.na(lnCVR[[i]]$yi),]
+}
+
+for (i in 1:12) {
+  lnVR[[i]] <- lnVR[[i]][!is.na(lnVR[[i]]$yi),]
+}
+
+
+# Prepare "ture" effect of variation (i.e. lnCVR and lnVR) for power analysis - fit multi-level meta-analytic models
+model_list_CVR<- NA
+for (i in 1:length(dat_list_variation)) {
+ model_list_CVR[i] <- rma.mv(data = lnCVR[[i]], yi = yi, V = vi, random = list(~1|Study, ~1|Unit_ID), method = "REML", test = "z") %>% list()
+}
+
+model_list_VR<- NA
+for (i in 1:length(dat_list_variation)) {
+ model_list_VR[i] <- rma.mv(data = lnCVR[[i]], yi = yi, V = vi, random = list(~1|Study, ~1|Unit_ID), method = "REML", test = "z") %>% list()
+}
+
+
+# We assume meta-analytic mean as ture effect, so we need to get estimate (mu) and corresponding error (SE)
+# relative variation - CVR
+model_est_CVR <- data.frame(MA_case=c("m1_1",
+                                      "m1_2",
+                                      "m2_1",
+                                      "m2_2",
+                                      "m5_1",
+                                      "m6_1",
+                                      "m6_2",
+                                      "m6_3",
+                                      "m6_4",
+                                      "m6_5",
+                                      "m9_1",
+                                      "m11_1"),
+                  mu_CVR=sapply(model_list_CVR, function(x) x$beta),
+                  SE_CVR=sapply(model_list_CVR, function(x) x$se),
+                  p_value=sapply(model_list_CVR, function(x) x$pval) %>% round(4))
+
+# Get two-tailed power for meta-analyses
+model_est_CVR$MA.power <- power.ma_Shinichi(mu=model_est_CVR$mu,SE=model_est_CVR$SE)
+
+
+# Get type S error for meta-analyses
+MA.power.S <- NA
+for (i in 1:length(model_est_CVR$MA_case)) {
+  MA.power.S[i] <- type_s(A=model_est_CVR$mu[i],s=model_est_CVR$SE[i],alpha=0.05) %>% unlist()
+}
+
+model_est_CVR$MA.power.S <- MA.power.S
+
+
+# Get type M error for meta-analyses
+MA.power.M <- NA
+for (i in 1:length(model_est_CVR$MA_case)) {
+  MA.power.M[i] <- type_m(A=model_est_CVR$mu[i],s=model_est_CVR$SE[i],alpha=0.05,df=Inf) %>% unlist()
+}
+
+model_est_CVR$MA.power.M <- MA.power.M
+
+
+# Save
+write.csv(model_est_CVR, file = "./meta-analysis power_CVR.csv", row.names = FALSE)
+
+
+# absolute variation - VR
+model_est_VR <- data.frame(MA_case=model_est_CVR$MA_case,
+                  mu_VR=sapply(model_list_VR, function(x) x$beta),
+                  SE_VR=sapply(model_list_VR, function(x) x$se),
+                  p_value=sapply(model_list_VR, function(x) x$pval))
+# Get two-tailed power for meta-analyses
+model_est_VR$MA.power <- power.ma_Shinichi(mu=model_est_VR$mu,SE=model_est_VR$SE)
+
+# Get type S error for meta-analyses
+MA.power.S <- NA
+for (i in 1:length(model_est_VR$MA_case)) {
+  MA.power.S[i] <- type_s(A=model_est_VR$mu[i],s=model_est_VR$SE[i],alpha=0.05) %>% unlist()
+}
+
+model_est_VR$MA.power.S <- MA.power.S
+
+
+# Get type M error for meta-analyses
+MA.power.M <- NA
+for (i in 1:length(model_est_VR$MA_case)) {
+  MA.power.M[i] <- type_m(A=model_est_VR$mu[i],s=model_est_VR$SE[i],alpha=0.05,df=Inf) %>% unlist()
+}
+
+model_est_VR$MA.power.M <- MA.power.M
+
+
+# Save
+write.csv(model_est_VR, file = "./meta-analysis power_VR.csv", row.names = FALSE)
+
+
+#***************************************************************#
+#       power for individual study within meta-analysis         #
+#***************************************************************#
+
+# lnCVR
+# Use meta-analytic estimate as true effect, to calculate power for individual data point
+# relative variation - CVR
+power.F_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  power.F_CVR[i] <- power.individual_Shinichi(mu=rep(model_list_CVR[[i]]$beta, length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(power.F_CVR)) {
+  lnCVR[[i]]$power.F_CVR <- power.F_CVR[[i]]
+}
+
+# absolute variation - VR
+power.F_VR <- NA
+for (i in 1:length(lnVR)) {
+  power.F_VR[i] <- power.individual_Shinichi(mu=rep(model_list_VR[[i]]$beta, length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(power.F_VR)) {
+  lnVR[[i]]$power.F_VR <- power.F_VR[[i]]
+}
+
+
+# Use effects without random effects as true effect sizes for each individual study, to calculate power for each individual study
+# This is what Helmut suggest to do, to account for random effects of each study
+
+# best linear unbiased estimate - study specific effects
+blups.list_CVR <- NA
+for (i in 1:length(model_list_CVR)) {
+  blups.list_CVR[i] <- ranef(model_list_CVR[[i]]) %>% list()
+}
+
+# get study index
+index.list_CVR <- NA # list()
+for (i in 1:length(model_list_CVR)) {
+  index.list_CVR[i] <- match(as.character(lnCVR[[i]]$Study),rownames(blups.list_CVR[[i]]$Study)) %>% list()
+}
+
+# effects geting rid of random effects
+effect.R_CVR <-NA
+for (i in 1:length(model_list_CVR)) {
+  effect.R_CVR[i] <- mapply(sum, model_list_CVR[[i]]$beta, blups.list_CVR[[i]]$Study[index.list_CVR[[i]],1], blups.list_CVR[[i]]$Unit_ID[,1]) %>% list()
+}
+
+power.R_CVR <- NA
+for (i in 1:length(dat_list_variation)) {
+  power.R_CVR[i] <- power.individual_Shinichi(mu=effect.R_CVR[[i]], se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# plot(power_CVR[[1]]-power_CVR2[[1]]) - check discrepancy
+# Allocate each set of power into coCVResponding dataset
+for (i in 1:length(power.R_CVR)) {
+  lnCVR[[i]]$power.R_CVR <- power.R_CVR[[i]]
+} 
+
+# Note that meta-analytic model only has one predicted/fitted value - fixed effect. While Meta-regression's fitted values are dependent on the level of moderator (i.e. independent variable)
+
+# type S (sign) eCVRor
+power.S_CVR <- NA
+for (i in 1:12) {
+  power.S_CVR[i] <- mapply(type_s, A=effect.R_CVR[[i]], s=sqrt(lnCVR[[i]]$vi), alpha=0.05) %>% list()
+}
+
+for (i in 1:length(power.S_CVR)) {
+  power.S_CVR[i] <- mapply(unlist, power.S_CVR[[i]]) %>% data.frame()
+} # convert into dataframe - early format contains column names
+
+# Allocate each set of power into coCVResponding dataset
+for (i in 1:length(power.S_CVR)) {
+  lnCVR[[i]]$power.S_CVR <- power.S_CVR[[i]]
+}
+
+
+# type M (magnitude) eCVRor
+power.M_CVR <- NA
+for (i in 1:12) {
+  power.M_CVR[i] <- mapply(type_m, A=effect.R_CVR[[i]], s=sqrt(lnCVR[[i]]$vi), alpha=0.05, df=Inf, n.sims=10000) %>% list()
+}  
+
+for (i in 1:length(power.M_CVR)) {
+  power.M_CVR[i] <- mapply(unlist, power.M_CVR[[i]]) %>% data.frame()
+} # convert into dataframe - early format contains column names
+
+
+# Allocate each set of power into coCVResponding dataset
+for (i in 1:length(power.M_CVR)) {
+  lnCVR[[i]]$power.M_CVR <- power.M_CVR[[i]]
+}
+
+
+
+# lnVR
+# Use meta-analytic estimate as true effect, to calculate power for individual data point
+# relative variation - VR
+power.F_VR <- NA
+for (i in 1:length(lnVR)) {
+  power.F_VR[i] <- power.individual_Shinichi(mu=rep(model_list_VR[[i]]$beta, length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(power.F_VR)) {
+  lnVR[[i]]$power.F_VR <- power.F_VR[[i]]
+}
+
+# relative variation - VR
+power.F_VR <- NA
+for (i in 1:length(lnVR)) {
+  power.F_VR[i] <- power.individual_Shinichi(mu=rep(model_list_VR[[i]]$beta, length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(power.F_VR)) {
+  lnVR[[i]]$power.F_VR <- power.F_VR[[i]]
+}
+
+
+# Use effects without random effects as true effect sizes for each individual study, to calculate power for each individual study
+# This is what Helmut suggest to do, to account for random effects of each study
+
+# best linear unbiased estimate - study specific effects
+blups.list_VR <- NA
+for (i in 1:length(model_list_VR)) {
+  blups.list_VR[i] <- ranef(model_list_VR[[i]]) %>% list()
+}
+
+# get study index
+index.list_VR <- NA # list()
+for (i in 1:length(model_list_VR)) {
+  index.list_VR[i] <- match(as.character(lnVR[[i]]$Study),rownames(blups.list_VR[[i]]$Study)) %>% list()
+} # not that Inubushi_et_al. are missing in blups.list_VR[[11]]$Study
+
+# effects geting rid of random effects
+effect.R_VR <-NA
+for (i in 1:length(model_list_VR)) {
+  effect.R_VR[i] <- mapply(sum, model_list_VR[[i]]$beta, blups.list_VR[[i]]$Study[index.list_VR[[i]],1], blups.list_VR[[i]]$Unit_ID[,1]) %>% list()
+}
+
+power.R_VR <- NA
+for (i in 1:length(dat_list_variation)) {
+  power.R_VR[i] <- power.individual_Shinichi(mu=effect.R_VR[[i]], se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# plot(power_VR[[1]]-power_VR2[[1]]) - check discrepancy
+# Allocate each set of power into coVResponding dataset
+for (i in 1:length(power.R_VR)) {
+  lnVR[[i]]$power.R_VR <- power.R_VR[[i]]
+} 
+
+# Note that meta-analytic model only has one predicted/fitted value - fixed effect. While Meta-regression's fitted values are dependent on the level of moderator (i.e. independent variable)
+
+# type S (sign) eVRor
+power.S_VR <- NA
+for (i in 1:12) {
+  power.S_VR[i] <- mapply(type_s, A=effect.R_VR[[i]], s=sqrt(lnVR[[i]]$vi), alpha=0.05) %>% list()
+}
+
+for (i in 1:length(power.S_VR)) {
+  power.S_VR[i] <- mapply(unlist, power.S_VR[[i]]) %>% data.frame()
+} # convert into dataframe - early format contains column names
+
+# Allocate each set of power into coVResponding dataset
+for (i in 1:length(power.S_VR)) {
+  lnVR[[i]]$power.S_VR <- power.S_VR[[i]]
+}
+
+
+# type M (magnitude) eVRor
+power.M_VR <- NA
+for (i in 1:12) {
+  power.M_VR[i] <- mapply(type_m, A=effect.R_VR[[i]], s=sqrt(lnVR[[i]]$vi), alpha=0.05, df=Inf, n.sims=10000) %>% list()
+}  
+
+for (i in 1:length(power.M_VR)) {
+  power.M_VR[i] <- mapply(unlist, power.M_VR[[i]]) %>% data.frame()
+} # convert into dataframe - early format contains column names
+
+
+# Allocate each set of power into coVResponding dataset
+for (i in 1:length(power.M_VR)) {
+  lnVR[[i]]$power.M_VR <- power.M_VR[[i]]
+}
+
+
+
+#***************************************************************#
+#  power calculation based on hypothetical varition differences #
+#***************************************************************#
+
+# lnCVR
+# Use 5% relative variation differences as true effect size, to calculate power for individual data point
+d5_power_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d5_power_CVR[i] <- power.individual_Shinichi(mu=rep(log(105/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(d5_power_CVR)) {
+  lnCVR[[i]]$d5_power_CVR <- d5_power_CVR[[i]]
+}
+
+
+# Use 10% relative variation differences as true effect size, to calculate power for individual data point
+d10_power_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d10_power_CVR[i] <- power.individual_Shinichi(mu=rep(log(110/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(d10_power_CVR)) {
+  lnCVR[[i]]$d10_power_CVR <- d10_power_CVR[[i]]
+}
+
+
+# Use 20% relative variation differences as true effect size, to calculate power for individual data point
+d20_power_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d20_power_CVR[i] <- power.individual_Shinichi(mu=rep(log(120/200), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(d20_power_CVR)) {
+  lnCVR[[i]]$d20_power_CVR <- d20_power_CVR[[i]]
+}
+
+# Use 40% relative variation differences as true effect size, to calculate power for individual data point
+d40_power_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d40_power_CVR[i] <- power.individual_Shinichi(mu=rep(log(140/400), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(d40_power_CVR)) {
+  lnCVR[[i]]$d40_power_CVR <- d40_power_CVR[[i]]
+}
+
+
+#lnVR
+# Use 5% absolute variation differences as true effect size, to calculate power for individual data point
+# lnVR
+d5_power_VR <- NA
+for (i in 1:length(lnVR)) {
+  d5_power_VR[i] <- power.individual_Shinichi(mu=rep(log(105/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(d5_power_VR)) {
+  lnVR[[i]]$d5_power_VR <- d5_power_VR[[i]]
+}
+
+
+# Use 10% absolute variation differences as true effect size, to calculate power for individual data point
+d10_power_VR <- NA
+for (i in 1:length(lnVR)) {
+  d10_power_VR[i] <- power.individual_Shinichi(mu=rep(log(110/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(d10_power_VR)) {
+  lnVR[[i]]$d10_power_VR <- d10_power_VR[[i]]
+}
+
+
+# Use 20% absolute variation differences as true effect size, to calculate power for individual data point
+d20_power_VR <- NA
+for (i in 1:length(lnVR)) {
+  d20_power_VR[i] <- power.individual_Shinichi(mu=rep(log(120/200), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(d20_power_VR)) {
+  lnVR[[i]]$d20_power_VR <- d20_power_VR[[i]]
+}
+
+# Use 40% absolute variation differences as true effect size, to calculate power for individual data point
+d40_power_VR <- NA
+for (i in 1:length(lnVR)) {
+  d40_power_VR[i] <- power.individual_Shinichi(mu=rep(log(140/400), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# Allocate each set of power into corresponding dataset
+for (i in 1:length(d40_power_VR)) {
+  lnVR[[i]]$d40_power_VR <- d40_power_VR[[i]]
+}
+
+
+
+
+# Summary of individual power for variation
+# individual power using meta-analytic mean as true effect
+## relative variation - lnCVR
+power.F_summary_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$power.F_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.F_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$power.F_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$power.F_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.F_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$power.F_CVR))[6,]) 
+
+
+power.R_summary_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$power.R_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.R_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$power.R_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$power.R_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.R_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$power.R_CVR))[6,]) 
+
+
+power.S_summary_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$power.S_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.S_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$power.S_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$power.S_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.S_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$power.S_CVR))[6,]) 
+
+
+power.M_summary_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$power.M_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.M_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$power.M_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$power.M_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.M_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$power.M_CVR))[6,]) 
+
+
+## absolute variation - lnVR
+power.F_summary_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$power.F_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$power.F_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$power.F_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$power.F_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$power.F_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$power.F_VR))[6,]) 
+
+
+# clean NA - ma11 has NA
+#for (i in 1:12) { lnVR[[i]] <- lnVR[[i]][!is.na(lnVR[[i]]$power.R_VR),]}
+
+power.R_summary_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$power.R_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$power.R_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$power.R_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$power.R_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$power.R_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$power.R_VR))[6,]) 
+
+
+power.S_summary_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$power.S_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$power.S_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$power.S_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$power.S_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$power.S_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$power.S_VR))[6,]) 
+
+
+power.M_summary_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$power.M_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$power.M_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$power.M_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$power.M_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$power.M_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$power.M_VR))[6,]) 
+
+
+
+# individual power using 40% mean differences as true effect
+## relative variation - lnCVR
+power_summary_d40_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=sapply(mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR)), function(x) x[1]),      
+                   `First quarter`=sapply(mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR)), function(x) x[2]),
+                   Median=sapply(mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR)), function(x) x[3]),
+                   Mean=sapply(mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR)), function(x) x[4]), 
+                   `Third quarter`=sapply(mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR)), function(x) x[5]), 
+                   Maximum=sapply(mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR)), function(x) x[6]))
+
+## absolute variation - lnVR
+power_summary_d40_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=sapply(mapply(summary, sapply(lnVR, function(x) x$d40_power_VR)), function(x) x[1]),      
+                   `First quarter`=sapply(mapply(summary, sapply(lnVR, function(x) x$d40_power_VR)), function(x) x[2]),
+                   Median=sapply(mapply(summary, sapply(lnVR, function(x) x$d40_power_VR)), function(x) x[3]),
+                   Mean=sapply(mapply(summary, sapply(lnVR, function(x) x$d40_power_VR)), function(x) x[4]), 
+                   `Third quarter`=sapply(mapply(summary, sapply(lnVR, function(x) x$d40_power_VR)), function(x) x[5]), 
+                   Maximum=sapply(mapply(summary, sapply(lnVR, function(x) x$d40_power_VR)), function(x) x[6]))
+
+
+# Calculate standard error
+# Based on averaged power (variable power.F_CVR)
+se.F_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.F_mean[i] <- sd(lnCVR[[i]]$power.F_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$power.F_CVR[!is.na(lnCVR[[i]]$power.F_CVR)]))
+}
+
+power.F_summary_CVR$se.F_mean <- se.F_mean
+
+
+# Based on averaged power (variable power.R_CVR)
+se.R_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.R_mean[i] <- sd(lnCVR[[i]]$power.R_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$power.R_CVR[!is.na(lnCVR[[i]]$power.R_CVR)]))
+}
+
+power.R_summary_CVR$se.R_mean <- se.R_mean
+
+
+
+# Based on averaged power (variable power.S_CVR)
+se.S_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.S_mean[i] <- sd(lnCVR[[i]]$power.S_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$power.S_CVR[!is.na(lnCVR[[i]]$power.S_CVR)]))
+}
+
+power.S_summary_CVR$se.S_mean <- se.S_mean
+
+
+# Based on averaged power (variable power.M_CVR)
+se.M_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.M_mean[i] <- sd(lnCVR[[i]]$power.M_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$power.M_CVR[!is.na(lnCVR[[i]]$power.M_CVR)]))
+}
+
+power.M_summary_CVR$se.M_mean <- se.M_mean
+
+
+# Based on 40% mean differences (variable d40_power_CVR)
+se.d40_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.d40_mean[i] <- sd(lnCVR[[i]]$d40_power_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d40_power_CVR[!is.na(lnCVR[[i]]$d40_power_CVR)]))
+}
+
+power_summary_d40_CVR$se.d40_mean <- se.d40_mean
+
+
+
+# Based on 40% relative variation differences (variable d40_power_CVR)
+se.d40_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.d40_mean[i] <- sd(lnCVR[[i]]$d40_power_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d40_power_CVR[!is.na(lnCVR[[i]]$d40_power_CVR)]))
+}
+
+power_summary_CVR$se.d40_mean <- se.d40_mean
+
+
+
+
+# Calculate standard error
+# Based on averaged power (variable power.F_VR)
+se.F_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.F_mean[i] <- sd(lnVR[[i]]$power.F_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$power.F_VR[!is.na(lnVR[[i]]$power.F_VR)]))
+}
+
+power.F_summary_VR$se.F_mean <- se.F_mean
+
+
+# Based on averaged power (variable power.R_VR)
+se.R_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.R_mean[i] <- sd(lnVR[[i]]$power.R_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$power.R_VR[!is.na(lnVR[[i]]$power.R_VR)]))
+}
+
+power.R_summary_VR$se.R_mean <- se.R_mean
+
+
+
+# Based on averaged power (variable power.S_VR)
+se.S_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.S_mean[i] <- sd(lnVR[[i]]$power.S_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$power.S_VR[!is.na(lnVR[[i]]$power.S_VR)]))
+}
+
+power.S_summary_VR$se.S_mean <- se.S_mean
+
+
+# Based on averaged power (variable power.M_VR)
+se.M_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.M_mean[i] <- sd(lnVR[[i]]$power.M_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$power.M_VR[!is.na(lnVR[[i]]$power.M_VR)]))
+}
+
+power.M_summary_VR$se.M_mean <- se.M_mean
+
+
+# Based on 40% mean differences (variable d40_power_VR)
+se.d40_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.d40_mean[i] <- sd(lnVR[[i]]$d40_power_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$d40_power_VR[!is.na(lnVR[[i]]$d40_power_VR)]))
+}
+
+power_summary_d40_VR$se.d40_mean <- se.d40_mean
+
+
+
+
+
+# meta-meta-analysis on power for variation
+## relative varition - lnCVR
+MMA_power.F_CVR <- with(power.F_summary_CVR, rma.mv(yi = Mean, V = se.mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.R_CVR <- with(power.R_summary_CVR, rma.mv(yi = Mean, V = se.mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.S_CVR <- with(power.S_summary_CVR, rma.mv(yi = Mean, V = se.mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M_CVR <- with(power.M_summary_CVR, rma.mv(yi = Mean, V = se.mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power_CVR_d40 <- with(power_summary_CVR, rma.mv(yi = Mean, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+
+## absolute varition - lnVR
+MMA_power.F_VR <- with(power.F_summary_VR, rma.mv(yi = Mean, V = se.mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.R_VR <- with(power.R_summary_VR, rma.mv(yi = Mean, V = se.mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.S_VR <- with(power.S_summary_VR, rma.mv(yi = Mean, V = se.mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M_VR <- with(power.M_summary_VR, rma.mv(yi = Mean, V = se.mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power_VR_d40 <- with(power_summary_VR, rma.mv(yi = Mean, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+# Retrieving estimates
+## relative variation - lnCVR
+  table.MMA_power.F_CVR <- mod_results(MMA_power.F_CVR, mod = 'Int')
+  table.MMA_power.R_CVR <- mod_results(MMA_power.R_CVR, mod = 'Int')
+  table.MMA_power.S_CVR <- mod_results(MMA_power.S_CVR, mod = 'Int')
+  table.MMA_power.M_CVR <- mod_results(MMA_power.M_CVR, mod = 'Int')
+  
+  table.MMA_power_CVR_d40 <- mod_results(MMA_power_CVR_d40, mod = 'Int')
+## absolute variation - lnVR
+  table.MMA_power.F_VR <- mod_results(MMA_power.F_VR, mod = 'Int')
+  table.MMA_power.R_VR <- mod_results(MMA_power.R_VR, mod = 'Int')
+  table.MMA_power.S_VR <- mod_results(MMA_power.S_VR, mod = 'Int')
+  table.MMA_power.M_VR <- mod_results(MMA_power.M_VR, mod = 'Int')
+  
+  table.MMA_power_VR_d40 <- mod_results(MMA_power_VR_d40, mod = 'Int')
+  
+# Plotting
+  #myorchard.plot1 <- edit(orchard_plot) # use edit() to tailor orchard_plot(): color - black; geom_point (size = 6), annotate ('text', size = 7)
+## relative variation - lnCVR
+  myorchard.plot1(table.MMA_power.F_CVR, mod = "Int", xlab = "Mean power for lnCVR", transfm = "none", angle = 90) +
+  #scale_colour_manual(values = c('grey40')) +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by=0.2)) +
+  scale_y_discrete(labels = c('Estimate of mean power')) +
+  theme(panel.grid = element_blank(),
+        panel.border = element_rect(size = 1.2, colour = "black", fill = NA),
+        axis.ticks = element_line(size = 0.9, color = 'black'),
+        axis.ticks.length = unit(0.15, 'cm'), 
+        axis.text.x = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=9,r=0,b=0,l=0)),
+        #axis.ticks.x = element_blank(),
+        axis.title.x = element_text(colour = 'black', face = 'bold', size = 20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=0,r=9,b=0,l=0)),
+        #axis.ticks.y = element_blank(),
+        plot.title = element_text(colour = 'black', size = 20, face = 'bold', hjust = 0.0),
+        #legend.text = element_text(size = 20),
+        #legend.title = element_text(size = 20),
+        legend.position = c(0, 1), legend.justification = c(0, 1)) +
+    ggtitle('Second order meta-analysis of power') + xlab("Mean power for lnCVR (fixed effect)") -> power.F.CVR
+
+png(filename = "./Figures/power.F.CVR.png", width = 7, height = 7, units = "in", type = "windows", res = 400)
+power.F.CVR
+dev.off()
+
+
+
+  myorchard.plot1(table.MMA_power.R_CVR, mod = "Int", xlab = "Mean power for lnCVR", transfm = "none", angle = 90) +
+  #scale_colour_manual(values = c('grey40')) +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by=0.2)) +
+  scale_y_discrete(labels = c('Estimate of mean power')) +
+  theme(panel.grid = element_blank(),
+        panel.border = element_rect(size = 1.2, colour = "black", fill = NA),
+        axis.ticks = element_line(size = 0.9, color = 'black'),
+        axis.ticks.length = unit(0.15, 'cm'), 
+        axis.text.x = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=9,r=0,b=0,l=0)),
+        #axis.ticks.x = element_blank(),
+        axis.title.x = element_text(colour = 'black', face = 'bold', size = 20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=0,r=9,b=0,l=0)),
+        #axis.ticks.y = element_blank(),
+        plot.title = element_text(colour = 'black', size = 20, face = 'bold', hjust = 0.0),
+        #legend.text = element_text(size = 20),
+        #legend.title = element_text(size = 20),
+        legend.position = c(0, 1), legend.justification = c(0, 1)) +
+    ggtitle('Second order meta-analysis of power') + xlab("Mean power for lnCVR (fixed & random effect)") -> power.R.CVR
+
+png(filename = "./Figures/power.R.CVR.png", width = 7, height = 7, units = "in", type = "windows", res = 400)
+power.R.CVR
+dev.off()
+
+
+  myorchard.plot1(table.MMA_power.S_CVR, mod = "Int", xlab = "Mean power for lnCVR", transfm = "none", angle = 90) +
+  #scale_colour_manual(values = c('grey40')) +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by=0.2)) +
+  scale_y_discrete(labels = c('Estimate of mean power')) +
+  theme(panel.grid = element_blank(),
+        panel.border = element_rect(size = 1.2, colour = "black", fill = NA),
+        axis.ticks = element_line(size = 0.9, color = 'black'),
+        axis.ticks.length = unit(0.15, 'cm'), 
+        axis.text.x = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=9,r=0,b=0,l=0)),
+        #axis.ticks.x = element_blank(),
+        axis.title.x = element_text(colour = 'black', face = 'bold', size = 20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=0,r=9,b=0,l=0)),
+        #axis.ticks.y = element_blank(),
+        plot.title = element_text(colour = 'black', size = 20, face = 'bold', hjust = 0.0),
+        #legend.text = element_text(size = 20),
+        #legend.title = element_text(size = 20),
+        legend.position = c(0, 1), legend.justification = c(0, 1)) +
+    ggtitle('Second order meta-analysis of power') + xlab("Type S for lnCVR") -> power.S.CVR
+
+png(filename = "./Figures/power.S.CVR.png", width = 7, height = 7, units = "in", type = "windows", res = 400)
+power.S.CVR
+dev.off()
+
+
+
+  myorchard.plot1(table.MMA_power.M_CVR, mod = "Int", xlab = "Mean power for lnCVR", transfm = "none", angle = 90) +
+  #scale_colour_manual(values = c('grey40')) +
+  #scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by=0.2)) +
+  scale_y_discrete(labels = c('Estimate of mean power')) +
+  theme(panel.grid = element_blank(),
+        panel.border = element_rect(size = 1.2, colour = "black", fill = NA),
+        axis.ticks = element_line(size = 0.9, color = 'black'),
+        axis.ticks.length = unit(0.15, 'cm'), 
+        axis.text.x = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=9,r=0,b=0,l=0)),
+        #axis.ticks.x = element_blank(),
+        axis.title.x = element_text(colour = 'black', face = 'bold', size = 20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=0,r=9,b=0,l=0)),
+        #axis.ticks.y = element_blank(),
+        plot.title = element_text(colour = 'black', size = 20, face = 'bold', hjust = 0.0),
+        #legend.text = element_text(size = 20),
+        #legend.title = element_text(size = 20),
+        legend.position = c(0, 1), legend.justification = c(0, 1)) +
+    ggtitle('Second order meta-analysis of power') + xlab("Type M for lnCVR") -> power.M.CVR
+
+png(filename = "./Figures/power.M.CVR.png", width = 7, height = 7, units = "in", type = "windows", res = 400)
+power.M.CVR
+dev.off()
+
+## 40% relative variation differences - lnCVR
+myorchard.plot1(table.MMA_power_CVR_d40, mod = "Int", xlab = "Hypothetical 40% lnCVR differences", transfm = "none", angle = 90) +
+  #scale_colour_manual(values = c('grey40')) +
+  scale_x_continuous(limits = c(0, 0.5), breaks = seq(0, 0.5, by=0.1)) +
+  scale_y_discrete(labels = c('Estimate of mean power')) +
+  theme(panel.grid = element_blank(),
+        panel.border = element_rect(size = 1.2, colour = "black", fill = NA),
+        axis.ticks = element_line(size = 0.9, color = 'black'),
+        axis.ticks.length = unit(0.15, 'cm'), 
+        axis.text.x = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=9,r=0,b=0,l=0)),
+        #axis.ticks.x = element_blank(),
+        axis.title.x = element_text(colour = 'black', face = 'bold', size = 20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=0,r=9,b=0,l=0)),
+        #axis.ticks.y = element_blank(),
+        plot.title = element_text(colour = 'black', size = 20, face = 'bold', hjust = 0.0),
+        #legend.text = element_text(size = 20),
+        #legend.title = element_text(size = 20),
+        legend.position = c(0, 1), legend.justification = c(0, 1)) +
+    ggtitle('Second order meta-analysis of power') + xlab("Hypothetical 40% lnCVR differences") -> power.CVR_d40
+
+png(filename = "./power.CVR_d40.png", width = 7, height = 7, units = "in", type = "windows", res = 400)
+power.CVR_d40
+dev.off()
+
+
+
+
+
+
+## absolute varition - lnVR
+  myorchard.plot1(table.MMA_power.F_VR, mod = "Int", xlab = "Mean power for lnVR", transfm = "none", angle = 90) +
+  #scale_colour_manual(values = c('grey40')) +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by=0.2)) +
+  scale_y_discrete(labels = c('Estimate of mean power')) +
+  theme(panel.grid = element_blank(),
+        panel.border = element_rect(size = 1.2, colour = "black", fill = NA),
+        axis.ticks = element_line(size = 0.9, color = 'black'),
+        axis.ticks.length = unit(0.15, 'cm'), 
+        axis.text.x = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=9,r=0,b=0,l=0)),
+        #axis.ticks.x = element_blank(),
+        axis.title.x = element_text(colour = 'black', face = 'bold', size = 20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=0,r=9,b=0,l=0)),
+        #axis.ticks.y = element_blank(),
+        plot.title = element_text(colour = 'black', size = 20, face = 'bold', hjust = 0.0),
+        #legend.text = element_text(size = 20),
+        #legend.title = element_text(size = 20),
+        legend.position = c(0, 1), legend.justification = c(0, 1)) +
+    ggtitle('Second order meta-analysis of power') + xlab("Mean power for lnVR (fixed effect)") -> power.F.VR
+
+png(filename = "./Figures/power.F.VR.png", width = 7, height = 7, units = "in", type = "windows", res = 400)
+power.F.VR
+dev.off()
+
+
+
+  myorchard.plot1(table.MMA_power.R_VR, mod = "Int", xlab = "Mean power for lnVR", transfm = "none", angle = 90) +
+  #scale_colour_manual(values = c('grey40')) +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by=0.2)) +
+  scale_y_discrete(labels = c('Estimate of mean power')) +
+  theme(panel.grid = element_blank(),
+        panel.border = element_rect(size = 1.2, colour = "black", fill = NA),
+        axis.ticks = element_line(size = 0.9, color = 'black'),
+        axis.ticks.length = unit(0.15, 'cm'), 
+        axis.text.x = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=9,r=0,b=0,l=0)),
+        #axis.ticks.x = element_blank(),
+        axis.title.x = element_text(colour = 'black', face = 'bold', size = 20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=0,r=9,b=0,l=0)),
+        #axis.ticks.y = element_blank(),
+        plot.title = element_text(colour = 'black', size = 20, face = 'bold', hjust = 0.0),
+        #legend.text = element_text(size = 20),
+        #legend.title = element_text(size = 20),
+        legend.position = c(0, 1), legend.justification = c(0, 1)) +
+    ggtitle('Second order meta-analysis of power') + xlab("Mean power for lnVR (fixed & random effect)") -> power.R.VR
+
+png(filename = "./Figures/power.R.VR.png", width = 7, height = 7, units = "in", type = "windows", res = 400)
+power.R.VR
+dev.off()
+
+
+  myorchard.plot1(table.MMA_power.S_VR, mod = "Int", xlab = "Mean power for lnVR", transfm = "none", angle = 90) +
+  #scale_colour_manual(values = c('grey40')) +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by=0.2)) +
+  scale_y_discrete(labels = c('Estimate of mean power')) +
+  theme(panel.grid = element_blank(),
+        panel.border = element_rect(size = 1.2, colour = "black", fill = NA),
+        axis.ticks = element_line(size = 0.9, color = 'black'),
+        axis.ticks.length = unit(0.15, 'cm'), 
+        axis.text.x = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=9,r=0,b=0,l=0)),
+        #axis.ticks.x = element_blank(),
+        axis.title.x = element_text(colour = 'black', face = 'bold', size = 20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=0,r=9,b=0,l=0)),
+        #axis.ticks.y = element_blank(),
+        plot.title = element_text(colour = 'black', size = 20, face = 'bold', hjust = 0.0),
+        #legend.text = element_text(size = 20),
+        #legend.title = element_text(size = 20),
+        legend.position = c(0, 1), legend.justification = c(0, 1)) +
+    ggtitle('Second order meta-analysis of power') + xlab("Type S for lnVR") -> power.S.VR
+
+png(filename = "./Figures/power.S.VR.png", width = 7, height = 7, units = "in", type = "windows", res = 400)
+power.S.VR
+dev.off()
+
+
+
+  myorchard.plot1(table.MMA_power.M_VR, mod = "Int", xlab = "Mean power for lnVR", transfm = "none", angle = 90) +
+  #scale_colour_manual(values = c('grey40')) +
+  #scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by=0.2)) +
+  scale_y_discrete(labels = c('Estimate of mean power')) +
+  theme(panel.grid = element_blank(),
+        panel.border = element_rect(size = 1.2, colour = "black", fill = NA),
+        axis.ticks = element_line(size = 0.9, color = 'black'),
+        axis.ticks.length = unit(0.15, 'cm'), 
+        axis.text.x = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=9,r=0,b=0,l=0)),
+        #axis.ticks.x = element_blank(),
+        axis.title.x = element_text(colour = 'black', face = 'bold', size = 20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=0,r=9,b=0,l=0)),
+        #axis.ticks.y = element_blank(),
+        plot.title = element_text(colour = 'black', size = 20, face = 'bold', hjust = 0.0),
+        #legend.text = element_text(size = 20),
+        #legend.title = element_text(size = 20),
+        legend.position = c(0, 1), legend.justification = c(0, 1)) +
+    ggtitle('Second order meta-analysis of power') + xlab("Type M for lnVR") -> power.M.VR
+
+png(filename = "./Figures/power.M.VR.png", width = 7, height = 7, units = "in", type = "windows", res = 400)
+power.M.VR
+dev.off()
+
+## 40% relative variation differences - lnVR
+myorchard.plot1(table.MMA_power_VR_d40, mod = "Int", xlab = "Hypothetical 40% lnVR differences", transfm = "none", angle = 90) +
+  #scale_colour_manual(values = c('grey40')) +
+  scale_x_continuous(limits = c(0, 0.5), breaks = seq(0, 0.5, by=0.1)) +
+  scale_y_discrete(labels = c('Estimate of mean power')) +
+  theme(panel.grid = element_blank(),
+        panel.border = element_rect(size = 1.2, colour = "black", fill = NA),
+        axis.ticks = element_line(size = 0.9, color = 'black'),
+        axis.ticks.length = unit(0.15, 'cm'), 
+        axis.text.x = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=9,r=0,b=0,l=0)),
+        #axis.ticks.x = element_blank(),
+        axis.title.x = element_text(colour = 'black', face = 'bold', size = 20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(colour = 'black', face = 'bold', size = 20, margin = margin(t=0,r=9,b=0,l=0)),
+        #axis.ticks.y = element_blank(),
+        plot.title = element_text(colour = 'black', size = 20, face = 'bold', hjust = 0.0),
+        #legend.text = element_text(size = 20),
+        #legend.title = element_text(size = 20),
+        legend.position = c(0, 1), legend.justification = c(0, 1)) +
+    ggtitle('Second order meta-analysis of power') + xlab("Hypothetical 40% lnVR differences") -> power.VR_d40
+
+png(filename = "./power.VR_d40.png", width = 7, height = 7, units = "in", type = "windows", res = 400)
+power.VR_d40
+dev.off()
+
+
+
+# Figure Layout for Section 1 & 2
+
+ggarrange(power.F.RR, power.R.RR, power.RR_d40, power.S.RR, power.M.RR,
+          power.F.CVR, power.R.CVR, power.CVR_d40, power.S.CVR, power.M.CVR,
+          power.F.VR, power.R.VR, power.VR_d40, power.S.VR, power.M.VR,heights = c(5,5,5,5,5,5,5,5,5,5,5,5,5,5,5), widths = c(5,5,5,5,5,5,5,5,5,5,5,5,5,5,5), ncol = 5, nrow = 3, align = "h") -> power.all
+
+png(filename = "./Figures/power.all.png", width = 33, height = 15, units = "in", type = "windows", res = 400)
+power.all
+dev.off()
+
+```
+
+
+
+### Section 3 - three weighting schemes (i.e. WAAP, PET-PEESE, http://environmentalcomputing.net/meta-analysis/) to evaluate publication bias
+
+
+```{r}
+#***************************************************************#
+#                          WAAP approach                        #
+#***************************************************************#
+# In our case, my understanding is we should call WAAP as random-effects-WAAP, because we do not want to use fixed effects model
+# Selecting adequately powered studies
+## We only use studies with power >80% or SE < 2.8
+WAAP_dat_m1_1_RR <- dat_m1_1 %>% subset(power_RR > 0.8)
+WAAP_dat_m1_1_CVR <- dat_m1_1 %>% subset(power_CVR > 0.8) # none data
+WAAP_dat_m1_1_VR <- dat_m1_1 %>% subset(power_VR > 0.8) # none data
+# Evaluating publication using adequately powered studies
+WAAP_m1_1_RR <- with(WAAP_dat_m1_1_RR, rma.mv(yi = RR,
+                                         V = VRR,
+                                         mods = ~sqrt(VRR),
+                                         random = list(~1|Study, ~1|Unit_ID),
+                                         method = "REML",
+                                         test = "z"))
+summary(WAAP_m1_1_RR)
+#***************************************************************#
+#                       PET-PEESE approach                      #
+#***************************************************************#
+# Get precision, i.e. 1/SE
+dat_m1_1$SE <- sqrt(dat_m1_1$var.LRR) # note it is SE rather than variance (V), so we should use sqrt(V)
+# # PET model - specifing 1/se^2 as weights
+# PET.m1_1 <- lm(RR~SE, weights = (1/SE)**2,data=dat_m1_1) # This form (OLS) reverse the intercept and slope coefficient from WLS version. Therefore, intercept from WLS version is the slope from OLS version. So we should not remove intercept (i.e. -1)
+# summary(PET.m1_1) # intercept rather than slope is our expected estimate
+# 
+# # Or we can use two-step approach for PET
+# dat_m1_1$t <- dat_m1_1$RR/sqrt(dat_m1_1$VRR)
+# dat_m1_1$precision <- 1/sqrt(dat_m1_1$VRR)
+# # We got same results with the above
+# PET.m1_1_2 <- lm(t~precision, data=dat_m1_1)
+# 
+# 
+# 
+# # PET-PEESE model - quadratic model rather than linear model
+# PET_PEESE.m1_1 <- lm(RR~VRR, weights =(1/SE)**2,data=dat_m1_1)
+# summary(PET_PEESE.m1_1) 
+# Or we can use meta-regression with variances (i.e. SE^2) as moderator
+PET_PEESE.m1_0 <- rma.mv(data = dat_m1_1, yi = LRR, V = var.LRR, 
+                          #mods = ~SE, # using variance rather than SE
+                          random = list(~1|Study, ~1|Unit_ID),
+                          method = "REML")
+summary(PET_PEESE.m1_0)
+PET_PEESE.m1_1 <- rma.mv(data = dat_m1_1, yi = LRR, V = var.LRR, 
+                          mods = ~SE, # using variance rather than SE
+                          random = list(~1|Study, ~1|Unit_ID),
+                          method = "REML")
+summary(PET_PEESE.m1_1)
+PET_PEESE.m1_2 <- rma.mv(data = dat_m1_1, yi = LRR, V = var.LRR, 
+                          mods = ~ var.LRR, # using variance rather than SE
+                          random = list(~1|Study, ~1|Unit_ID),
+                          method = "REML")
+summary(PET_PEESE.m1_2)
+# Note: I am not sure which approachs you want me to use to evaluate publication bias in this website: http://environmentalcomputing.net/meta-analysis/
+#   
+# Whatever, I used a regular model to evaluate publication, i.e. Egger regression test
+# #***************************************************************#
+#                      Egger regression test                    #
+#***************************************************************#
+# Egger_m1_1_RR <- with(dat_m1_1, rma.mv(yi = RR,
+#                                          V = VRR,
+#                                          mods = ~sqrt(VRR),
+#                                          random = list(~1|Study, ~1|Unit_ID),
+#                                          method = "REML",
+#                                          test = "z"))
+# 
+# summary(Egger_m1_1_RR) # Note that here we should look at slope, rather than intercept, which is a distinction from PET model
+# alternative model 
+alternative_model <- with(dat_m1_1, rma.mv(yi = LRR,
+                                         W = 1/var.LRR,
+                                         V = var.LRR,
+                                         random = list(~1|Study, ~1|Unit_ID),
+                                         method = "REML"))
+summary(alternative_model) 
+```
+
+
+
+
+
+
+
+
+
+
