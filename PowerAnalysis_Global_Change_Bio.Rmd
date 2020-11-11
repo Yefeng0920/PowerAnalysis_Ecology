@@ -37,14 +37,68 @@ pacman::p_load(knitr, # knit markdown
 library(retrodesign)
 
 # Function to calculate power for meta-analysis
-power.ma_Shinichi <- function(mu, SE) {
-  2-pnorm(qnorm(0.975)-abs(mu)/SE)-pnorm(qnorm(0.975)+abs(mu)/SE)
-  } # two-tailed power
+power.ma_Shinichi <- function(mu, SE, alpha = 0.05) {
+  2-pnorm(qnorm(1-alpha/2)-abs(mu)/SE)-pnorm(qnorm(1-alpha/2)+abs(mu)/SE)
+  } # two-tailed power or power.ma_Shinichi1 <- function(mu,SE){1 - pnorm(qnorm(1-0.05/2)-abs(mu)/SE) + pnorm(-qnorm(1-0.05/2)-abs(mu)/SE)}
+
 
 
 # Function for power analysis for empirical data point
-power.individual_Shinichi <- function(mu, se) {
-  2-pnorm(qnorm(0.975)-abs(mu)/se)-pnorm(qnorm(0.975)+abs(mu)/se)} # two-tailed power
+power.individual_Shinichi <- function(mu, se, alpha = 0.05) {
+  2-pnorm(qnorm(1-alpha/2)-abs(mu)/se)-pnorm(qnorm(1-alpha/2)+abs(mu)/se)} # two-tailed power
+
+
+# Function for Type S error for empirical data point
+
+type.S <- function(mu, se, alpha = 0.05){
+  z <- qnorm(1 - alpha/2, mean = 0, sd = 1, lower.tail = T) # Z-score or quantile
+  p.u <- 1 - pnorm(z - abs(mu)/se, mean = 0, sd = 1, lower.tail = T) # upper-tail probability
+  p.l <- pnorm(-z - abs(mu)/se, mean = 0, sd = 1, lower.tail = T) # lower-tail probability
+  power <- p.u + p.l # upper + lower
+  typeS <- p.l/power # percentage of the opposite direction
+  return(data.frame("power"=power,
+                    "type_S"=typeS))
+} 
+
+# We also can use t-distribution to estimate error
+# type.S <- function(mu, se, alpha = 0.05){
+#  z <- qt(1 - alpha/2, df=Inf) # Z-score or quantile
+#  p.u <- 1 - pt(z - abs(mu)/se, df=Inf) # upper-tail probability
+#  p.l <- pt(-z - abs(mu)/se, df=Inf) # lower-tail probability
+#  power <- p.u + p.l # upper + lower
+#  typeS <- p.l/power # percentage of the opposite direction
+#  return(data.frame(power=power,
+#                    type_S=typeS))}
+
+
+# Function for Type M error for empirical data point
+
+type.M <- function(mu, se, alpha = 0.05, N = 10000) {
+  z <- qnorm(1 - alpha/2, mean = 0, sd = 1, lower.tail = T) # Z-score or quantile
+  # est.random <- (mu + se*rnorm(n=N, mean = 0, sd = 1))
+  overestimate <- NA
+  for (i in 1:length(mu)) {
+    # est.random[i] <- rnorm(n=N, mean=mu[i], sd=se[i])
+    # sig.index[i] <- abs(rnorm(n=N, mean=mu[i], sd=se[i])) > se[i]*z
+    overestimate[i] <- mean(abs(rnorm(n=N, mean=mu[i], sd=se[i]))[abs(rnorm(n=N, mean=mu[i], sd=se[i])) > se[i]*z])/abs(mu[i]) # ratio is regardnesss of sign, so we need absolute value
+  }
+  return(data.frame(overestimate))
+}
+
+
+type.M(rep(model_est_RR$mu_RR[3],length(dat_list[[3]]$var.LRR)),sqrt(dat_list[[3]]$var.LRR))
+
+
+type.M(effect.R_RR[[1]],sqrt(dat_list[[1]]$var.LRR))
+
+
+type.S(-0.5,1)
+type.M(-0.5,1)
+
+retrodesign(-0.5,1)
+
+retro_design(-0.5,1)
+
 
 
 library(here)
