@@ -702,7 +702,7 @@ power.F.M2_summary_RR <- data.frame(MA_case=model_est_RR$MA_case,
 
 
 #----------------------------------------------------------------#
-#                 (ii) study effect as true effect
+#     (ii) study effect as true effect (fixed & random effect)
 #----------------------------------------------------------------#
 
 #--------------------- (1) two tailed power ---------------------#
@@ -747,18 +747,145 @@ power.R.M2_summary_RR <- data.frame(MA_case=model_est_RR$MA_case,
 
 
 
-# individual type M error using study specific effect as true effect
-power.M_summary_RR1 <- data.frame(MA_case=model_est_RR$MA_case,
-                   Minimum=mapply(summary, sapply(dat_list, function(x) x$power.M_RR))[1,],      
-                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$power.M_RR))[2,],
-                   Median=mapply(summary, sapply(dat_list, function(x) x$power.M_RR))[3,],
-                   Mean=mapply(summary, sapply(dat_list, function(x) x$power.M_RR))[4,], 
-                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$power.M_RR))[5,], 
-                   Maximum=mapply(summary, sapply(dat_list, function(x) x$power.M_RR))[6,])
+#*****************************************************************#
+#********************** 5% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+power_summary_d5_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$d5_power_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$d5_power_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$d5_power_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$d5_power_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$d5_power_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$d5_power_RR))[6,])
+
+
+#---------------------- (2) type S error -----------------------#
+power.S_summary_d5_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$d5_power.S_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$d5_power.S_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$d5_power.S_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$d5_power.S_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$d5_power.S_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$d5_power.S_RR))[6,])
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.M_summary_d5_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$d5_power.M_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$d5_power.M_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$d5_power.M_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$d5_power.M_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$d5_power.M_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$d5_power.M_RR))[6,])
+
+
+#---------------- (4) type M error (relative error) --------------#
+power.M2_summary_d5_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$d5_power.M2_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$d5_power.M2_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$d5_power.M2_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$d5_power.M2_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$d5_power.M2_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$d5_power.M2_RR))[6,])
 
 
 
-# individual power using 40% mean differences as true effect
+#*****************************************************************#
+#********************** 10% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+power_summary_d10_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$d10_power_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$d10_power_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$d10_power_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$d10_power_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$d10_power_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$d10_power_RR))[6,])
+
+
+#---------------------- (2) type S error -----------------------#
+power.S_summary_d10_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$d10_power.S_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$d10_power.S_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$d10_power.S_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$d10_power.S_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$d10_power.S_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$d10_power.S_RR))[6,])
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.M_summary_d10_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$d10_power.M_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$d10_power.M_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$d10_power.M_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$d10_power.M_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$d10_power.M_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$d10_power.M_RR))[6,])
+
+
+#---------------- (4) type M error (relative error) --------------#
+power.M2_summary_d10_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$d10_power.M2_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$d10_power.M2_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$d10_power.M2_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$d10_power.M2_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$d10_power.M2_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$d10_power.M2_RR))[6,])
+
+
+
+#*****************************************************************#
+#********************** 20% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+power_summary_d20_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$d20_power_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$d20_power_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$d20_power_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$d20_power_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$d20_power_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$d20_power_RR))[6,])
+
+
+#---------------------- (2) type S error -----------------------#
+power.S_summary_d20_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$d20_power.S_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$d20_power.S_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$d20_power.S_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$d20_power.S_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$d20_power.S_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$d20_power.S_RR))[6,])
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.M_summary_d20_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$d20_power.M_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$d20_power.M_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$d20_power.M_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$d20_power.M_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$d20_power.M_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$d20_power.M_RR))[6,])
+
+
+#---------------- (4) type M error (relative error) --------------#
+power.M2_summary_d20_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$d20_power.M2_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$d20_power.M2_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$d20_power.M2_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$d20_power.M2_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$d20_power.M2_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$d20_power.M2_RR))[6,])
+
+
+#*****************************************************************#
+#********************** 40% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
 power_summary_d40_RR <- data.frame(MA_case=model_est_RR$MA_case,
                    Minimum=mapply(summary, sapply(dat_list, function(x) x$d40_power_RR))[1,],      
                    `First quarter`=mapply(summary, sapply(dat_list, function(x) x$d40_power_RR))[2,],
@@ -768,10 +895,48 @@ power_summary_d40_RR <- data.frame(MA_case=model_est_RR$MA_case,
                    Maximum=mapply(summary, sapply(dat_list, function(x) x$d40_power_RR))[6,])
 
 
+#---------------------- (2) type S error -----------------------#
+power.S_summary_d40_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$d40_power.S_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$d40_power.S_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$d40_power.S_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$d40_power.S_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$d40_power.S_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$d40_power.S_RR))[6,])
 
 
-# Calculate standard error
-# Based on averaged power (variable power.F_RR)
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.M_summary_d40_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$d40_power.M_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$d40_power.M_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$d40_power.M_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$d40_power.M_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$d40_power.M_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$d40_power.M_RR))[6,])
+
+
+#---------------- (4) type M error (relative error) --------------#
+power.M2_summary_d40_RR <- data.frame(MA_case=model_est_RR$MA_case,
+                   Minimum=mapply(summary, sapply(dat_list, function(x) x$d40_power.M2_RR))[1,],      
+                   `First quarter`=mapply(summary, sapply(dat_list, function(x) x$d40_power.M2_RR))[2,],
+                   Median=mapply(summary, sapply(dat_list, function(x) x$d40_power.M2_RR))[3,],
+                   Mean=mapply(summary, sapply(dat_list, function(x) x$d40_power.M2_RR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(dat_list, function(x) x$d40_power.M2_RR))[5,], 
+                   Maximum=mapply(summary, sapply(dat_list, function(x) x$d40_power.M2_RR))[6,])
+
+
+
+
+#*********************************************************************#
+#--------- calculate standard error for each type of power -----------#
+#*********************************************************************#
+
+#----------------------------------------------------------------#
+#           (i) intercept (i.e. fixed effect) as true effect
+#----------------------------------------------------------------#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable power.F_RR
 se.F_mean <- NA
 for (i in 1:length(dat_list)) {
   se.F_mean[i] <- sd(dat_list[[i]]$power.F_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$power.F_RR[!is.na(dat_list[[i]]$power.F_RR)]))
@@ -779,8 +944,42 @@ for (i in 1:length(dat_list)) {
 
 power.F_summary_RR$se.F_mean <- se.F_mean
 
+#---------------------- (2) type S error -----------------------#
+# standard error of variable power.F.S_RR
+se.F.S_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.F.S_mean[i] <- sd(dat_list[[i]]$power.F.S_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$power.F.S_RR[!is.na(dat_list[[i]]$power.F.S_RR)]))
+}
 
-# Based on averaged power (variable power.R_RR)
+power.F.S_summary_RR$se.F.S_mean <- se.F.S_mean
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable power.F.M_RR
+se.F.M_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.F.M_mean[i] <- sd(dat_list[[i]]$power.F.M_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$power.F.M_RR[!is.na(dat_list[[i]]$power.F.M_RR)]))
+}
+
+power.F.M_summary_RR$se.F.M_mean <- se.F.M_mean
+
+
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable power.F.M2_RR
+se.F.M2_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.F.M2_mean[i] <- sd(dat_list[[i]]$power.F.M2_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$power.F.M2_RR[!is.na(dat_list[[i]]$power.F.M2_RR)]))
+}
+
+power.F.M2_summary_RR$se.F.M2_mean <- se.F.M2_mean
+
+
+#----------------------------------------------------------------#
+#                 (ii) study effect as true effect
+#----------------------------------------------------------------#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable power.R_RR
 se.R_mean <- NA
 for (i in 1:length(dat_list)) {
   se.R_mean[i] <- sd(dat_list[[i]]$power.R_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$power.R_RR[!is.na(dat_list[[i]]$power.R_RR)]))
@@ -789,26 +988,173 @@ for (i in 1:length(dat_list)) {
 power.R_summary_RR$se.R_mean <- se.R_mean
 
 
-
-# Based on averaged power (variable power.S_RR)
-se.S_mean <- NA
+#---------------------- (2) type S error -----------------------#
+# standard error of variable power.R.S_RR
+se.R.S_mean <- NA
 for (i in 1:length(dat_list)) {
-  se.S_mean[i] <- sd(dat_list[[i]]$power.S_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$power.S_RR[!is.na(dat_list[[i]]$power.S_RR)]))
+  se.R.S_mean[i] <- sd(dat_list[[i]]$power.R.S_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$power.R.S_RR[!is.na(dat_list[[i]]$power.R.S_RR)]))
 }
 
-power.S_summary_RR$se.S_mean <- se.S_mean
+power.R.S_summary_RR$se.R.S_mean <- se.R.S_mean
 
 
-# Based on averaged power (variable power.M_RR)
-se.M_mean <- NA
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable power.R.M_RR
+se.R.M_mean <- NA
 for (i in 1:length(dat_list)) {
-  se.M_mean[i] <- sd(dat_list[[i]]$power.M_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$power.M_RR[!is.na(dat_list[[i]]$power.M_RR)]))
+  se.R.M_mean[i] <- sd(dat_list[[i]]$power.R.M_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$power.R.M_RR[!is.na(dat_list[[i]]$power.R.M_RR)]))
 }
 
-power.M_summary_RR$se.M_mean <- se.M_mean
+power.R.M_summary_RR$se.R.M_mean <- se.R.M_mean
 
 
-# Based on 40% mean differences (variable d40_power_RR)
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable power.R.M2_RR
+se.R.M2_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.R.M2_mean[i] <- sd(dat_list[[i]]$power.R.M2_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$power.R.M2_RR[!is.na(dat_list[[i]]$power.R.M2_RR)]))
+}
+
+power.R.M2_summary_RR$se.R.M2_mean <- se.R.M2_mean
+
+
+
+#----------------------------------------------------------------#
+#               (iii) hypothetical effect as true effect
+#----------------------------------------------------------------#
+
+#*****************************************************************#
+#********************** 5% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable d5_power_RR
+se.d5_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.d5_mean[i] <- sd(dat_list[[i]]$d5_power_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$d5_power_RR[!is.na(dat_list[[i]]$d5_power_RR)]))
+}
+
+power_summary_d5_RR$se.d5_mean <- se.d5_mean
+
+#---------------------- (2) type S error -----------------------#
+# standard error of variable d5_power.S_RR
+se.d5_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.d5_mean[i] <- sd(dat_list[[i]]$d5_power.S_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$d5_power.S_RR[!is.na(dat_list[[i]]$d5_power.S_RR)]))
+}
+
+power.S_summary_d5_RR$se.d5_mean <- se.d5_mean
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable d5_power.M_RR
+se.d5_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.d5_mean[i] <- sd(dat_list[[i]]$d5_power.M_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$d5_power.M_RR[!is.na(dat_list[[i]]$d5_power.M_RR)]))
+}
+
+power.M_summary_d5_RR$se.d5_mean <- se.d5_mean
+
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable d5_power.M2_RR
+se.d5_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.d5_mean[i] <- sd(dat_list[[i]]$d5_power.M2_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$d5_power.M2_RR[!is.na(dat_list[[i]]$d5_power.M2_RR)]))
+}
+
+power.M2_summary_d5_RR$se.d5_mean <- se.d5_mean
+
+
+
+#*****************************************************************#
+#********************** 10% mean differences *********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable d10_power_RR
+se.d10_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.d10_mean[i] <- sd(dat_list[[i]]$d10_power_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$d10_power_RR[!is.na(dat_list[[i]]$d10_power_RR)]))
+}
+
+power_summary_d10_RR$se.d10_mean <- se.d10_mean
+
+#---------------------- (2) type S error -----------------------#
+# standard error of variable d10_power.S_RR
+se.d10_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.d10_mean[i] <- sd(dat_list[[i]]$d10_power.S_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$d10_power.S_RR[!is.na(dat_list[[i]]$d10_power.S_RR)]))
+}
+
+power.S_summary_d10_RR$se.d10_mean <- se.d10_mean
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable d10_power.M_RR
+se.d10_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.d10_mean[i] <- sd(dat_list[[i]]$d10_power.M_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$d10_power.M_RR[!is.na(dat_list[[i]]$d10_power.M_RR)]))
+}
+
+power.M_summary_d10_RR$se.d10_mean <- se.d10_mean
+
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable d10_power.M2_RR
+se.d10_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.d10_mean[i] <- sd(dat_list[[i]]$d10_power.M2_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$d10_power.M2_RR[!is.na(dat_list[[i]]$d10_power.M2_RR)]))
+}
+
+power.M2_summary_d10_RR$se.d10_mean <- se.d10_mean
+
+
+
+#*****************************************************************#
+#********************** 20% mean differences *********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable d20_power_RR
+se.d20_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.d20_mean[i] <- sd(dat_list[[i]]$d20_power_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$d20_power_RR[!is.na(dat_list[[i]]$d20_power_RR)]))
+}
+
+power_summary_d20_RR$se.d20_mean <- se.d20_mean
+
+#---------------------- (2) type S error -----------------------#
+# standard error of variable d20_power.S_RR
+se.d20_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.d20_mean[i] <- sd(dat_list[[i]]$d20_power.S_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$d20_power.S_RR[!is.na(dat_list[[i]]$d20_power.S_RR)]))
+}
+
+power.S_summary_d20_RR$se.d20_mean <- se.d20_mean
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable d20_power.M_RR
+se.d20_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.d20_mean[i] <- sd(dat_list[[i]]$d20_power.M_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$d20_power.M_RR[!is.na(dat_list[[i]]$d20_power.M_RR)]))
+}
+
+power.M_summary_d20_RR$se.d20_mean <- se.d20_mean
+
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable d20_power.M2_RR
+se.d20_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.d20_mean[i] <- sd(dat_list[[i]]$d20_power.M2_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$d20_power.M2_RR[!is.na(dat_list[[i]]$d20_power.M2_RR)]))
+}
+
+power.M2_summary_d20_RR$se.d20_mean <- se.d20_mean
+
+
+
+#*****************************************************************#
+#********************** 40% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable d40_power_RR
 se.d40_mean <- NA
 for (i in 1:length(dat_list)) {
   se.d40_mean[i] <- sd(dat_list[[i]]$d40_power_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$d40_power_RR[!is.na(dat_list[[i]]$d40_power_RR)]))
@@ -816,21 +1162,115 @@ for (i in 1:length(dat_list)) {
 
 power_summary_d40_RR$se.d40_mean <- se.d40_mean
 
+#---------------------- (2) type S error -----------------------#
+# standard error of variable d40_power.S_RR
+se.d40_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.d40_mean[i] <- sd(dat_list[[i]]$d40_power.S_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$d40_power.S_RR[!is.na(dat_list[[i]]$d40_power.S_RR)]))
+}
+
+power.S_summary_d40_RR$se.d40_mean <- se.d40_mean
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable d40_power.M_RR
+se.d40_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.d40_mean[i] <- sd(dat_list[[i]]$d40_power.M_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$d40_power.M_RR[!is.na(dat_list[[i]]$d40_power.M_RR)]))
+}
+
+power.M_summary_d40_RR$se.d40_mean <- se.d40_mean
+
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable d40_power.M2_RR
+se.d40_mean <- NA
+for (i in 1:length(dat_list)) {
+  se.d40_mean[i] <- sd(dat_list[[i]]$d40_power.M2_RR, na.rm=TRUE) / sqrt(length(dat_list[[i]]$d40_power.M2_RR[!is.na(dat_list[[i]]$d40_power.M2_RR)]))
+}
+
+power.M2_summary_d40_RR$se.d40_mean <- se.d40_mean
 
 
-# meta-meta-analysis on power
+
+
+#*********************************************************************#
+#-------------------- meta-meta-analysis on power --------------------#
+#*********************************************************************#
+
+#----------------------------------------------------------------#
+#           (i) intercept (i.e. fixed effect) as true effect
+#----------------------------------------------------------------#
 MMA_power.F_RR <- with(power.F_summary_RR, rma.mv(yi = Mean, V = se.F_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
+MMA_power.F.S_RR <- with(power.F.S_summary_RR, rma.mv(yi = Mean, V = se.F.S_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.F.M_RR <- with(power.F.M_summary_RR, rma.mv(yi = Mean, V = se.F.M_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.F.M2_RR <- with(power.F.M2_summary_RR, rma.mv(yi = Mean, V = se.F.M2_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+
+#----------------------------------------------------------------#
+#                 (ii) study effect as true effect
+#----------------------------------------------------------------#
 MMA_power.R_RR <- with(power.R_summary_RR, rma.mv(yi = Mean, V = se.R_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
-MMA_power.S_RR <- with(power.S_summary_RR, rma.mv(yi = Mean, V = se.S_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+MMA_power.R.S_RR <- with(power.R.S_summary_RR, rma.mv(yi = Mean, V = se.R.S_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
-# some meta-analytic cases have very large type M error, we consider them as potential outlier
+MMA_power.R.M_RR <- with(power.R.M_summary_RR, rma.mv(yi = Mean, V = se.R.M_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.R.M2_RR <- with(power.R.M2_summary_RR, rma.mv(yi = Mean, V = se.R.M2_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+#----------------------------------------------------------------#
+#               (iii) hypothetical effect as true effect
+#----------------------------------------------------------------#
+
+#*****************************************************************#
+#********************** 5% mean differences **********************#
+#*****************************************************************#
+
+MMA_power_RR_d5 <- with(power_summary_d5_RR, rma.mv(yi = Mean, V = se.d5_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.S_RR_d5 <- with(power.S_summary_d5_RR, rma.mv(yi = Mean, V = se.d5_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M_RR_d5 <- with(power.M_summary_d5_RR, rma.mv(yi = Mean, V = se.d5_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M2_RR_d5 <- with(power.M2_summary_d5_RR, rma.mv(yi = Mean, V = se.d5_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+#*****************************************************************#
+#********************** 10% mean differences *********************#
+#*****************************************************************#
+
+MMA_power_RR_d10 <- with(power_summary_d10_RR, rma.mv(yi = Mean, V = se.d10_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.S_RR_d10 <- with(power.S_summary_d10_RR, rma.mv(yi = Mean, V = se.d10_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M_RR_d10 <- with(power.M_summary_d10_RR, rma.mv(yi = Mean, V = se.d10_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M2_RR_d10 <- with(power.M2_summary_d10_RR, rma.mv(yi = Mean, V = se.d10_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+#*****************************************************************#
+#********************** 20% mean differences *********************#
+#*****************************************************************#
+
+MMA_power_RR_d20 <- with(power_summary_d20_RR, rma.mv(yi = Mean, V = se.d20_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.S_RR_d20 <- with(power.S_summary_d20_RR, rma.mv(yi = Mean, V = se.d20_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M_RR_d20 <- with(power.M_summary_d20_RR, rma.mv(yi = Mean, V = se.d20_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M2_RR_d20 <- with(power.M2_summary_d20_RR, rma.mv(yi = Mean, V = se.d20_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+
+# some meta-analytic cases have very large type M error, we want to consider them as potential outlier
 power.M_summary_RR2 <- power.M_summary_RR %>% subset(power.M_summary_RR$se.M_mean < 100) # remove potential outlier
 MMA_power.M_RR <- with(power.M_summary_RR, rma.mv(yi = Mean, V = se.M_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
 
-MMA_power_RR_d40 <- with(power_summary_d40_RR, rma.mv(yi = Mean, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
 
 
 
