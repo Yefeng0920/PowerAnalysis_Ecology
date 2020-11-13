@@ -747,6 +747,10 @@ power.R.M2_summary_RR <- data.frame(MA_case=model_est_RR$MA_case,
 
 
 
+#----------------------------------------------------------------#
+#               (iii) hypothetical effect as true effect
+#----------------------------------------------------------------#
+
 #*****************************************************************#
 #********************** 5% mean differences **********************#
 #*****************************************************************#
@@ -1203,7 +1207,7 @@ MMA_power.F_RR <- with(power.F_summary_RR, rma.mv(yi = Mean, V = se.F_mean, rand
 
 MMA_power.F.S_RR <- with(power.F.S_summary_RR, rma.mv(yi = Mean, V = se.F.S_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
-MMA_power.F.M_RR <- with(power.F.M_summary_RR, rma.mv(yi = Mean, V = se.F.M_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+MMA_power.F.M_RR <- with(power.F.M_summary_RR, rma.mv(yi = Median, V = se.F.M_mean, random = list(~1|MA_case), method = "REML", test = "z")) # median rather than mean
 
 MMA_power.F.M2_RR <- with(power.F.M2_summary_RR, rma.mv(yi = Mean, V = se.F.M2_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
@@ -1216,7 +1220,7 @@ MMA_power.R_RR <- with(power.R_summary_RR, rma.mv(yi = Mean, V = se.R_mean, rand
 
 MMA_power.R.S_RR <- with(power.R.S_summary_RR, rma.mv(yi = Mean, V = se.R.S_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
-MMA_power.R.M_RR <- with(power.R.M_summary_RR, rma.mv(yi = Mean, V = se.R.M_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+MMA_power.R.M_RR <- with(power.R.M_summary_RR, rma.mv(yi = Median, V = se.R.M_mean, random = list(~1|MA_case), method = "REML", test = "z")) # median rather than mean
 
 MMA_power.R.M2_RR <- with(power.R.M2_summary_RR, rma.mv(yi = Mean, V = se.R.M2_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
@@ -1233,7 +1237,7 @@ MMA_power_RR_d5 <- with(power_summary_d5_RR, rma.mv(yi = Mean, V = se.d5_mean, r
 
 MMA_power.S_RR_d5 <- with(power.S_summary_d5_RR, rma.mv(yi = Mean, V = se.d5_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
-MMA_power.M_RR_d5 <- with(power.M_summary_d5_RR, rma.mv(yi = Mean, V = se.d5_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+MMA_power.M_RR_d5 <- with(power.M_summary_d5_RR, rma.mv(yi = Median, V = se.d5_mean, random = list(~1|MA_case), method = "REML", test = "z")) # median rather than mean
 
 MMA_power.M2_RR_d5 <- with(power.M2_summary_d5_RR, rma.mv(yi = Mean, V = se.d5_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
@@ -1246,7 +1250,7 @@ MMA_power_RR_d10 <- with(power_summary_d10_RR, rma.mv(yi = Mean, V = se.d10_mean
 
 MMA_power.S_RR_d10 <- with(power.S_summary_d10_RR, rma.mv(yi = Mean, V = se.d10_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
-MMA_power.M_RR_d10 <- with(power.M_summary_d10_RR, rma.mv(yi = Mean, V = se.d10_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+MMA_power.M_RR_d10 <- with(power.M_summary_d10_RR, rma.mv(yi = Median, V = se.d10_mean, random = list(~1|MA_case), method = "REML", test = "z")) # median rather than mean
 
 MMA_power.M2_RR_d10 <- with(power.M2_summary_d10_RR, rma.mv(yi = Mean, V = se.d10_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
@@ -1259,10 +1263,22 @@ MMA_power_RR_d20 <- with(power_summary_d20_RR, rma.mv(yi = Mean, V = se.d20_mean
 
 MMA_power.S_RR_d20 <- with(power.S_summary_d20_RR, rma.mv(yi = Mean, V = se.d20_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
-MMA_power.M_RR_d20 <- with(power.M_summary_d20_RR, rma.mv(yi = Mean, V = se.d20_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+MMA_power.M_RR_d20 <- with(power.M_summary_d20_RR, rma.mv(yi = Median, V = se.d20_mean, random = list(~1|MA_case), method = "REML", test = "z")) # median rather than mean
 
 MMA_power.M2_RR_d20 <- with(power.M2_summary_d20_RR, rma.mv(yi = Mean, V = se.d20_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
+
+#*****************************************************************#
+#********************** 40% mean differences *********************#
+#*****************************************************************#
+
+MMA_power_RR_d40 <- with(power_summary_d40_RR, rma.mv(yi = Mean, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.S_RR_d40 <- with(power.S_summary_d40_RR, rma.mv(yi = Mean, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M_RR_d40 <- with(power.M_summary_d40_RR, rma.mv(yi = Median, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z")) # median rather than mean
+
+MMA_power.M2_RR_d40 <- with(power.M2_summary_d40_RR, rma.mv(yi = Mean, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
 
 # some meta-analytic cases have very large type M error, we want to consider them as potential outlier
@@ -1273,18 +1289,70 @@ MMA_power.M_RR <- with(power.M_summary_RR, rma.mv(yi = Mean, V = se.M_mean, rand
 
 
 
+#*********************************************************************#
+#----------------------- retrieving estimates ------------------------#
+#*********************************************************************#
+
+#----------------------------------------------------------------#
+#           (i) intercept (i.e. fixed effect) as true effect
+#----------------------------------------------------------------#
+table.MMA_power.F_RR <- mod_results(MMA_power.F_RR, mod = 'Int')
+table.MMA_power.F.S_RR <- mod_results(MMA_power.F.S_RR, mod = 'Int')
+table.MMA_power.F.M_RR <- mod_results(MMA_power.F.M_RR, mod = 'Int')
+table.MMA_power.F.M2_RR <- mod_results(MMA_power.F.M2_RR, mod = 'Int')
+
+#----------------------------------------------------------------#
+#                 (ii) study effect as true effect
+#----------------------------------------------------------------#
+table.MMA_power.R_RR <- mod_results(MMA_power.R_RR, mod = 'Int')
+table.MMA_power.R.S_RR <- mod_results(MMA_power.R.S_RR, mod = 'Int')
+table.MMA_power.R.M_RR <- mod_results(MMA_power.R.M_RR, mod = 'Int')
+table.MMA_power.R.M2_RR <- mod_results(MMA_power.R.M2_RR, mod = 'Int')
 
 
-# Retrieving estimates
-  table.MMA_power.F_RR <- mod_results(MMA_power.F_RR, mod = 'Int')
-  table.MMA_power.R_RR <- mod_results(MMA_power.R_RR, mod = 'Int')
-  table.MMA_power.S_RR <- mod_results(MMA_power.S_RR, mod = 'Int')
-  table.MMA_power.M_RR <- mod_results(MMA_power.M_RR, mod = 'Int')
-  
-  table.MMA_power_RR_d40 <- mod_results(MMA_power_RR_d40, mod = 'Int')
+#----------------------------------------------------------------#
+#               (iii) hypothetical effect as true effect
+#----------------------------------------------------------------#
 
- # Plotting
-  #myorchard.plot1 <- edit(orchard_plot) # use edit() to tailor orchard_plot(): color - black; geom_point (size = 6), annotate ('text', size = 7)
+#*****************************************************************#
+#********************** 5% mean differences **********************#
+#*****************************************************************#
+table.MMA_power_RR_d5 <- mod_results(MMA_power_RR_d5, mod = 'Int')
+table.MMA_power.S_RR_d5 <- mod_results(MMA_power.S_RR_d5, mod = 'Int')
+table.MMA_power.M_RR_d5 <- mod_results(MMA_power.M_RR_d5, mod = 'Int')
+table.MMA_power.M2_RR_d5 <- mod_results(MMA_power.M2_RR_d5, mod = 'Int')
+
+ 
+#*****************************************************************#
+#********************** 10% mean differences *********************#
+#*****************************************************************#
+table.MMA_power_RR_d10 <- mod_results(MMA_power_RR_d10, mod = 'Int')
+table.MMA_power.S_RR_d10 <- mod_results(MMA_power.S_RR_d10, mod = 'Int')
+table.MMA_power.M_RR_d10 <- mod_results(MMA_power.M_RR_d10, mod = 'Int')
+table.MMA_power.M2_RR_d10 <- mod_results(MMA_power.M2_RR_d10, mod = 'Int')
+
+
+#*****************************************************************#
+#********************** 20% mean differences *********************#
+#*****************************************************************#
+table.MMA_power_RR_d20 <- mod_results(MMA_power_RR_d20, mod = 'Int')
+table.MMA_power.S_RR_d20 <- mod_results(MMA_power.S_RR_d20, mod = 'Int')
+table.MMA_power.M_RR_d20 <- mod_results(MMA_power.M_RR_d20, mod = 'Int')
+table.MMA_power.M2_RR_d20 <- mod_results(MMA_power.M2_RR_d20, mod = 'Int')
+
+
+#*****************************************************************#
+#********************** 40% mean differences *********************#
+#*****************************************************************#
+table.MMA_power_RR_d40 <- mod_results(MMA_power_RR_d40, mod = 'Int')
+table.MMA_power.S_RR_d40 <- mod_results(MMA_power.S_RR_d40, mod = 'Int')
+table.MMA_power.M_RR_d40 <- mod_results(MMA_power.M_RR_d40, mod = 'Int')
+table.MMA_power.M2_RR_d40 <- mod_results(MMA_power.M2_RR_d40, mod = 'Int')
+
+
+
+# Plotting
+  #myorchard.plot1 <- edit(orchard_plot) # use edit() to tailor orchard_plot(): color -> black; geom_point (size = 6), annotate ('text', size = 7)
   
 # meta-analytic mean
   myorchard.plot1(table.MMA_power.F_RR, mod = "Int", xlab = "Mean power for lnRR", transfm = "none", angle = 90) +
@@ -1422,6 +1490,89 @@ dev.off()
 
 
 
+# Fig
+```{r}
+
+
+
+background.colour <- 'white'
+
+hypothesis.theme <- theme(panel.background = element_rect(fill = background.colour),
+                        plot.background = element_rect(fill = background.colour),
+                        panel.grid = element_blank(),
+                        panel.border = element_rect(size = 1.2, colour = "black", fill = NA),
+                        #axis.line = element_line(size = 0.9, colour = 'black'),
+                        axis.ticks = element_line(size = 0.9, color = 'black'),
+                        axis.ticks.length = unit(0.15, 'cm'),
+                        axis.text.y = element_text(face = 'bold',size = 15, margin = margin(t = 0, r = 5, b = 0, l = 0)),
+                        axis.text.x = element_text(face = 'bold' , size = 15, margin = margin(t = 10, r = 0, b = 0, l = 0)),
+                        axis.title = element_text(size = 18),
+                        axis.title.y = element_text(margin = margin(t = 0, r = 15, b = 0, l = 0)),
+                        axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l =0)),
+                      
+                        plot.title = element_text(size = 18, margin = margin(0, 0, 10, 0), hjust = -0.03, face = 'bold'))
+                       #legend.background = element_blank(),
+                       #legend.key = element_blank(),
+                       #legend.title = element_text(size = 12),
+
+
+
+## retriving estimates
+model.table.RR <- data.frame(traits = factor(c('Neurobehavior',
+                                               'Learning-MWM',
+                                               'Memory-MWM',
+                                               'Memory-NOR',
+                                               'Anxiety-EPM',
+                                               'Anxiety-OFT'),
+                                            levels = rev(c('Neurobehavior',
+                                                           'Learning-MWM',
+                                                           'Memory-MWM',
+                                                           'Memory-NOR',
+                                                           'Anxiety-EPM',
+                                                           'Anxiety-OFT'))),
+                             coeffi = c(model1.behavior_RR$b,
+                                        model1.learning_MWM_RR$b,
+                                        model1.memory_MWM_RR$b,
+                                        model1.memory_NOR_RR$b,
+                                        model1.anxiety_EPM_RR$b,
+                                        model1.anxiety_OFT_RR$b),
+                             lower = c(model1.behavior_RR$ci.lb,
+                                       model1.learning_MWM_RR$ci.lb,
+                                       model1.memory_MWM_RR$ci.lb,
+                                       model1.memory_NOR_RR$ci.lb,
+                                       model1.anxiety_EPM_RR$ci.lb,
+                                       model1.anxiety_OFT_RR$ci.lb),
+                             upper = c(model1.behavior_RR$ci.ub,
+                                       model1.learning_MWM_RR$ci.ub,
+                                       model1.memory_MWM_RR$ci.ub,
+                                       model1.memory_NOR_RR$ci.ub,
+                                       model1.anxiety_EPM_RR$ci.ub,
+                                       model1.anxiety_OFT_RR$ci.ub))
+
+## plot
+ggplot() +
+  geom_hline(yintercept = 0, lty = 2, lwd = 1, colour = 'grey40', alpha = 1) +
+  geom_pointrange(data = model.table.RR, aes(x = traits, y = coeffi, ymin = lower, ymax = upper, shape = traits, size = traits, colour = traits), lwd = 1.2, show.legend = F, fatten = 7) +
+  scale_shape_manual(values = c(16, 16, 16, 16, 16, 18)) +
+  scale_size_manual(values = c(0.6, 0.6, 0.6, 0.6, 0.6, 1)) +
+  scale_color_manual(values = c("#009E73", "#009E73", "#009E73", "#009E73", "#009E73", "#E69F00")) +
+  scale_y_continuous(limits = c(-0.27, 0.93),
+                     breaks = c(-0.2, 0.0, 0.2, 0.4, 0.6, 0.8), 
+                     labels = c('-0.2', '0.0', '0.2', '0.4', '0.6','0.8') 
+                     ) +
+  coord_flip() +
+  hypothesis.theme +
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_text(colour = 'black', size = 18),
+        axis.text.x = element_text(colour = 'black', size = 18),
+        plot.margin = unit(c(0.3, 0.3, 0, 0.3), 'cm')) +
+  ylab(' ') +
+  ggtitle ('(A)') +
+  theme(axis.title.x = element_text(margin = margin(t = 5, r = 0, b = 0, l = 0))) -> fig.overall.behavior.RR
+```
+
+
+
 
 
 ### Section 2 - power analysis for variance-effect (i.e. lnCVR and lnVR)
@@ -1449,7 +1600,7 @@ raw_m9_1 <- read.csv(file = "./12_lnCVR_data/raw_m9_1.csv", header = TRUE)
 raw_m11_1 <- read.csv(file = "./12_lnCVR_data/raw_m11_1.csv", header = TRUE)
 
 
-# Rename the column names of descriptive statistics to standard column names (i.e. "T_mean", "T_sd", "T_N", "C_mean", "C_sd", "C_N")
+# rename the column names of descriptive statistics to standard column names (i.e. "T_mean", "T_sd", "T_N", "C_mean", "C_sd", "C_N")
 names(raw_m1_1)[str_detect(names(raw_m1_1), c("T.mean|T.sd|T.N|C.mean|C.sd|C.N"))] <- c("T_mean", "T_sd", "T_N", "C_mean", "C_sd", "C_N")
 names(raw_m1_2)[str_detect(names(raw_m1_2), c("T.mean|T.sd|T.N|C.mean|C.sd|C.N"))] <- c("T_mean", "T_sd", "T_N", "C_mean", "C_sd", "C_N") 
 
@@ -1468,7 +1619,7 @@ names(raw_m9_1)[str_detect(names(raw_m9_1), c("N2O.trt|SD.N2O.trt|N.N2O.trt|N2O.
 names(raw_m11_1)[str_detect(names(raw_m11_1), c("Mean|SD|N|Mean.1|SD.1|N.1"))] <- c("C_mean","C_sd","C_N","T_mean","T_sd","T_N")
 
 
-# Make a list of data
+# make a list of data
 dat_list_variation <- list(raw_m1_1,
                            raw_m1_2,
                            raw_m2_1,
@@ -1482,13 +1633,13 @@ dat_list_variation <- list(raw_m1_1,
                            raw_m9_1,
                            raw_m11_1)
 
-# Calculate the number of total effect sizes - sample size
+# calculate the number of total effect sizes - sample size
 ES_number <- NA
 ES_number <- mapply(unique, sapply(dat_list_variation, function(x) x$Unit_ID)) 
 unlist(ES_number) %>% length() # 2004
 
 
-# Calculate 3 type of effect size statistics (i.e. lnRR, lnCVR and lnVR)
+# calculate 3 type of effect size statistics (i.e. lnRR, lnCVR and lnVR)
 lnRR <- NA
 for (i in 1:length(dat_list_variation)) {
   lnRR[i] <- escalc(measure = "ROM",
@@ -1536,7 +1687,7 @@ for (i in 1:12) {
 }
 
 
-# Prepare "ture" effect of variation (i.e. lnCVR and lnVR) for power analysis - fit multi-level meta-analytic models
+# prepare "ture" effect of variation (i.e. lnCVR and lnVR) for power analysis - fit multi-level meta-analytic models
 model_list_CVR<- NA
 for (i in 1:length(dat_list_variation)) {
  model_list_CVR[i] <- rma.mv(data = lnCVR[[i]], yi = yi, V = vi, random = list(~1|Study, ~1|Unit_ID), method = "REML", test = "z") %>% list()
@@ -1544,12 +1695,15 @@ for (i in 1:length(dat_list_variation)) {
 
 model_list_VR<- NA
 for (i in 1:length(dat_list_variation)) {
- model_list_VR[i] <- rma.mv(data = lnCVR[[i]], yi = yi, V = vi, random = list(~1|Study, ~1|Unit_ID), method = "REML", test = "z") %>% list()
+ model_list_VR[i] <- rma.mv(data = lnVR[[i]], yi = yi, V = vi, random = list(~1|Study, ~1|Unit_ID), method = "REML", test = "z") %>% list()
 }
 
 
-# We assume meta-analytic mean as ture effect, so we need to get estimate (mu) and corresponding error (SE)
-# relative variation - CVR
+#****************************************************************#
+#------------------------------lnCVR-----------------------------#
+#****************************************************************#
+
+# we assume meta-analytic mean as ture effect, so we need to get estimate (mu) and corresponding error (SE)
 model_est_CVR <- data.frame(MA_case=c("m1_1",
                                       "m1_2",
                                       "m2_1",
@@ -1566,11 +1720,17 @@ model_est_CVR <- data.frame(MA_case=c("m1_1",
                   SE_CVR=sapply(model_list_CVR, function(x) x$se),
                   p_value=sapply(model_list_CVR, function(x) x$pval) %>% round(4))
 
-# Get two-tailed power for meta-analyses
+
+
+#-----------------------------------------------------------#
+#          (1) two-tailed power for meta-analyses
+#-----------------------------------------------------------#
 model_est_CVR$MA.power <- power.ma_Shinichi(mu=model_est_CVR$mu,SE=model_est_CVR$SE)
 
 
-# Get type S error for meta-analyses
+#-----------------------------------------------------------#
+#            (2) type S error for meta-analyses
+#-----------------------------------------------------------#
 MA.power.S <- NA
 for (i in 1:length(model_est_CVR$MA_case)) {
   MA.power.S[i] <- error_S(mu=model_est_CVR$mu[i],se=model_est_CVR$SE[i],alpha=0.05) %>% unlist()
@@ -1579,7 +1739,9 @@ for (i in 1:length(model_est_CVR$MA_case)) {
 model_est_CVR$MA.power.S <- MA.power.S
 
 
-# Get type M error for meta-analyses
+#-----------------------------------------------------------#
+#   (3) type M error (overestimate ratio) for meta-analyses
+#-----------------------------------------------------------#
 MA.power.M <- NA
 for (i in 1:length(model_est_CVR$MA_case)) {
   MA.power.M[i] <- error_M(mu=model_est_CVR$mu[i],se=model_est_CVR$SE[i],alpha=0.05,N=10000) %>% unlist()
@@ -1588,19 +1750,40 @@ for (i in 1:length(model_est_CVR$MA_case)) {
 model_est_CVR$MA.power.M <- MA.power.M
 
 
+#-----------------------------------------------------------#
+#   (4) type M error (relative error) for meta-analyses
+#-----------------------------------------------------------#
+MA.power.M2 <- NA
+for (i in 1:length(model_est_CVR$MA_case)) {
+  MA.power.M2[i] <- error_M2(mu=model_est_CVR$mu[i],se=model_est_CVR$SE[i],alpha=0.05,N=10000) %>% unlist()
+}
+
+model_est_CVR$MA.power.M2 <- MA.power.M2
+
+
 # Save
 write.csv(model_est_CVR, file = "./meta-analysis power_CVR.csv", row.names = FALSE)
 
 
-# absolute variation - VR
+#****************************************************************#
+#-------------------------------lnVR-----------------------------#
+#****************************************************************#
+
+# we assume meta-analytic mean as ture effect, so we need to get estimate (mu) and corresponding error (SE)
+
 model_est_VR <- data.frame(MA_case=model_est_CVR$MA_case,
                   mu_VR=sapply(model_list_VR, function(x) x$beta),
                   SE_VR=sapply(model_list_VR, function(x) x$se),
                   p_value=sapply(model_list_VR, function(x) x$pval))
-# Get two-tailed power for meta-analyses
+
+#-----------------------------------------------------------#
+#          (1) two-tailed power for meta-analyses
+#-----------------------------------------------------------#
 model_est_VR$MA.power <- power.ma_Shinichi(mu=model_est_VR$mu,SE=model_est_VR$SE)
 
-# Get type S error for meta-analyses
+#-----------------------------------------------------------#
+#            (2) type S error for meta-analyses
+#-----------------------------------------------------------#
 MA.power.S <- NA
 for (i in 1:length(model_est_VR$MA_case)) {
   MA.power.S[i] <- error_S(mu=model_est_VR$mu[i],se=model_est_VR$SE[i],alpha=0.05) %>% unlist()
@@ -1609,56 +1792,95 @@ for (i in 1:length(model_est_VR$MA_case)) {
 model_est_VR$MA.power.S <- MA.power.S
 
 
-# Get type M error for meta-analyses
+#-----------------------------------------------------------#
+#   (3) type M error (overestimate ratio) for meta-analyses
+#-----------------------------------------------------------#
 MA.power.M <- NA
 for (i in 1:length(model_est_VR$MA_case)) {
   MA.power.M[i] <- error_M(mu=model_est_VR$mu[i],se=model_est_VR$SE[i],alpha=0.05,N=10000) %>% unlist()
 }
 
 model_est_VR$MA.power.M <- MA.power.M
-  
+
+#-----------------------------------------------------------#
+#   (4) type M error (relative error) for meta-analyses
+#-----------------------------------------------------------#  
+MA.power.M2 <- NA
+for (i in 1:length(model_est_VR$MA_case)) {
+  MA.power.M2[i] <- error_M2(mu=model_est_VR$mu[i],se=model_est_VR$SE[i],alpha=0.05,N=10000) %>% unlist()
+}
+
+model_est_VR$MA.power.M2 <- MA.power.M2
+
 
 # Save
 write.csv(model_est_VR, file = "./meta-analysis power_VR.csv", row.names = FALSE)
 
 
 #***************************************************************#
-#       power for individual study within meta-analysis         #
+#        power for empirical studies within meta-analysis       #
 #***************************************************************#
 
+# We have three approaches for calculating empirical studies within meta-analysis: (i) using meta-analytic estimate (i.e. intercept or fixed effect) as true effect; (ii) using study effect as true effect (i.e. fixed plus random effect), which accomodate between-study heterogeneity; (iii) postulated (i.e. hypothetical) effect as true effect - 5%, 10%, 20%, 40% difference)
+
+
+#****************************************************************#
+#------------------------------lnCVR-----------------------------#
+#****************************************************************#
+
+#----------------------------------------------------------------#
+#           (i) intercept (i.e. fixed effect) as true effect
+#----------------------------------------------------------------#
+
+#--------------------- (1) two tailed power ---------------------#
+
 # lnCVR
-# Use meta-analytic estimate as true effect, to calculate power for individual data point
-# relative variation - CVR
 power.F_CVR <- NA
 for (i in 1:length(lnCVR)) {
   power.F_CVR[i] <- power.individual_Shinichi(mu=rep(model_list_CVR[[i]]$beta, length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
 
-# Allocate each set of power into corresponding dataset
+# allocate each set of power into corresponding dataset
 for (i in 1:length(power.F_CVR)) {
   lnCVR[[i]]$power.F_CVR <- power.F_CVR[[i]]
 }
 
-# absolute variation - VR
-power.F_VR <- NA
-for (i in 1:length(lnVR)) {
-  power.F_VR[i] <- power.individual_Shinichi(mu=rep(model_list_VR[[i]]$beta, length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
 
-# Allocate each set of power into corresponding dataset
-for (i in 1:length(power.F_VR)) {
-  lnVR[[i]]$power.F_VR <- power.F_VR[[i]]
+#---------------------- (2) type S error -----------------------#
+power.F.S_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  power.F.S_CVR[i] <- mapply(error_S,mu=rep(model_list_CVR[[i]]$beta, length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(power.F.S_CVR)) {
+  lnCVR[[i]]$power.F.S_CVR <- power.F.S_CVR[[i]]
 }
 
 
-# Use effects without random effects as true effect sizes for each individual study, to calculate power for each individual study
+#---------------- (4) type M error (relative error) --------------#
+power.F.M2_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  power.F.M2_CVR[i] <-mapply(error_M2,mu=rep(model_list_CVR[[i]]$beta, length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(power.F.M2_CVR)) {
+  lnCVR[[i]]$power.F.M2_CVR <- power.F.M2_CVR[[i]]
+}
+
+
+#----------------------------------------------------------------#
+#                 (ii) study effect as true effect
+#----------------------------------------------------------------#
+
+# use effects without random effects as true effect sizes for each individual study, to calculate power for each individual study
 # This is what Helmut suggest to do, to account for random effects of each study
 
-# best linear unbiased estimate - study specific effects
+# get best linear unbiased estimate (only random effect) - this contains two components random effect respectively, i.e. list(~1|Study, ~1|Unit_ID)
 blups.list_CVR <- NA
 for (i in 1:length(model_list_CVR)) {
   blups.list_CVR[i] <- ranef(model_list_CVR[[i]]) %>% list()
 }
 
-# get study index
+# get study index - match two components random effect
 index.list_CVR <- NA # list()
 for (i in 1:length(model_list_CVR)) {
   index.list_CVR[i] <- match(as.character(lnCVR[[i]]$Study),rownames(blups.list_CVR[[i]]$Study)) %>% list()
@@ -1670,81 +1892,317 @@ for (i in 1:length(model_list_CVR)) {
   effect.R_CVR[i] <- mapply(sum, model_list_CVR[[i]]$beta, blups.list_CVR[[i]]$Study[index.list_CVR[[i]],1], blups.list_CVR[[i]]$Unit_ID[,1]) %>% list()
 }
 
+
+#--------------------- (1) two tailed power ---------------------#
 power.R_CVR <- NA
 for (i in 1:length(dat_list_variation)) {
   power.R_CVR[i] <- power.individual_Shinichi(mu=effect.R_CVR[[i]], se=sqrt(lnCVR[[i]]$vi)) %>% list()}
 
 # plot(power_CVR[[1]]-power_CVR2[[1]]) - check discrepancy
-# Allocate each set of power into coCVResponding dataset
+# allocate each set of power into coCVResponding dataset
 for (i in 1:length(power.R_CVR)) {
   lnCVR[[i]]$power.R_CVR <- power.R_CVR[[i]]
 } 
 
 # Note that meta-analytic model only has one predicted/fitted value - fixed effect. While Meta-regression's fitted values are dependent on the level of moderator (i.e. independent variable)
 
-# type S (sign) eCVRor
-power.S_CVR <- NA
+#---------------------- (2) type S error -----------------------#
+power.R.S_CVR <- NA
 for (i in 1:12) {
-  power.S_CVR[i] <- mapply(error_S, mu=effect.R_CVR[[i]], se=sqrt(lnCVR[[i]]$vi), alpha=0.05) %>% list()
+  power.R.S_CVR[i] <- mapply(error_S, mu=effect.R_CVR[[i]], se=sqrt(lnCVR[[i]]$vi), alpha=0.05) %>% list()
 }
 
-# Allocate each set of power into coCVResponding dataset
-for (i in 1:length(power.S_CVR)) {
-  lnCVR[[i]]$power.S_CVR <- power.S_CVR[[i]]
+# allocate each set of power into coCVResponding dataset
+for (i in 1:length(power.R.S_CVR)) {
+  lnCVR[[i]]$power.R.S_CVR <- power.R.S_CVR[[i]]
 }
 
 
-# type M (magnitude) eCVRor
-power.M_CVR <- NA
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.R.M_CVR <- NA
 for (i in 1:12) {
-  power.M_CVR[i] <- mapply(error_M, mu=effect.R_CVR[[i]], se=sqrt(lnCVR[[i]]$vi), alpha=0.05, N=10000) %>% list()
+  power.R.M_CVR[i] <- mapply(error_M, mu=effect.R_CVR[[i]], se=sqrt(lnCVR[[i]]$vi), alpha=0.05, N=10000) %>% list()
 }  
 
-
-# Allocate each set of power into coCVResponding dataset
-for (i in 1:length(power.M_CVR)) {
-  lnCVR[[i]]$power.M_CVR <- power.M_CVR[[i]]
+# allocate each set of power into coCVResponding dataset
+for (i in 1:length(power.R.M_CVR)) {
+  lnCVR[[i]]$power.R.M_CVR <- power.R.M_CVR[[i]]
 }
 
 
+#---------------- (4) type M error (relative error) --------------#
+power.R.M2_CVR <- NA
+for (i in 1:12) {
+  power.R.M2_CVR[i] <- mapply(error_M2, mu=effect.R_CVR[[i]], se=sqrt(lnCVR[[i]]$vi), alpha=0.05, N=10000) %>% list()
+}  
+
+# allocate each set of power into coCVResponding dataset
+for (i in 1:length(power.R.M2_CVR)) {
+  lnCVR[[i]]$power.R.M2_CVR <- power.R.M2_CVR[[i]]
+}
+
+
+#----------------------------------------------------------------#
+#               (iii) hypothetical effect as true effect
+#----------------------------------------------------------------#
+
+#*****************************************************************#
+#********************** 5% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+d5_power_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d5_power_CVR[i] <- power.individual_Shinichi(mu=rep(log(105/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d5_power_CVR)) {
+  lnCVR[[i]]$d5_power_CVR <- d5_power_CVR[[i]]
+}
+
+#---------------------- (2) type S error -----------------------#
+d5_power.S_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d5_power.S_CVR[i] <- mapply(error_S, mu=rep(log(105/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d5_power.S_CVR)) {
+  lnCVR[[i]]$d5_power.S_CVR <- d5_power.S_CVR[[i]]
+}
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+d5_power.M_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d5_power.M_CVR[i] <- mapply(error_M, mu=rep(log(105/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d5_power.M_CVR)) {
+  lnCVR[[i]]$d5_power.M_CVR <- d5_power.M_CVR[[i]]
+}
+
+#---------------- (4) type M error (relative error) --------------#
+d5_power.M2_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d5_power.M2_CVR[i] <- mapply(error_M2, mu=rep(log(105/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d5_power.M2_CVR)) {
+  lnCVR[[i]]$d5_power.M2_CVR <- d5_power.M2_CVR[[i]]
+}
+
+
+#*****************************************************************#
+#********************* 10% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+d10_power_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d10_power_CVR[i] <- power.individual_Shinichi(mu=rep(log(110/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d10_power_CVR)) {
+  lnCVR[[i]]$d10_power_CVR <- d10_power_CVR[[i]]
+}
+
+#---------------------- (2) type S error -----------------------#
+d10_power.S_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d10_power.S_CVR[i] <- mapply(error_S, mu=rep(log(110/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d10_power.S_CVR)) {
+  lnCVR[[i]]$d10_power.S_CVR <- d10_power.S_CVR[[i]]
+}
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+d10_power.M_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d10_power.M_CVR[i] <- mapply(error_M, mu=rep(log(110/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d10_power.M_CVR)) {
+  lnCVR[[i]]$d10_power.M_CVR <- d10_power.M_CVR[[i]]
+}
+
+#---------------- (4) type M error (relative error) --------------#
+d10_power.M2_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d10_power.M2_CVR[i] <- mapply(error_M2, mu=rep(log(110/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d10_power.M2_CVR)) {
+  lnCVR[[i]]$d10_power.M2_CVR <- d10_power.M2_CVR[[i]]
+}
+
+
+
+#*****************************************************************#
+#********************* 20% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+d20_power_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d20_power_CVR[i] <- power.individual_Shinichi(mu=rep(log(120/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d20_power_CVR)) {
+  lnCVR[[i]]$d20_power_CVR <- d20_power_CVR[[i]]
+}
+
+#---------------------- (2) type S error -----------------------#
+d20_power.S_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d20_power.S_CVR[i] <- mapply(error_S, mu=rep(log(120/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d20_power.S_CVR)) {
+  lnCVR[[i]]$d20_power.S_CVR <- d20_power.S_CVR[[i]]
+}
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+d20_power.M_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d20_power.M_CVR[i] <- mapply(error_M, mu=rep(log(120/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d20_power.M_CVR)) {
+  lnCVR[[i]]$d20_power.M_CVR <- d20_power.M_CVR[[i]]
+}
+
+#---------------- (4) type M error (relative error) --------------#
+d20_power.M2_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d20_power.M2_CVR[i] <- mapply(error_M2, mu=rep(log(120/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d20_power.M2_CVR)) {
+  lnCVR[[i]]$d20_power.M2_CVR <- d20_power.M2_CVR[[i]]
+}
+
+#*****************************************************************#
+#********************* 40% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+d40_power_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d40_power_CVR[i] <- power.individual_Shinichi(mu=rep(log(140/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d40_power_CVR)) {
+  lnCVR[[i]]$d40_power_CVR <- d40_power_CVR[[i]]
+}
+
+#---------------------- (2) type S error -----------------------#
+d40_power.S_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d40_power.S_CVR[i] <- mapply(error_S, mu=rep(log(140/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d40_power.S_CVR)) {
+  lnCVR[[i]]$d40_power.S_CVR <- d40_power.S_CVR[[i]]
+}
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+d40_power.M_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d40_power.M_CVR[i] <- mapply(error_M, mu=rep(log(140/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d40_power.M_CVR)) {
+  lnCVR[[i]]$d40_power.M_CVR <- d40_power.M_CVR[[i]]
+}
+
+#---------------- (4) type M error (relative error) --------------#
+d40_power.M2_CVR <- NA
+for (i in 1:length(lnCVR)) {
+  d40_power.M2_CVR[i] <- mapply(error_M2, mu=rep(log(140/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d40_power.M2_CVR)) {
+  lnCVR[[i]]$d40_power.M2_CVR <- d40_power.M2_CVR[[i]]
+}
+
+
+
+
+#****************************************************************#
+#------------------------------lnVR------------------------------#
+#****************************************************************#
+
+#----------------------------------------------------------------#
+#           (i) intercept (i.e. fixed effect) as true effect
+#----------------------------------------------------------------#
+
+#--------------------- (1) two tailed power ---------------------#
 
 # lnVR
-# Use meta-analytic estimate as true effect, to calculate power for individual data point
-# relative variation - VR
 power.F_VR <- NA
 for (i in 1:length(lnVR)) {
   power.F_VR[i] <- power.individual_Shinichi(mu=rep(model_list_VR[[i]]$beta, length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
 
-# Allocate each set of power into corresponding dataset
-for (i in 1:length(power.F_VR)) {
-  lnVR[[i]]$power.F_VR <- power.F_VR[[i]]
-}
-
-# relative variation - VR
-power.F_VR <- NA
-for (i in 1:length(lnVR)) {
-  power.F_VR[i] <- power.individual_Shinichi(mu=rep(model_list_VR[[i]]$beta, length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
-
-# Allocate each set of power into corresponding dataset
+# allocate each set of power into corresponding dataset
 for (i in 1:length(power.F_VR)) {
   lnVR[[i]]$power.F_VR <- power.F_VR[[i]]
 }
 
 
-# Use effects without random effects as true effect sizes for each individual study, to calculate power for each individual study
+#---------------------- (2) type S error -----------------------#
+power.F.S_VR <- NA
+for (i in 1:length(lnVR)) {
+  power.F.S_VR[i] <- mapply(error_S,mu=rep(model_list_VR[[i]]$beta, length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(power.F.S_VR)) {
+  lnVR[[i]]$power.F.S_VR <- power.F.S_VR[[i]]
+}
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.F.M_VR <- NA
+for (i in 1:length(lnVR)) {
+  power.F.M_VR[i] <-mapply(error_M,mu=rep(model_list_VR[[i]]$beta, length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(power.F.M_VR)) {
+  lnVR[[i]]$power.F.M_VR <- power.F.M_VR[[i]]
+}
+
+
+#---------------- (4) type M error (relative error) --------------#
+power.F.M2_VR <- NA
+for (i in 1:length(lnVR)) {
+  power.F.M2_VR[i] <-mapply(error_M2,mu=rep(model_list_VR[[i]]$beta, length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(power.F.M2_VR)) {
+  lnVR[[i]]$power.F.M2_VR <- power.F.M2_VR[[i]]
+}
+
+
+#----------------------------------------------------------------#
+#                 (ii) study effect as true effect
+#----------------------------------------------------------------#
+
+# use effects without random effects as true effect sizes for each individual study, to calculate power for each individual study
 # This is what Helmut suggest to do, to account for random effects of each study
 
-# best linear unbiased estimate - study specific effects
+# get best linear unbiased estimate (only random effect) - this contains two components random effect respectively, i.e. list(~1|Study, ~1|Unit_ID)
 blups.list_VR <- NA
 for (i in 1:length(model_list_VR)) {
   blups.list_VR[i] <- ranef(model_list_VR[[i]]) %>% list()
 }
 
-# get study index
+# get study index - match two components random effect
 index.list_VR <- NA # list()
 for (i in 1:length(model_list_VR)) {
   index.list_VR[i] <- match(as.character(lnVR[[i]]$Study),rownames(blups.list_VR[[i]]$Study)) %>% list()
-} # not that Inubushi_et_al. are missing in blups.list_VR[[11]]$Study
+}
 
 # effects geting rid of random effects
 effect.R_VR <-NA
@@ -1752,141 +2210,261 @@ for (i in 1:length(model_list_VR)) {
   effect.R_VR[i] <- mapply(sum, model_list_VR[[i]]$beta, blups.list_VR[[i]]$Study[index.list_VR[[i]],1], blups.list_VR[[i]]$Unit_ID[,1]) %>% list()
 }
 
+
+#--------------------- (1) two tailed power ---------------------#
 power.R_VR <- NA
 for (i in 1:length(dat_list_variation)) {
   power.R_VR[i] <- power.individual_Shinichi(mu=effect.R_VR[[i]], se=sqrt(lnVR[[i]]$vi)) %>% list()}
 
 # plot(power_VR[[1]]-power_VR2[[1]]) - check discrepancy
-# Allocate each set of power into coVResponding dataset
+# allocate each set of power into coVResponding dataset
 for (i in 1:length(power.R_VR)) {
   lnVR[[i]]$power.R_VR <- power.R_VR[[i]]
 } 
 
 # Note that meta-analytic model only has one predicted/fitted value - fixed effect. While Meta-regression's fitted values are dependent on the level of moderator (i.e. independent variable)
 
-# type S (sign) eVRor
-power.S_VR <- NA
+#---------------------- (2) type S error -----------------------#
+power.R.S_VR <- NA
 for (i in 1:12) {
-  power.S_VR[i] <- mapply(error_S, mu=effect.R_VR[[i]], se=sqrt(lnVR[[i]]$vi), alpha=0.05) %>% list()
+  power.R.S_VR[i] <- mapply(error_S, mu=effect.R_VR[[i]], se=sqrt(lnVR[[i]]$vi), alpha=0.05) %>% list()
 }
 
-# Allocate each set of power into coVResponding dataset
-for (i in 1:length(power.S_VR)) {
-  lnVR[[i]]$power.S_VR <- power.S_VR[[i]]
+# allocate each set of power into coVResponding dataset
+for (i in 1:length(power.R.S_VR)) {
+  lnVR[[i]]$power.R.S_VR <- power.R.S_VR[[i]]
 }
 
 
-# type M (magnitude) eVRor
-power.M_VR <- NA
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.R.M_VR <- NA
 for (i in 1:12) {
-  power.M_VR[i] <- mapply(error_M, mu=effect.R_VR[[i]], se=sqrt(lnVR[[i]]$vi), alpha=0.05, N=10000) %>% list()
+  power.R.M_VR[i] <- mapply(error_M, mu=effect.R_VR[[i]], se=sqrt(lnVR[[i]]$vi), alpha=0.05, N=10000) %>% list()
 }  
 
-# Allocate each set of power into coVResponding dataset
-for (i in 1:length(power.M_VR)) {
-  lnVR[[i]]$power.M_VR <- power.M_VR[[i]]
+# allocate each set of power into coVResponding dataset
+for (i in 1:length(power.R.M_VR)) {
+  lnVR[[i]]$power.R.M_VR <- power.R.M_VR[[i]]
 }
 
 
+#---------------- (4) type M error (relative error) --------------#
+power.R.M2_VR <- NA
+for (i in 1:12) {
+  power.R.M2_VR[i] <- mapply(error_M2, mu=effect.R_VR[[i]], se=sqrt(lnVR[[i]]$vi), alpha=0.05, N=10000) %>% list()
+}  
 
-#***************************************************************#
-#  power calculation based on hypothetical varition differences #
-#***************************************************************#
-
-# lnCVR
-# Use 5% relative variation differences as true effect size, to calculate power for individual data point
-d5_power_CVR <- NA
-for (i in 1:length(lnCVR)) {
-  d5_power_CVR[i] <- power.individual_Shinichi(mu=rep(log(105/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
-
-# Allocate each set of power into corresponding dataset
-for (i in 1:length(d5_power_CVR)) {
-  lnCVR[[i]]$d5_power_CVR <- d5_power_CVR[[i]]
+# allocate each set of power into coVResponding dataset
+for (i in 1:length(power.R.M2_VR)) {
+  lnVR[[i]]$power.R.M2_VR <- power.R.M2_VR[[i]]
 }
 
 
-# Use 10% relative variation differences as true effect size, to calculate power for individual data point
-d10_power_CVR <- NA
-for (i in 1:length(lnCVR)) {
-  d10_power_CVR[i] <- power.individual_Shinichi(mu=rep(log(110/100), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
+#----------------------------------------------------------------#
+#               (iii) hypothetical effect as true effect
+#----------------------------------------------------------------#
 
-# Allocate each set of power into corresponding dataset
-for (i in 1:length(d10_power_CVR)) {
-  lnCVR[[i]]$d10_power_CVR <- d10_power_CVR[[i]]
-}
+#*****************************************************************#
+#********************** 5% mean differences **********************#
+#*****************************************************************#
 
-
-# Use 20% relative variation differences as true effect size, to calculate power for individual data point
-d20_power_CVR <- NA
-for (i in 1:length(lnCVR)) {
-  d20_power_CVR[i] <- power.individual_Shinichi(mu=rep(log(120/200), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
-
-# Allocate each set of power into corresponding dataset
-for (i in 1:length(d20_power_CVR)) {
-  lnCVR[[i]]$d20_power_CVR <- d20_power_CVR[[i]]
-}
-
-# Use 40% relative variation differences as true effect size, to calculate power for individual data point
-d40_power_CVR <- NA
-for (i in 1:length(lnCVR)) {
-  d40_power_CVR[i] <- power.individual_Shinichi(mu=rep(log(140/400), length(lnCVR[[i]]$vi)), se=sqrt(lnCVR[[i]]$vi)) %>% list()}
-
-# Allocate each set of power into corresponding dataset
-for (i in 1:length(d40_power_CVR)) {
-  lnCVR[[i]]$d40_power_CVR <- d40_power_CVR[[i]]
-}
-
-
-#lnVR
-# Use 5% absolute variation differences as true effect size, to calculate power for individual data point
-# lnVR
+#--------------------- (1) two tailed power ---------------------#
 d5_power_VR <- NA
 for (i in 1:length(lnVR)) {
   d5_power_VR[i] <- power.individual_Shinichi(mu=rep(log(105/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
 
-# Allocate each set of power into corresponding dataset
+# allocate each set of power into corresponding dataset
 for (i in 1:length(d5_power_VR)) {
   lnVR[[i]]$d5_power_VR <- d5_power_VR[[i]]
 }
 
+#---------------------- (2) type S error -----------------------#
+d5_power.S_VR <- NA
+for (i in 1:length(lnVR)) {
+  d5_power.S_VR[i] <- mapply(error_S, mu=rep(log(105/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
 
-# Use 10% absolute variation differences as true effect size, to calculate power for individual data point
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d5_power.S_VR)) {
+  lnVR[[i]]$d5_power.S_VR <- d5_power.S_VR[[i]]
+}
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+d5_power.M_VR <- NA
+for (i in 1:length(lnVR)) {
+  d5_power.M_VR[i] <- mapply(error_M, mu=rep(log(105/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d5_power.M_VR)) {
+  lnVR[[i]]$d5_power.M_VR <- d5_power.M_VR[[i]]
+}
+
+#---------------- (4) type M error (relative error) --------------#
+d5_power.M2_VR <- NA
+for (i in 1:length(lnVR)) {
+  d5_power.M2_VR[i] <- mapply(error_M2, mu=rep(log(105/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d5_power.M2_VR)) {
+  lnVR[[i]]$d5_power.M2_VR <- d5_power.M2_VR[[i]]
+}
+
+
+#*****************************************************************#
+#********************* 10% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
 d10_power_VR <- NA
 for (i in 1:length(lnVR)) {
   d10_power_VR[i] <- power.individual_Shinichi(mu=rep(log(110/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
 
-# Allocate each set of power into corresponding dataset
+# allocate each set of power into corresponding dataset
 for (i in 1:length(d10_power_VR)) {
   lnVR[[i]]$d10_power_VR <- d10_power_VR[[i]]
 }
 
+#---------------------- (2) type S error -----------------------#
+d10_power.S_VR <- NA
+for (i in 1:length(lnVR)) {
+  d10_power.S_VR[i] <- mapply(error_S, mu=rep(log(110/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
 
-# Use 20% absolute variation differences as true effect size, to calculate power for individual data point
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d10_power.S_VR)) {
+  lnVR[[i]]$d10_power.S_VR <- d10_power.S_VR[[i]]
+}
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+d10_power.M_VR <- NA
+for (i in 1:length(lnVR)) {
+  d10_power.M_VR[i] <- mapply(error_M, mu=rep(log(110/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d10_power.M_VR)) {
+  lnVR[[i]]$d10_power.M_VR <- d10_power.M_VR[[i]]
+}
+
+#---------------- (4) type M error (relative error) --------------#
+d10_power.M2_VR <- NA
+for (i in 1:length(lnVR)) {
+  d10_power.M2_VR[i] <- mapply(error_M2, mu=rep(log(110/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d10_power.M2_VR)) {
+  lnVR[[i]]$d10_power.M2_VR <- d10_power.M2_VR[[i]]
+}
+
+
+
+#*****************************************************************#
+#********************* 20% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
 d20_power_VR <- NA
 for (i in 1:length(lnVR)) {
-  d20_power_VR[i] <- power.individual_Shinichi(mu=rep(log(120/200), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+  d20_power_VR[i] <- power.individual_Shinichi(mu=rep(log(120/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
 
-# Allocate each set of power into corresponding dataset
+# allocate each set of power into corresponding dataset
 for (i in 1:length(d20_power_VR)) {
   lnVR[[i]]$d20_power_VR <- d20_power_VR[[i]]
 }
 
-# Use 40% absolute variation differences as true effect size, to calculate power for individual data point
+#---------------------- (2) type S error -----------------------#
+d20_power.S_VR <- NA
+for (i in 1:length(lnVR)) {
+  d20_power.S_VR[i] <- mapply(error_S, mu=rep(log(120/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d20_power.S_VR)) {
+  lnVR[[i]]$d20_power.S_VR <- d20_power.S_VR[[i]]
+}
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+d20_power.M_VR <- NA
+for (i in 1:length(lnVR)) {
+  d20_power.M_VR[i] <- mapply(error_M, mu=rep(log(120/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d20_power.M_VR)) {
+  lnVR[[i]]$d20_power.M_VR <- d20_power.M_VR[[i]]
+}
+
+#---------------- (4) type M error (relative error) --------------#
+d20_power.M2_VR <- NA
+for (i in 1:length(lnVR)) {
+  d20_power.M2_VR[i] <- mapply(error_M2, mu=rep(log(120/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d20_power.M2_VR)) {
+  lnVR[[i]]$d20_power.M2_VR <- d20_power.M2_VR[[i]]
+}
+
+#*****************************************************************#
+#********************* 40% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
 d40_power_VR <- NA
 for (i in 1:length(lnVR)) {
-  d40_power_VR[i] <- power.individual_Shinichi(mu=rep(log(140/400), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+  d40_power_VR[i] <- power.individual_Shinichi(mu=rep(log(140/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
 
-# Allocate each set of power into corresponding dataset
+# allocate each set of power into corresponding dataset
 for (i in 1:length(d40_power_VR)) {
   lnVR[[i]]$d40_power_VR <- d40_power_VR[[i]]
+}
+
+#---------------------- (2) type S error -----------------------#
+d40_power.S_VR <- NA
+for (i in 1:length(lnVR)) {
+  d40_power.S_VR[i] <- mapply(error_S, mu=rep(log(140/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d40_power.S_VR)) {
+  lnVR[[i]]$d40_power.S_VR <- d40_power.S_VR[[i]]
+}
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+d40_power.M_VR <- NA
+for (i in 1:length(lnVR)) {
+  d40_power.M_VR[i] <- mapply(error_M, mu=rep(log(140/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d40_power.M_VR)) {
+  lnVR[[i]]$d40_power.M_VR <- d40_power.M_VR[[i]]
+}
+
+#---------------- (4) type M error (relative error) --------------#
+d40_power.M2_VR <- NA
+for (i in 1:length(lnVR)) {
+  d40_power.M2_VR[i] <- mapply(error_M2, mu=rep(log(140/100), length(lnVR[[i]]$vi)), se=sqrt(lnVR[[i]]$vi)) %>% list()}
+
+# allocate each set of power into corresponding dataset
+for (i in 1:length(d40_power.M2_VR)) {
+  lnVR[[i]]$d40_power.M2_VR <- d40_power.M2_VR[[i]]
 }
 
 
 
 
-# Summary of individual power for variation
-# individual power using meta-analytic mean as true effect
-## relative variation - lnCVR
+
+
+#*********************************************************************#
+#----------- summary of empirical power for each approach ------------#
+#*********************************************************************#
+
+#****************************************************************#
+#-----------------------------lnCVR------------------------------#
+#****************************************************************#
+
+#----------------------------------------------------------------#
+#           (i) intercept (i.e. fixed effect) as true effect
+#----------------------------------------------------------------#
+
+#--------------------- (1) two tailed power ---------------------#
 power.F_summary_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
                    Minimum=mapply(summary, sapply(lnCVR, function(x) x$power.F_CVR))[1,],      
                    `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.F_CVR))[2,],
@@ -1896,6 +2474,41 @@ power.F_summary_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
                    Maximum=mapply(summary, sapply(lnCVR, function(x) x$power.F_CVR))[6,]) 
 
 
+#---------------------- (2) type S error -----------------------#
+power.F.S_summary_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$power.F.S_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.F.S_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$power.F.S_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$power.F.S_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.F.S_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$power.F.S_CVR))[6,]) 
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.F.M_summary_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$power.F.M_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.F.M_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$power.F.M_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$power.F.M_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.F.M_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$power.F.M_CVR))[6,])
+
+#---------------- (4) type M error (relative error) --------------#
+power.F.M2_summary_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$power.F.M2_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.F.M2_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$power.F.M2_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$power.F.M2_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.F.M2_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$power.F.M2_CVR))[6,])
+
+
+
+#----------------------------------------------------------------#
+#     (ii) study effect as true effect (fixed & random effect)
+#----------------------------------------------------------------#
+
+#--------------------- (1) two tailed power ---------------------#
 power.R_summary_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
                    Minimum=mapply(summary, sapply(lnCVR, function(x) x$power.R_CVR))[1,],      
                    `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.R_CVR))[2,],
@@ -1905,25 +2518,232 @@ power.R_summary_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
                    Maximum=mapply(summary, sapply(lnCVR, function(x) x$power.R_CVR))[6,]) 
 
 
-power.S_summary_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
-                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$power.S_CVR))[1,],      
-                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.S_CVR))[2,],
-                   Median=mapply(summary, sapply(lnCVR, function(x) x$power.S_CVR))[3,],
-                   Mean=mapply(summary, sapply(lnCVR, function(x) x$power.S_CVR))[4,], 
-                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.S_CVR))[5,], 
-                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$power.S_CVR))[6,]) 
+#---------------------- (2) type S error -----------------------#
+power.R.S_summary_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$power.R.S_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.R.S_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$power.R.S_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$power.R.S_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.R.S_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$power.R.S_CVR))[6,]) 
 
 
-power.M_summary_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
-                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$power.M_CVR))[1,],      
-                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.M_CVR))[2,],
-                   Median=mapply(summary, sapply(lnCVR, function(x) x$power.M_CVR))[3,],
-                   Mean=mapply(summary, sapply(lnCVR, function(x) x$power.M_CVR))[4,], 
-                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.M_CVR))[5,], 
-                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$power.M_CVR))[6,]) 
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.R.M_summary_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$power.R.M_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.R.M_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$power.R.M_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$power.R.M_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.R.M_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$power.R.M_CVR))[6,]) 
 
 
-## absolute variation - lnVR
+
+#---------------- (4) type M error (relative error) --------------#
+power.R.M2_summary_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$power.R.M2_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.R.M2_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$power.R.M2_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$power.R.M2_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$power.R.M2_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$power.R.M2_CVR))[6,]) 
+
+
+
+
+#----------------------------------------------------------------#
+#               (iii) hypothetical effect as true effect
+#----------------------------------------------------------------#
+
+#*****************************************************************#
+#********************** 5% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+power_summary_d5_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$d5_power_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$d5_power_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$d5_power_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$d5_power_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$d5_power_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$d5_power_CVR))[6,]) 
+
+
+#---------------------- (2) type S error -----------------------#
+power.S_summary_d5_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$d5_power.S_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$d5_power.S_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$d5_power.S_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$d5_power.S_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$d5_power.S_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$d5_power.S_CVR))[6,]) 
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.M_summary_d5_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$d5_power.M_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$d5_power.M_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$d5_power.M_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$d5_power.M_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$d5_power.M_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$d5_power.M_CVR))[6,]) 
+
+
+#---------------- (4) type M error (relative error) --------------#
+power.M2_summary_d5_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$d5_power.M2_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$d5_power.M2_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$d5_power.M2_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$d5_power.M2_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$d5_power.M2_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$d5_power.M2_CVR))[6,]) 
+
+
+#*****************************************************************#
+#********************** 10% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+power_summary_d10_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$d10_power_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$d10_power_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$d10_power_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$d10_power_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$d10_power_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$d10_power_CVR))[6,]) 
+
+
+#---------------------- (2) type S error -----------------------#
+power.S_summary_d10_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$d10_power.S_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$d10_power.S_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$d10_power.S_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$d10_power.S_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$d10_power.S_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$d10_power.S_CVR))[6,]) 
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.M_summary_d10_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$d10_power.M_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$d10_power.M_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$d10_power.M_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$d10_power.M_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$d10_power.M_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$d10_power.M_CVR))[6,]) 
+
+
+#---------------- (4) type M error (relative error) --------------#
+power.M2_summary_d10_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$d10_power.M2_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$d10_power.M2_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$d10_power.M2_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$d10_power.M2_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$d10_power.M2_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$d10_power.M2_CVR))[6,]) 
+
+
+#*****************************************************************#
+#********************** 20% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+power_summary_d20_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$d20_power_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$d20_power_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$d20_power_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$d20_power_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$d20_power_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$d20_power_CVR))[6,]) 
+
+
+#---------------------- (2) type S error -----------------------#
+power.S_summary_d20_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$d20_power.S_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$d20_power.S_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$d20_power.S_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$d20_power.S_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$d20_power.S_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$d20_power.S_CVR))[6,]) 
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.M_summary_d20_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$d20_power.M_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$d20_power.M_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$d20_power.M_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$d20_power.M_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$d20_power.M_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$d20_power.M_CVR))[6,]) 
+
+
+#---------------- (4) type M error (relative error) --------------#
+power.M2_summary_d20_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$d20_power.M2_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$d20_power.M2_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$d20_power.M2_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$d20_power.M2_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$d20_power.M2_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$d20_power.M2_CVR))[6,]) 
+
+
+
+#*****************************************************************#
+#********************** 40% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+power_summary_d40_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR))[6,]) 
+
+
+#---------------------- (2) type S error -----------------------#
+power.S_summary_d40_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$d40_power.S_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$d40_power.S_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$d40_power.S_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$d40_power.S_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$d40_power.S_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$d40_power.S_CVR))[6,]) 
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.M_summary_d40_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$d40_power.M_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$d40_power.M_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$d40_power.M_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$d40_power.M_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$d40_power.M_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$d40_power.M_CVR))[6,]) 
+
+
+#---------------- (4) type M error (relative error) --------------#
+power.M2_summary_d40_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
+                   Minimum=mapply(summary, sapply(lnCVR, function(x) x$d40_power.M2_CVR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnCVR, function(x) x$d40_power.M2_CVR))[2,],
+                   Median=mapply(summary, sapply(lnCVR, function(x) x$d40_power.M2_CVR))[3,],
+                   Mean=mapply(summary, sapply(lnCVR, function(x) x$d40_power.M2_CVR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnCVR, function(x) x$d40_power.M2_CVR))[5,], 
+                   Maximum=mapply(summary, sapply(lnCVR, function(x) x$d40_power.M2_CVR))[6,]) 
+
+
+
+
+
+#****************************************************************#
+#-----------------------------lnVR-------------------------------#
+#****************************************************************#
+
+#----------------------------------------------------------------#
+#           (i) intercept (i.e. fixed effect) as true effect
+#----------------------------------------------------------------#
+
+#--------------------- (1) two tailed power ---------------------#
 power.F_summary_VR <- data.frame(MA_case=model_est_VR$MA_case,
                    Minimum=mapply(summary, sapply(lnVR, function(x) x$power.F_VR))[1,],      
                    `First quarter`=mapply(summary, sapply(lnVR, function(x) x$power.F_VR))[2,],
@@ -1933,9 +2753,42 @@ power.F_summary_VR <- data.frame(MA_case=model_est_VR$MA_case,
                    Maximum=mapply(summary, sapply(lnVR, function(x) x$power.F_VR))[6,]) 
 
 
-# clean NA - ma11 has NA
-#for (i in 1:12) { lnVR[[i]] <- lnVR[[i]][!is.na(lnVR[[i]]$power.R_VR),]}
+#---------------------- (2) type S error -----------------------#
+power.F.S_summary_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$power.F.S_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$power.F.S_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$power.F.S_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$power.F.S_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$power.F.S_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$power.F.S_VR))[6,]) 
 
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.F.M_summary_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$power.F.M_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$power.F.M_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$power.F.M_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$power.F.M_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$power.F.M_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$power.F.M_VR))[6,])
+
+
+#---------------- (4) type M error (relative error) --------------#
+power.F.M2_summary_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$power.F.M2_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$power.F.M2_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$power.F.M2_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$power.F.M2_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$power.F.M2_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$power.F.M2_VR))[6,])
+
+
+
+#----------------------------------------------------------------#
+#     (ii) study effect as true effect (fixed & random effect)
+#----------------------------------------------------------------#
+
+#--------------------- (1) two tailed power ---------------------#
 power.R_summary_VR <- data.frame(MA_case=model_est_VR$MA_case,
                    Minimum=mapply(summary, sapply(lnVR, function(x) x$power.R_VR))[1,],      
                    `First quarter`=mapply(summary, sapply(lnVR, function(x) x$power.R_VR))[2,],
@@ -1945,47 +2798,245 @@ power.R_summary_VR <- data.frame(MA_case=model_est_VR$MA_case,
                    Maximum=mapply(summary, sapply(lnVR, function(x) x$power.R_VR))[6,]) 
 
 
-power.S_summary_VR <- data.frame(MA_case=model_est_VR$MA_case,
-                   Minimum=mapply(summary, sapply(lnVR, function(x) x$power.S_VR))[1,],      
-                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$power.S_VR))[2,],
-                   Median=mapply(summary, sapply(lnVR, function(x) x$power.S_VR))[3,],
-                   Mean=mapply(summary, sapply(lnVR, function(x) x$power.S_VR))[4,], 
-                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$power.S_VR))[5,], 
-                   Maximum=mapply(summary, sapply(lnVR, function(x) x$power.S_VR))[6,]) 
+#---------------------- (2) type S error -----------------------#
+power.R.S_summary_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$power.R.S_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$power.R.S_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$power.R.S_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$power.R.S_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$power.R.S_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$power.R.S_VR))[6,]) 
 
 
-power.M_summary_VR <- data.frame(MA_case=model_est_VR$MA_case,
-                   Minimum=mapply(summary, sapply(lnVR, function(x) x$power.M_VR))[1,],      
-                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$power.M_VR))[2,],
-                   Median=mapply(summary, sapply(lnVR, function(x) x$power.M_VR))[3,],
-                   Mean=mapply(summary, sapply(lnVR, function(x) x$power.M_VR))[4,], 
-                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$power.M_VR))[5,], 
-                   Maximum=mapply(summary, sapply(lnVR, function(x) x$power.M_VR))[6,]) 
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.R.M_summary_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$power.R.M_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$power.R.M_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$power.R.M_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$power.R.M_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$power.R.M_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$power.R.M_VR))[6,]) 
 
 
 
-# individual power using 40% mean differences as true effect
-## relative variation - lnCVR
-power_summary_d40_CVR <- data.frame(MA_case=model_est_CVR$MA_case,
-                   Minimum=sapply(mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR)), function(x) x[1]),      
-                   `First quarter`=sapply(mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR)), function(x) x[2]),
-                   Median=sapply(mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR)), function(x) x[3]),
-                   Mean=sapply(mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR)), function(x) x[4]), 
-                   `Third quarter`=sapply(mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR)), function(x) x[5]), 
-                   Maximum=sapply(mapply(summary, sapply(lnCVR, function(x) x$d40_power_CVR)), function(x) x[6]))
+#---------------- (4) type M error (relative error) --------------#
+power.R.M2_summary_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$power.R.M2_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$power.R.M2_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$power.R.M2_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$power.R.M2_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$power.R.M2_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$power.R.M2_VR))[6,]) 
 
-## absolute variation - lnVR
+
+
+
+#----------------------------------------------------------------#
+#               (iii) hypothetical effect as true effect
+#----------------------------------------------------------------#
+
+#*****************************************************************#
+#********************** 5% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+power_summary_d5_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$d5_power_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$d5_power_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$d5_power_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$d5_power_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$d5_power_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$d5_power_VR))[6,]) 
+
+
+#---------------------- (2) type S error -----------------------#
+power.S_summary_d5_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$d5_power.S_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$d5_power.S_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$d5_power.S_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$d5_power.S_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$d5_power.S_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$d5_power.S_VR))[6,]) 
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.M_summary_d5_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$d5_power.M_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$d5_power.M_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$d5_power.M_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$d5_power.M_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$d5_power.M_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$d5_power.M_VR))[6,]) 
+
+
+#---------------- (4) type M error (relative error) --------------#
+power.M2_summary_d5_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$d5_power.M2_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$d5_power.M2_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$d5_power.M2_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$d5_power.M2_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$d5_power.M2_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$d5_power.M2_VR))[6,]) 
+
+
+#*****************************************************************#
+#********************** 10% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+power_summary_d10_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$d10_power_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$d10_power_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$d10_power_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$d10_power_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$d10_power_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$d10_power_VR))[6,]) 
+
+
+#---------------------- (2) type S error -----------------------#
+power.S_summary_d10_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$d10_power.S_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$d10_power.S_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$d10_power.S_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$d10_power.S_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$d10_power.S_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$d10_power.S_VR))[6,]) 
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.M_summary_d10_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$d10_power.M_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$d10_power.M_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$d10_power.M_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$d10_power.M_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$d10_power.M_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$d10_power.M_VR))[6,]) 
+
+
+#---------------- (4) type M error (relative error) --------------#
+power.M2_summary_d10_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$d10_power.M2_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$d10_power.M2_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$d10_power.M2_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$d10_power.M2_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$d10_power.M2_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$d10_power.M2_VR))[6,]) 
+
+
+#*****************************************************************#
+#********************** 20% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+power_summary_d20_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$d20_power_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$d20_power_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$d20_power_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$d20_power_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$d20_power_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$d20_power_VR))[6,]) 
+
+
+#---------------------- (2) type S error -----------------------#
+power.S_summary_d20_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$d20_power.S_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$d20_power.S_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$d20_power.S_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$d20_power.S_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$d20_power.S_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$d20_power.S_VR))[6,]) 
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.M_summary_d20_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$d20_power.M_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$d20_power.M_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$d20_power.M_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$d20_power.M_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$d20_power.M_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$d20_power.M_VR))[6,]) 
+
+
+#---------------- (4) type M error (relative error) --------------#
+power.M2_summary_d20_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$d20_power.M2_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$d20_power.M2_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$d20_power.M2_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$d20_power.M2_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$d20_power.M2_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$d20_power.M2_VR))[6,]) 
+
+
+
+#*****************************************************************#
+#********************** 40% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
 power_summary_d40_VR <- data.frame(MA_case=model_est_VR$MA_case,
-                   Minimum=sapply(mapply(summary, sapply(lnVR, function(x) x$d40_power_VR)), function(x) x[1]),      
-                   `First quarter`=sapply(mapply(summary, sapply(lnVR, function(x) x$d40_power_VR)), function(x) x[2]),
-                   Median=sapply(mapply(summary, sapply(lnVR, function(x) x$d40_power_VR)), function(x) x[3]),
-                   Mean=sapply(mapply(summary, sapply(lnVR, function(x) x$d40_power_VR)), function(x) x[4]), 
-                   `Third quarter`=sapply(mapply(summary, sapply(lnVR, function(x) x$d40_power_VR)), function(x) x[5]), 
-                   Maximum=sapply(mapply(summary, sapply(lnVR, function(x) x$d40_power_VR)), function(x) x[6]))
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$d40_power_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$d40_power_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$d40_power_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$d40_power_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$d40_power_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$d40_power_VR))[6,]) 
 
 
-# Calculate standard error
-# Based on averaged power (variable power.F_CVR)
+#---------------------- (2) type S error -----------------------#
+power.S_summary_d40_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$d40_power.S_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$d40_power.S_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$d40_power.S_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$d40_power.S_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$d40_power.S_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$d40_power.S_VR))[6,]) 
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+power.M_summary_d40_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$d40_power.M_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$d40_power.M_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$d40_power.M_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$d40_power.M_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$d40_power.M_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$d40_power.M_VR))[6,]) 
+
+
+#---------------- (4) type M error (relative error) --------------#
+power.M2_summary_d40_VR <- data.frame(MA_case=model_est_VR$MA_case,
+                   Minimum=mapply(summary, sapply(lnVR, function(x) x$d40_power.M2_VR))[1,],      
+                   `First quarter`=mapply(summary, sapply(lnVR, function(x) x$d40_power.M2_VR))[2,],
+                   Median=mapply(summary, sapply(lnVR, function(x) x$d40_power.M2_VR))[3,],
+                   Mean=mapply(summary, sapply(lnVR, function(x) x$d40_power.M2_VR))[4,], 
+                   `Third quarter`=mapply(summary, sapply(lnVR, function(x) x$d40_power.M2_VR))[5,], 
+                   Maximum=mapply(summary, sapply(lnVR, function(x) x$d40_power.M2_VR))[6,]) 
+
+
+
+# clean NA - ma11 has NA
+#for (i in 1:12) { lnVR[[i]] <- lnVR[[i]][!is.na(lnVR[[i]]$power.R_VR),]}
+
+
+
+
+
+
+
+
+#*********************************************************************#
+#--------- calculate standard error for each type of power -----------#
+#*********************************************************************#
+
+#****************************************************************#
+#-----------------------------lnCVR------------------------------#
+#****************************************************************#
+
+#----------------------------------------------------------------#
+#           (i) intercept (i.e. fixed effect) as true effect
+#----------------------------------------------------------------#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable power.F_CVR
 se.F_mean <- NA
 for (i in 1:length(lnCVR)) {
   se.F_mean[i] <- sd(lnCVR[[i]]$power.F_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$power.F_CVR[!is.na(lnCVR[[i]]$power.F_CVR)]))
@@ -1994,7 +3045,43 @@ for (i in 1:length(lnCVR)) {
 power.F_summary_CVR$se.F_mean <- se.F_mean
 
 
-# Based on averaged power (variable power.R_CVR)
+#---------------------- (2) type S error -----------------------#
+# standard error of variable power.F.S_CVR
+se.F.S_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.F.S_mean[i] <- sd(lnCVR[[i]]$power.F.S_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$power.F.S_CVR[!is.na(lnCVR[[i]]$power.F.S_CVR)]))
+}
+
+power.F.S_summary_CVR$se.F.S_mean <- se.F.S_mean
+
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable power.F.M_CVR
+se.F.M_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.F.M_mean[i] <- sd(lnCVR[[i]]$power.F.M_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$power.F.M_CVR[!is.na(lnCVR[[i]]$power.F.M_CVR)]))
+}
+
+power.F.M_summary_CVR$se.F.M_mean <- se.F.M_mean
+
+
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable power.F.M2_RR
+se.F.M2_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.F.M2_mean[i] <- sd(lnCVR[[i]]$power.F.M2_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$power.F.M2_CVR[!is.na(lnCVR[[i]]$power.F.M2_CVR)]))
+}
+
+power.F.M2_summary_CVR$se.F.M2_mean <- se.F.M2_mean
+
+
+#----------------------------------------------------------------#
+#                 (ii) study effect as true effect
+#----------------------------------------------------------------#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable power.R_CVR
 se.R_mean <- NA
 for (i in 1:length(lnCVR)) {
   se.R_mean[i] <- sd(lnCVR[[i]]$power.R_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$power.R_CVR[!is.na(lnCVR[[i]]$power.R_CVR)]))
@@ -2003,26 +3090,183 @@ for (i in 1:length(lnCVR)) {
 power.R_summary_CVR$se.R_mean <- se.R_mean
 
 
-
-# Based on averaged power (variable power.S_CVR)
-se.S_mean <- NA
+#---------------------- (2) type S error -----------------------#
+# standard error of variable power.R.S_CVR
+se.R.S_mean <- NA
 for (i in 1:length(lnCVR)) {
-  se.S_mean[i] <- sd(lnCVR[[i]]$power.S_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$power.S_CVR[!is.na(lnCVR[[i]]$power.S_CVR)]))
+  se.R.S_mean[i] <- sd(lnCVR[[i]]$power.R.S_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$power.R.S_CVR[!is.na(lnCVR[[i]]$power.R.S_CVR)]))
 }
 
-power.S_summary_CVR$se.S_mean <- se.S_mean
+power.R.S_summary_CVR$se.R.S_mean <- se.R.S_mean
 
 
-# Based on averaged power (variable power.M_CVR)
-se.M_mean <- NA
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable power.R.M_CVR
+se.R.M_mean <- NA
 for (i in 1:length(lnCVR)) {
-  se.M_mean[i] <- sd(lnCVR[[i]]$power.M_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$power.M_CVR[!is.na(lnCVR[[i]]$power.M_CVR)]))
+  se.R.M_mean[i] <- sd(lnCVR[[i]]$power.R.M_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$power.R.M_CVR[!is.na(lnCVR[[i]]$power.R.M_CVR)]))
 }
 
-power.M_summary_CVR$se.M_mean <- se.M_mean
+power.R.M_summary_CVR$se.R.M_mean <- se.R.M_mean
 
 
-# Based on 40% mean differences (variable d40_power_CVR)
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable power.R.M2_RR
+se.R.M2_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.R.M2_mean[i] <- sd(lnCVR[[i]]$power.R.M2_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$power.R.M2_CVR[!is.na(lnCVR[[i]]$power.R.M2_CVR)]))
+}
+
+power.R.M2_summary_CVR$se.R.M2_mean <- se.R.M2_mean
+
+
+
+#----------------------------------------------------------------#
+#               (iii) hypothetical effect as true effect
+#----------------------------------------------------------------#
+
+#*****************************************************************#
+#********************** 5% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable d5_power_CVR
+se.d5_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.d5_mean[i] <- sd(lnCVR[[i]]$d5_power_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d5_power_CVR[!is.na(lnCVR[[i]]$d5_power_CVR)]))
+}
+
+power_summary_d5_CVR$se.d5_mean <- se.d5_mean
+
+
+#---------------------- (2) type S error -----------------------#
+# standard error of variable d5_power.S_CVR
+se.d5_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.d5_mean[i] <- sd(lnCVR[[i]]$d5_power.S_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d5_power.S_CVR[!is.na(lnCVR[[i]]$d5_power.S_CVR)]))
+}
+
+power.S_summary_d5_CVR$se.d5_mean <- se.d5_mean
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable d5_power.M_CVR
+se.d5_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.d5_mean[i] <- sd(lnCVR[[i]]$d5_power.M_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d5_power.M_CVR[!is.na(lnCVR[[i]]$d5_power.M_CVR)]))
+}
+
+power.M_summary_d5_CVR$se.d5_mean <- se.d5_mean
+
+
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable d5_power.M2_CVR
+se.d5_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.d5_mean[i] <- sd(lnCVR[[i]]$d5_power.M2_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d5_power.M2_CVR[!is.na(lnCVR[[i]]$d5_power.M2_CVR)]))
+}
+
+power.M2_summary_d5_CVR$se.d5_mean <- se.d5_mean
+
+
+
+#*****************************************************************#
+#********************** 10% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable d10_power_CVR
+se.d10_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.d10_mean[i] <- sd(lnCVR[[i]]$d10_power_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d10_power_CVR[!is.na(lnCVR[[i]]$d10_power_CVR)]))
+}
+
+power_summary_d10_CVR$se.d10_mean <- se.d10_mean
+
+
+#---------------------- (2) type S error -----------------------#
+# standard error of variable d10_power.S_CVR
+se.d10_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.d10_mean[i] <- sd(lnCVR[[i]]$d10_power.S_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d10_power.S_CVR[!is.na(lnCVR[[i]]$d10_power.S_CVR)]))
+}
+
+power.S_summary_d10_CVR$se.d10_mean <- se.d10_mean
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable d10_power.M_CVR
+se.d10_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.d10_mean[i] <- sd(lnCVR[[i]]$d10_power.M_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d10_power.M_CVR[!is.na(lnCVR[[i]]$d10_power.M_CVR)]))
+}
+
+power.M_summary_d10_CVR$se.d10_mean <- se.d10_mean
+
+
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable d10_power.M2_CVR
+se.d10_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.d10_mean[i] <- sd(lnCVR[[i]]$d10_power.M2_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d10_power.M2_CVR[!is.na(lnCVR[[i]]$d10_power.M2_CVR)]))
+}
+
+power.M2_summary_d10_CVR$se.d10_mean <- se.d10_mean
+
+
+
+#*****************************************************************#
+#********************** 20% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable d20_power_CVR
+se.d20_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.d20_mean[i] <- sd(lnCVR[[i]]$d20_power_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d20_power_CVR[!is.na(lnCVR[[i]]$d20_power_CVR)]))
+}
+
+power_summary_d20_CVR$se.d20_mean <- se.d20_mean
+
+
+#---------------------- (2) type S error -----------------------#
+# standard error of variable d20_power.S_CVR
+se.d20_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.d20_mean[i] <- sd(lnCVR[[i]]$d20_power.S_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d20_power.S_CVR[!is.na(lnCVR[[i]]$d20_power.S_CVR)]))
+}
+
+power.S_summary_d20_CVR$se.d20_mean <- se.d20_mean
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable d20_power.M_CVR
+se.d20_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.d20_mean[i] <- sd(lnCVR[[i]]$d20_power.M_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d20_power.M_CVR[!is.na(lnCVR[[i]]$d20_power.M_CVR)]))
+}
+
+power.M_summary_d20_CVR$se.d20_mean <- se.d20_mean
+
+
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable d20_power.M2_CVR
+se.d20_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.d20_mean[i] <- sd(lnCVR[[i]]$d20_power.M2_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d20_power.M2_CVR[!is.na(lnCVR[[i]]$d20_power.M2_CVR)]))
+}
+
+power.M2_summary_d20_CVR$se.d20_mean <- se.d20_mean
+
+
+
+#*****************************************************************#
+#********************** 40% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable d40_power_CVR
 se.d40_mean <- NA
 for (i in 1:length(lnCVR)) {
   se.d40_mean[i] <- sd(lnCVR[[i]]$d40_power_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d40_power_CVR[!is.na(lnCVR[[i]]$d40_power_CVR)]))
@@ -2031,20 +3275,50 @@ for (i in 1:length(lnCVR)) {
 power_summary_d40_CVR$se.d40_mean <- se.d40_mean
 
 
-
-# Based on 40% relative variation differences (variable d40_power_CVR)
+#---------------------- (2) type S error -----------------------#
+# standard error of variable d40_power.S_CVR
 se.d40_mean <- NA
 for (i in 1:length(lnCVR)) {
-  se.d40_mean[i] <- sd(lnCVR[[i]]$d40_power_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d40_power_CVR[!is.na(lnCVR[[i]]$d40_power_CVR)]))
+  se.d40_mean[i] <- sd(lnCVR[[i]]$d40_power.S_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d40_power.S_CVR[!is.na(lnCVR[[i]]$d40_power.S_CVR)]))
 }
 
-power_summary_CVR$se.d40_mean <- se.d40_mean
+power.S_summary_d40_CVR$se.d40_mean <- se.d40_mean
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable d40_power.M_CVR
+se.d40_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.d40_mean[i] <- sd(lnCVR[[i]]$d40_power.M_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d40_power.M_CVR[!is.na(lnCVR[[i]]$d40_power.M_CVR)]))
+}
+
+power.M_summary_d40_CVR$se.d40_mean <- se.d40_mean
+
+
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable d40_power.M2_CVR
+se.d40_mean <- NA
+for (i in 1:length(lnCVR)) {
+  se.d40_mean[i] <- sd(lnCVR[[i]]$d40_power.M2_CVR, na.rm=TRUE) / sqrt(length(lnCVR[[i]]$d40_power.M2_CVR[!is.na(lnCVR[[i]]$d40_power.M2_CVR)]))
+}
+
+power.M2_summary_d40_CVR$se.d40_mean <- se.d40_mean
 
 
 
 
-# Calculate standard error
-# Based on averaged power (variable power.F_VR)
+
+
+#****************************************************************#
+#-----------------------------lnVR-------------------------------#
+#****************************************************************#
+
+#----------------------------------------------------------------#
+#           (i) intercept (i.e. fixed effect) as true effect
+#----------------------------------------------------------------#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable power.F_VR
 se.F_mean <- NA
 for (i in 1:length(lnVR)) {
   se.F_mean[i] <- sd(lnVR[[i]]$power.F_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$power.F_VR[!is.na(lnVR[[i]]$power.F_VR)]))
@@ -2053,7 +3327,43 @@ for (i in 1:length(lnVR)) {
 power.F_summary_VR$se.F_mean <- se.F_mean
 
 
-# Based on averaged power (variable power.R_VR)
+#---------------------- (2) type S error -----------------------#
+# standard error of variable power.F.S_VR
+se.F.S_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.F.S_mean[i] <- sd(lnVR[[i]]$power.F.S_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$power.F.S_VR[!is.na(lnVR[[i]]$power.F.S_VR)]))
+}
+
+power.F.S_summary_VR$se.F.S_mean <- se.F.S_mean
+
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable power.F.M_VR
+se.F.M_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.F.M_mean[i] <- sd(lnVR[[i]]$power.F.M_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$power.F.M_VR[!is.na(lnVR[[i]]$power.F.M_VR)]))
+}
+
+power.F.M_summary_VR$se.F.M_mean <- se.F.M_mean
+
+
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable power.F.M2_RR
+se.F.M2_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.F.M2_mean[i] <- sd(lnVR[[i]]$power.F.M2_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$power.F.M2_VR[!is.na(lnVR[[i]]$power.F.M2_VR)]))
+}
+
+power.F.M2_summary_VR$se.F.M2_mean <- se.F.M2_mean
+
+
+#----------------------------------------------------------------#
+#                 (ii) study effect as true effect
+#----------------------------------------------------------------#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable power.R_VR
 se.R_mean <- NA
 for (i in 1:length(lnVR)) {
   se.R_mean[i] <- sd(lnVR[[i]]$power.R_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$power.R_VR[!is.na(lnVR[[i]]$power.R_VR)]))
@@ -2062,26 +3372,183 @@ for (i in 1:length(lnVR)) {
 power.R_summary_VR$se.R_mean <- se.R_mean
 
 
-
-# Based on averaged power (variable power.S_VR)
-se.S_mean <- NA
+#---------------------- (2) type S error -----------------------#
+# standard error of variable power.R.S_VR
+se.R.S_mean <- NA
 for (i in 1:length(lnVR)) {
-  se.S_mean[i] <- sd(lnVR[[i]]$power.S_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$power.S_VR[!is.na(lnVR[[i]]$power.S_VR)]))
+  se.R.S_mean[i] <- sd(lnVR[[i]]$power.R.S_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$power.R.S_VR[!is.na(lnVR[[i]]$power.R.S_VR)]))
 }
 
-power.S_summary_VR$se.S_mean <- se.S_mean
+power.R.S_summary_VR$se.R.S_mean <- se.R.S_mean
 
 
-# Based on averaged power (variable power.M_VR)
-se.M_mean <- NA
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable power.R.M_VR
+se.R.M_mean <- NA
 for (i in 1:length(lnVR)) {
-  se.M_mean[i] <- sd(lnVR[[i]]$power.M_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$power.M_VR[!is.na(lnVR[[i]]$power.M_VR)]))
+  se.R.M_mean[i] <- sd(lnVR[[i]]$power.R.M_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$power.R.M_VR[!is.na(lnVR[[i]]$power.R.M_VR)]))
 }
 
-power.M_summary_VR$se.M_mean <- se.M_mean
+power.R.M_summary_VR$se.R.M_mean <- se.R.M_mean
 
 
-# Based on 40% mean differences (variable d40_power_VR)
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable power.R.M2_RR
+se.R.M2_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.R.M2_mean[i] <- sd(lnVR[[i]]$power.R.M2_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$power.R.M2_VR[!is.na(lnVR[[i]]$power.R.M2_VR)]))
+}
+
+power.R.M2_summary_VR$se.R.M2_mean <- se.R.M2_mean
+
+
+
+#----------------------------------------------------------------#
+#               (iii) hypothetical effect as true effect
+#----------------------------------------------------------------#
+
+#*****************************************************************#
+#********************** 5% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable d5_power_VR
+se.d5_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.d5_mean[i] <- sd(lnVR[[i]]$d5_power_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$d5_power_VR[!is.na(lnVR[[i]]$d5_power_VR)]))
+}
+
+power_summary_d5_VR$se.d5_mean <- se.d5_mean
+
+
+#---------------------- (2) type S error -----------------------#
+# standard error of variable d5_power.S_VR
+se.d5_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.d5_mean[i] <- sd(lnVR[[i]]$d5_power.S_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$d5_power.S_VR[!is.na(lnVR[[i]]$d5_power.S_VR)]))
+}
+
+power.S_summary_d5_VR$se.d5_mean <- se.d5_mean
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable d5_power.M_VR
+se.d5_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.d5_mean[i] <- sd(lnVR[[i]]$d5_power.M_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$d5_power.M_VR[!is.na(lnVR[[i]]$d5_power.M_VR)]))
+}
+
+power.M_summary_d5_VR$se.d5_mean <- se.d5_mean
+
+
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable d5_power.M2_VR
+se.d5_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.d5_mean[i] <- sd(lnVR[[i]]$d5_power.M2_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$d5_power.M2_VR[!is.na(lnVR[[i]]$d5_power.M2_VR)]))
+}
+
+power.M2_summary_d5_VR$se.d5_mean <- se.d5_mean
+
+
+
+#*****************************************************************#
+#********************** 10% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable d10_power_VR
+se.d10_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.d10_mean[i] <- sd(lnVR[[i]]$d10_power_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$d10_power_VR[!is.na(lnVR[[i]]$d10_power_VR)]))
+}
+
+power_summary_d10_VR$se.d10_mean <- se.d10_mean
+
+
+#---------------------- (2) type S error -----------------------#
+# standard error of variable d10_power.S_VR
+se.d10_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.d10_mean[i] <- sd(lnVR[[i]]$d10_power.S_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$d10_power.S_VR[!is.na(lnVR[[i]]$d10_power.S_VR)]))
+}
+
+power.S_summary_d10_VR$se.d10_mean <- se.d10_mean
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable d10_power.M_VR
+se.d10_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.d10_mean[i] <- sd(lnVR[[i]]$d10_power.M_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$d10_power.M_VR[!is.na(lnVR[[i]]$d10_power.M_VR)]))
+}
+
+power.M_summary_d10_VR$se.d10_mean <- se.d10_mean
+
+
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable d10_power.M2_VR
+se.d10_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.d10_mean[i] <- sd(lnVR[[i]]$d10_power.M2_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$d10_power.M2_VR[!is.na(lnVR[[i]]$d10_power.M2_VR)]))
+}
+
+power.M2_summary_d10_VR$se.d10_mean <- se.d10_mean
+
+
+
+#*****************************************************************#
+#********************** 20% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable d20_power_VR
+se.d20_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.d20_mean[i] <- sd(lnVR[[i]]$d20_power_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$d20_power_VR[!is.na(lnVR[[i]]$d20_power_VR)]))
+}
+
+power_summary_d20_VR$se.d20_mean <- se.d20_mean
+
+
+#---------------------- (2) type S error -----------------------#
+# standard error of variable d20_power.S_VR
+se.d20_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.d20_mean[i] <- sd(lnVR[[i]]$d20_power.S_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$d20_power.S_VR[!is.na(lnVR[[i]]$d20_power.S_VR)]))
+}
+
+power.S_summary_d20_VR$se.d20_mean <- se.d20_mean
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable d20_power.M_VR
+se.d20_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.d20_mean[i] <- sd(lnVR[[i]]$d20_power.M_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$d20_power.M_VR[!is.na(lnVR[[i]]$d20_power.M_VR)]))
+}
+
+power.M_summary_d20_VR$se.d20_mean <- se.d20_mean
+
+
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable d20_power.M2_VR
+se.d20_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.d20_mean[i] <- sd(lnVR[[i]]$d20_power.M2_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$d20_power.M2_VR[!is.na(lnVR[[i]]$d20_power.M2_VR)]))
+}
+
+power.M2_summary_d20_VR$se.d20_mean <- se.d20_mean
+
+
+
+#*****************************************************************#
+#********************** 40% mean differences **********************#
+#*****************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+# standard error of variable d40_power_VR
 se.d40_mean <- NA
 for (i in 1:length(lnVR)) {
   se.d40_mean[i] <- sd(lnVR[[i]]$d40_power_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$d40_power_VR[!is.na(lnVR[[i]]$d40_power_VR)]))
@@ -2090,33 +3557,213 @@ for (i in 1:length(lnVR)) {
 power_summary_d40_VR$se.d40_mean <- se.d40_mean
 
 
+#---------------------- (2) type S error -----------------------#
+# standard error of variable d40_power.S_VR
+se.d40_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.d40_mean[i] <- sd(lnVR[[i]]$d40_power.S_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$d40_power.S_VR[!is.na(lnVR[[i]]$d40_power.S_VR)]))
+}
+
+power.S_summary_d40_VR$se.d40_mean <- se.d40_mean
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# standard error of variable d40_power.M_VR
+se.d40_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.d40_mean[i] <- sd(lnVR[[i]]$d40_power.M_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$d40_power.M_VR[!is.na(lnVR[[i]]$d40_power.M_VR)]))
+}
+
+power.M_summary_d40_VR$se.d40_mean <- se.d40_mean
+
+
+#---------------- (4) type M error (relative error) --------------#
+# standard error of variable d40_power.M2_VR
+se.d40_mean <- NA
+for (i in 1:length(lnVR)) {
+  se.d40_mean[i] <- sd(lnVR[[i]]$d40_power.M2_VR, na.rm=TRUE) / sqrt(length(lnVR[[i]]$d40_power.M2_VR[!is.na(lnVR[[i]]$d40_power.M2_VR)]))
+}
+
+power.M2_summary_d40_VR$se.d40_mean <- se.d40_mean
 
 
 
-# meta-meta-analysis on power for variation
-## relative varition - lnCVR
-MMA_power.F_CVR <- with(power.F_summary_CVR, rma.mv(yi = Mean, V = se.mean, random = list(~1|MA_case), method = "REML", test = "z"))
-
-MMA_power.R_CVR <- with(power.R_summary_CVR, rma.mv(yi = Mean, V = se.mean, random = list(~1|MA_case), method = "REML", test = "z"))
-
-MMA_power.S_CVR <- with(power.S_summary_CVR, rma.mv(yi = Mean, V = se.mean, random = list(~1|MA_case), method = "REML", test = "z"))
-
-MMA_power.M_CVR <- with(power.M_summary_CVR, rma.mv(yi = Mean, V = se.mean, random = list(~1|MA_case), method = "REML", test = "z"))
-
-MMA_power_CVR_d40 <- with(power_summary_CVR, rma.mv(yi = Mean, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
 
 
-## absolute varition - lnVR
-MMA_power.F_VR <- with(power.F_summary_VR, rma.mv(yi = Mean, V = se.mean, random = list(~1|MA_case), method = "REML", test = "z"))
+#*********************************************************************#
+#-------------------- meta-meta-analysis on power --------------------#
+#*********************************************************************#
 
-MMA_power.R_VR <- with(power.R_summary_VR, rma.mv(yi = Mean, V = se.mean, random = list(~1|MA_case), method = "REML", test = "z"))
+#****************************************************************#
+#-----------------------------lnCVR------------------------------#
+#****************************************************************#
 
-MMA_power.S_VR <- with(power.S_summary_VR, rma.mv(yi = Mean, V = se.mean, random = list(~1|MA_case), method = "REML", test = "z"))
+#----------------------------------------------------------------#
+#           (i) intercept (i.e. fixed effect) as true effect
+#----------------------------------------------------------------#
+MMA_power.F_CVR <- with(power.F_summary_CVR, rma.mv(yi = Mean, V = se.F_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
-MMA_power.M_VR <- with(power.M_summary_VR, rma.mv(yi = Mean, V = se.mean, random = list(~1|MA_case), method = "REML", test = "z"))
+MMA_power.F.S_CVR <- with(power.F.S_summary_CVR, rma.mv(yi = Mean, V = se.F.S_mean, random = list(~1|MA_case), method = "REML", test = "z"))
 
-MMA_power_VR_d40 <- with(power_summary_VR, rma.mv(yi = Mean, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+MMA_power.F.M_CVR <- with(power.F.M_summary_CVR, rma.mv(yi = Mean, V = se.F.M_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.F.M2_CVR <- with(power.F.M2_summary_CVR, rma.mv(yi = Mean, V = se.F.M2_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+
+
+#----------------------------------------------------------------#
+#                 (ii) study effect as true effect
+#----------------------------------------------------------------#
+MMA_power.R_CVR <- with(power.R_summary_CVR, rma.mv(yi = Mean, V = se.R_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.R.S_CVR <- with(power.R.S_summary_CVR, rma.mv(yi = Mean, V = se.R.S_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.R.M_CVR <- with(power.R.M_summary_CVR, rma.mv(yi = Mean, V = se.R.M_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.R.M2_CVR <- with(power.R.M2_summary_CVR, rma.mv(yi = Mean, V = se.R.M2_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+
+#----------------------------------------------------------------#
+#               (iii) hypothetical effect as true effect
+#----------------------------------------------------------------#
+
+#*****************************************************************#
+#********************** 5% mean differences **********************#
+#*****************************************************************#
+MMA_power_CVR_d5 <- with(power_summary_d5_CVR, rma.mv(yi = Mean, V = se.d5_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.S_CVR_d5 <- with(power.S_summary_d5_CVR, rma.mv(yi = Mean, V = se.d5_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M_CVR_d5 <- with(power.M_summary_d5_CVR, rma.mv(yi = Mean, V = se.d5_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M2_CVR_d5 <- with(power.M2_summary_d5_CVR, rma.mv(yi = Mean, V = se.d5_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+#*****************************************************************#
+#********************** 10% mean differences *********************#
+#*****************************************************************#
+MMA_power_CVR_d10 <- with(power_summary_d10_CVR, rma.mv(yi = Mean, V = se.d10_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.S_CVR_d10 <- with(power.S_summary_d10_CVR, rma.mv(yi = Mean, V = se.d10_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M_CVR_d10 <- with(power.M_summary_d10_CVR, rma.mv(yi = Mean, V = se.d10_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M2_CVR_d10 <- with(power.M2_summary_d10_CVR, rma.mv(yi = Mean, V = se.d10_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+#*****************************************************************#
+#********************** 20% mean differences *********************#
+#*****************************************************************#
+MMA_power_CVR_d20 <- with(power_summary_d20_CVR, rma.mv(yi = Mean, V = se.d20_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.S_CVR_d20 <- with(power.S_summary_d20_CVR, rma.mv(yi = Mean, V = se.d20_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M_CVR_d20 <- with(power.M_summary_d20_CVR, rma.mv(yi = Mean, V = se.d20_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M2_CVR_d20 <- with(power.M2_summary_d20_CVR, rma.mv(yi = Mean, V = se.d20_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+#*****************************************************************#
+#********************** 40% mean differences *********************#
+#*****************************************************************#
+MMA_power_CVR_d40 <- with(power_summary_d40_CVR, rma.mv(yi = Mean, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.S_CVR_d40 <- with(power.S_summary_d40_CVR, rma.mv(yi = Mean, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M_CVR_d40 <- with(power.M_summary_d40_CVR, rma.mv(yi = Mean, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M2_CVR_d40 <- with(power.M2_summary_d40_CVR, rma.mv(yi = Mean, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+
+
+#****************************************************************#
+#-----------------------------lnVR-------------------------------#
+#****************************************************************#
+
+#----------------------------------------------------------------#
+#           (i) intercept (i.e. fixed effect) as true effect
+#----------------------------------------------------------------#
+MMA_power.F_VR <- with(power.F_summary_VR, rma.mv(yi = Mean, V = se.F_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.F.S_VR <- with(power.F.S_summary_VR, rma.mv(yi = Mean, V = se.F.S_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.F.M_VR <- with(power.F.M_summary_VR, rma.mv(yi = Mean, V = se.F.M_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.F.M2_VR <- with(power.F.M2_summary_VR, rma.mv(yi = Mean, V = se.F.M2_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+
+
+#----------------------------------------------------------------#
+#                 (ii) study effect as true effect
+#----------------------------------------------------------------#
+MMA_power.R_VR <- with(power.R_summary_VR, rma.mv(yi = Mean, V = se.R_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.R.S_VR <- with(power.R.S_summary_VR, rma.mv(yi = Mean, V = se.R.S_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.R.M_VR <- with(power.R.M_summary_VR, rma.mv(yi = Mean, V = se.R.M_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.R.M2_VR <- with(power.R.M2_summary_VR, rma.mv(yi = Mean, V = se.R.M2_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+
+#----------------------------------------------------------------#
+#               (iii) hypothetical effect as true effect
+#----------------------------------------------------------------#
+
+#*****************************************************************#
+#********************** 5% mean differences **********************#
+#*****************************************************************#
+MMA_power_VR_d5 <- with(power_summary_d5_VR, rma.mv(yi = Mean, V = se.d5_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.S_VR_d5 <- with(power.S_summary_d5_VR, rma.mv(yi = Mean, V = se.d5_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M_VR_d5 <- with(power.M_summary_d5_VR, rma.mv(yi = Mean, V = se.d5_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M2_VR_d5 <- with(power.M2_summary_d5_VR, rma.mv(yi = Mean, V = se.d5_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+#*****************************************************************#
+#********************** 10% mean differences *********************#
+#*****************************************************************#
+MMA_power_VR_d10 <- with(power_summary_d10_VR, rma.mv(yi = Mean, V = se.d10_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.S_VR_d10 <- with(power.S_summary_d10_VR, rma.mv(yi = Mean, V = se.d10_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M_VR_d10 <- with(power.M_summary_d10_VR, rma.mv(yi = Mean, V = se.d10_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M2_VR_d10 <- with(power.M2_summary_d10_VR, rma.mv(yi = Mean, V = se.d10_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+#*****************************************************************#
+#********************** 20% mean differences *********************#
+#*****************************************************************#
+MMA_power_VR_d20 <- with(power_summary_d20_VR, rma.mv(yi = Mean, V = se.d20_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.S_VR_d20 <- with(power.S_summary_d20_VR, rma.mv(yi = Mean, V = se.d20_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M_VR_d20 <- with(power.M_summary_d20_VR, rma.mv(yi = Mean, V = se.d20_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M2_VR_d20 <- with(power.M2_summary_d20_VR, rma.mv(yi = Mean, V = se.d20_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+#*****************************************************************#
+#********************** 40% mean differences *********************#
+#*****************************************************************#
+MMA_power_VR_d40 <- with(power_summary_d40_VR, rma.mv(yi = Mean, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.S_VR_d40 <- with(power.S_summary_d40_VR, rma.mv(yi = Mean, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M_VR_d40 <- with(power.M_summary_d40_VR, rma.mv(yi = Mean, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+MMA_power.M2_VR_d40 <- with(power.M2_summary_d40_VR, rma.mv(yi = Mean, V = se.d40_mean, random = list(~1|MA_case), method = "REML", test = "z"))
+
+
+
 
 
 # Retrieving estimates
