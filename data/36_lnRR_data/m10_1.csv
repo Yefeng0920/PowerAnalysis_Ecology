@@ -1,0 +1,36 @@
+Unit_ID,X,LRR,var.LRR,scale,col,Study,s,pr.st
+1,4.14,-0.059188871,0.476505358,1.355418052,darkcyan,"(Benzoni et al., 2003; Hassan et al., 2002; Pilcher and Alsuhaibany, 2000; Sheppard et al., 2000; Wilson et al., 2000)",Aden-G,0.292524269
+2,2.18,-0.320645684,0.476505358,1.355418052,darkcyan,"(Ahmada et al., 2002; Sheppard and Obura, 2005; Stobart et al., 2002; Stobart et al., 2005; Teleki et al., 2000; Teleki and Spencer, 2000)",Aldabra,-1.269122802
+3,4.55,-1.112648938,0.29429983,1.775756176,darkcyan,"(Sheppard, 1999)",Chagos,0.61919534
+4,3.21,-0.360614542,0.590616109,1.224243824,darkcyan,"(Ahmada et al., 2002; Bigot et al., 2000; Quod and Bigot, 2000; Quod et al., 2002)",Comoros,-0.448461331
+5,4.62,-0.576887374,0.590616109,1.224243824,darkcyan,"(Pilcher et al., 2000; Rezai et al., 2004; Wilson et al., 2000; Wilson et al., 2002)",Gulf-SE,0.67496845
+6,6.52,-1.132263088,0.590616109,1.224243824,darkcyan,"(Pilcher et al., 2000; Rezai et al., 2004; Wilson et al., 2000; Wilson et al., 2002)",Gulf-SW,2.188809999
+7,5.92,-0.844317232,0.383224293,1.520678036,darkcyan,"(Pilcher et al., 2000; Rezai et al., 2004; Riegl, 2002; Wilson et al., 2000; Wilson et al., 2002)",Gulf-W,1.710754773
+9,4,-1.133677425,0.383224293,1.520678036,darkcyan,"(Pet-Soede et al., 2000; Rajasuriya et al., 2002; Rajasuriya et al., 2000; Rajasuriya et al., 2004; Wilhelmsson, 2002)",India (Lakshadweep),0.18097805
+10,4.78,-1.524020161,1,1,darkcyan,"(Obura, 2002; Obura et al., 2000b)",Kenya-N,0.802449843
+11,4.54,-0.916803859,0.339453666,1.629532004,darkcyan,"(McClanahan et al., 2001)",Kenya-S,0.611227753
+12,3.41,-0.252389119,0.590616109,1.224243824,darkcyan,"(Ahmada et al., 2002; Bigot et al., 2000)",Madagascar-E,-0.289109589
+13,2.81,0.137653272,0.419059784,1.448487648,darkcyan,"(Ahmada et al., 2002; Ahmada et al., 2004; Bigot et al., 2000; Quod and Bigot, 2000; Quod et al., 2002; Souter et al., 2000; Webster and McMahon, 2002) ",Madagascar-NW,-0.767164815
+14,3.47,-0.168034602,0.476505358,1.355418052,darkcyan,"(Ahmada et al., 2002; Ahmada et al., 2004; Bigot et al., 2000; Quod and Bigot, 2000; Quod et al., 2002; Souter et al., 2000; Webster and McMahon, 2002) ",Madagascar-SW,-0.241304066
+15,5.43,-2.998002422,0.312771273,1.710836105,darkcyan,"(Edwards et al., 2001; McClanahan, 2000; Rajasuriya et al., 2002; Rajasuriya et al., 2000; Rajasuriya et al., 2004; Zahir, 2000; Zahir, 2002)",Maldives (Central Atolls),1.320343005
+16,4.91,-1.148757521,0.244436476,2,darkcyan,"(Edwards et al., 2001; McClanahan, 2000; Rajasuriya et al., 2002; Rajasuriya et al., 2000; Rajasuriya et al., 2004; Zahir, 2000; Zahir, 2002) ",Maldives (Southern Atolls),0.906028476
+17,5.03,-2.597384633,0.590616109,1.224243824,darkcyan,"(Edwards, 2002; Pet-Soede et al., 2000; Rajasuriya, 2002b; Rajasuriya and Karunarathna, 2000a; Rajasuriya et al., 2004) ",Manar-G,1.001639521
+18,2.27,-0.060045036,0.302793107,1.74492186,darkcyan,"(Ahmada et al., 2002; Ahmada et al., 2004; Bigot et al., 2000; Ministry of Fisheries and Marine Resources, Mauritius, 1998; Moothien Pillay et al., 2002; Turner et al., 2000a)",Mauritius,-1.197414518
+19,3.43,-0.100718676,0.419059784,1.448487648,darkcyan,"(Ahmada et al., 2002; Ahmada et al., 2004; Bigot et al., 2000; Chabanet, 2002; Quod and Bigot, 2000; Quod et al., 2002)",Mayotte,-0.273174415
+20,2.93,-0.356674944,0.476505358,1.355418052,darkcyan,"(Motta et al., 2002; Motta et al., 2000; Obura et al., 2002; Obura et al., 2004; Obura et al., 2000a; Schleyer et al., 1999)",Mozambique-C,-0.67155377
+21,3.58,-0.287682072,0.476505358,1.355418052,darkcyan,"(Motta et al., 2002; Motta et al., 2000; Obura et al., 2002; Obura et al., 2004; Obura et al., 2000a; Schleyer et al., 1999) ",Mozambique-N,-0.153660608
+22,1.89,-0.223044878,0.476505358,1.355418052,darkcyan," (Motta et al., 2002; Motta et al., 2000; Obura et al., 2002; Obura et al., 2004; Obura et al., 2000a; Schleyer et al., 1999) ",Mozambique-S,-1.500182828
+23,4.15,-0.916290732,0.590616109,1.224243824,darkcyan,"(Pilcher et al., 2000; Rezai et al., 2004; Wilson et al., 2000; Wilson et al., 2002)",Oman-G,0.300491856
+24,2,-0.056435207,0.476505358,1.355418052,darkcyan,"(Hassan et al., 2002; Kotb et al., 2004; Pilcher and Alsuhaibany, 2000; Wilson et al., 2000)",Red Sea-C,-1.41253937
+25,2.43,0.048202102,0.590616109,1.224243824,darkcyan,"(Ateweberhan, 2004; Ateweberhan, unpublished; Hassan et al., 2002; Sheppard et al., 2000; Wilson et al., 2000; Zekeria, 2003)",Red Sea-S,-1.069933125
+26,2.16,-0.251184567,0.476505358,1.355418052,darkcyan,"(Hassan et al., 2002; Loya, 2004; Loya et al., 2001; Wilkinson et al., 2005; Wilson et al., 2000)",Res Sea-N,-1.285057976
+27,2.51,-0.1471201,0.312771273,1.710836105,darkcyan,"(Ahmada et al., 2002; Ahmada et al., 2004; Bigot et al., 2000; Letourneur, 1996; Letourneur, 2000; Quod and Bigot, 2000; Quod et al., 2002)",Reunion,-1.006192428
+28,2.72,-0.370385321,0.590616109,1.224243824,darkcyan,"(Ahmada et al., 2002; Ahmada et al., 2004; Clark, unpublished; Wilkinson et al., 2005)",Rodrigues,-0.838873099
+29,5.05,-1.801866622,0.257044844,1.935079929,darkcyan,"(Ahmada et al., 2002; Bigot et al., 2000; Engelhardt et al., 2002; Jennings et al., 1996; Turner et al., 2000b)",Seychelles-N (Granite),1.017574695
+30,4.75,-1.24165521,0.339453666,1.629532004,darkcyan,"(Souter et al., 2000; Spalding and Jarvis, 2002; Spencer et al., 2000; Turner et al., 2000b)",Seychelles-S (Coralline),0.778547082
+31,4.86,-0.284942708,0.476505358,1.355418052,darkcyan,"(DeVantier et al., unpublished; Pilcher et al., 2000; Rezai et al., 2004; Wilson et al., 2000; Wilson et al., 2002)",Socotra,0.86619054
+32,2.12,0.08299096,0.476505358,1.355418052,darkcyan,"(Celliers and Schleyer, 2002; Riegl et al., 1995; Schleyer, 1995; Schleyer and Celliers, 2000; Schleyer and Celliers, 2005)",South Africa,-1.316928325
+33,4.67,-1.37838397,0.324734205,1.672731473,darkcyan,"(Rajasuriya, 2002a; Rajasuriya and Karunarathna, 2000b; Rajasuriya et al., 2002; Rajasuriya et al., 2000; Rajasuriya et al., 2004; Wilkinson et al., 2005)",Sri Lanka-S,0.714806385
+34,5.2,-2.469318613,0.383224293,1.520678036,darkcyan,"(Rajasuriya, 2002a; Rajasuriya and Karunarathna, 2000b; Rajasuriya et al., 2002; Rajasuriya et al., 2000; Rajasuriya et al., 2004; Wilkinson et al., 2005)  ",Sri Lanka-W,1.137088502
+35,2.29,-0.625896574,0.286951732,1.803905701,darkcyan,"(Mohammed et al., 2002; Muhando and Mohammed, 2002)",Tanzania-N,-1.181479344
+36,3.52,-1.098612289,0.476505358,1.355418052,darkcyan," (Mohammed et al., 2002; Muhando and Mohammed, 2002) ",Tanzania-S,-0.201466131
