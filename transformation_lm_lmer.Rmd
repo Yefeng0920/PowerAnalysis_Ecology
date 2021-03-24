@@ -1,0 +1,311 @@
+---
+title: "Power analysis Helmut's Nature Ecol Evol paper"
+author: "Yefeng"
+date: "2020/9/21"
+output: html_document
+subtitle: "check for Shinichi"
+---
+
+
+## Setup
+
+```{r setup, echo = FALSE}
+# Tidy
+ # rm(list=ls())
+ # graphics.off()
+
+# Preparing workspace
+knitr::opts_chunk$set(echo = TRUE, include = TRUE)
+
+# Loading packages
+pacman::p_load(knitr, # knit markdown
+               readxl, 
+               readr, 
+               metafor, 
+               dplyr, 
+               tidyverse, 
+               janitor, # generate 1-, 2-way table
+               patchwork, # layout of plots
+               cowplot, 
+               ggpubr,
+               gridExtra,
+               #orchaRd, # forest-like plot
+               gridGraphics, # Redraw Base Graphics Using 'grid' Graphics. `gridGraphics` is required to handle base-R plots.
+               dabestr,
+               here,
+               retrodesign,
+               lme4,
+               car,
+               boot
+               )
+
+```
+
+
+
+###  1 Power lnRR
+
+###  1.1 Estimate overall power, Type M and S
+
+####  1.1.1 MA power
+
+```{r}
+# load meta-analysis level power
+load(here("data","model_est_RR.RData"))
+
+
+#***************************************************************#
+#      estiamte overall power for meta-analysis level power     #
+#***************************************************************#
+
+#--------------------- (1) two tailed power ---------------------#
+MMA_MA_RR <- lm(MA.power~1, weights = k, data = model_est_RR) 
+MMA_MA_RR$coefficients
+# log
+MMA_MA_RR2 <- lm(log(MA.power)~1, weights = k, data = model_est_RR)
+MMA_MA_RR2$coefficients %>% exp() 
+# logit
+MMA_MA_RR3 <- lm(car::logit(MA.power)~1, weights = k, data = model_est_RR)
+MMA_MA_RR3$coefficients %>% inv.logit() # or plogis()
+
+# make plot
+par(mfrow = c(1, 3))
+residuals(MMA_MA_RR) %>% hist(main = paste("orignal power (MAOM)"), xlab = "Residual")
+residuals(MMA_MA_RR2) %>% hist(main = paste("log power (MAOM)"), xlab = "Residual") 
+residuals(MMA_MA_RR3) %>% hist(main = paste("logit power (MAOM)"), xlab = "Residual") 
+
+#---------------------- (2) type S error -----------------------#
+
+MMA_MA.S_RR <- lm(MA.power.S~1, weights = k, data = model_est_RR) 
+MMA_MA.S_RR$coefficients
+# log
+MMA_MA.S_RR2 <- lm(log(MA.power.S)~1, weights = k, data = model_est_RR)
+MMA_MA.S_RR2$coefficients %>% exp() 
+# logit
+MMA_MA.S_RR3 <- lm(car::logit(MA.power.S)~1, weights = k, data = model_est_RR)
+MMA_MA.S_RR3$coefficients %>% inv.logit() # or plogis()
+
+# make plot
+par(mfrow = c(1, 3))
+residuals(MMA_MA.S_RR) %>% hist(main = paste("orignal Type S (MAOM)"), xlab = "Residual")
+residuals(MMA_MA.S_RR2) %>% hist(main = paste("log Type S (MAOM)"), xlab = "Residual") 
+residuals(MMA_MA.S_RR3) %>% hist(main = paste("logit Type S (MAOM)"), xlab = "Residual") 
+
+
+#-------------- (3) type M error (overestimate ratio) -------------#
+# note that logit transformation is not suitable for Type M, because M error is not the probability. So I have not done logit transformation for M
+
+MMA_MA.M_RR <- lm(MA.power.M~1, weights = k, data = model_est_RR) 
+MMA_MA.M_RR$coefficients
+# log
+MMA_MA.M_RR2 <- lm(log(MA.power.M)~1, weights = k, data = model_est_RR)
+MMA_MA.M_RR2$coefficients %>% exp() 
+
+
+# make plot
+par(mfrow = c(1, 2))
+residuals(MMA_MA.M_RR) %>% hist(main = paste("orignal Type M (MAOM)"), xlab = "Residual")
+residuals(MMA_MA.M_RR2) %>% hist(main = paste("log Type M (MAOM)"), xlab = "Residual") 
+
+```
+
+
+#### 1.1.2 Individual power
+```{r}
+
+# load individual level power
+load(here("data","individual_est_RR.RData"))
+
+
+#***************************************************************#
+#        estiamte overall power for individual level power      #
+#***************************************************************#
+
+#----------------------------------------------------------------#
+#           (i) intercept (overall mean) as true effect
+#----------------------------------------------------------------#
+
+#--------------------- (1) two tailed power ---------------------#
+
+MMA_power.F_RR <- lmer(power.F_RR ~ 1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.F_RR)$coefficients[1]
+# log
+MMA_power.F_RR2 <- lmer(log(power.F_RR) ~ 1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.F_RR2)$coefficients[1] %>% exp()
+# logit
+MMA_power.F_RR3 <- lmer(car::logit(power.F_RR) ~ 1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.F_RR3)$coefficients[1] %>% inv.logit()
+
+# make plot
+par(mfrow = c(1, 3))
+residuals(MMA_power.F_RR) %>% hist(main = paste("orignal power (MAOM)"), xlab = "Residual")
+residuals(MMA_power.F_RR2) %>% hist(main = paste("log power (MAOM)"), xlab = "Residual") 
+residuals(MMA_power.F_RR3) %>% hist(main = paste("logit power (MAOM)"), xlab = "Residual") 
+
+
+# include approach_RR as fixed effect and stressor as random effect
+# your example code returned contrast estimates. I used -1 to get non-contrast estimate. -1 is general? It seems that it fits both rma and lmer  
+MMA_power.F_RR.approach <- lmer(power.F_RR ~ 1 + I(approach_RR) -1 + (1 | studyID_RR) + (1 | stressor_RR), data = individual_est_RR)
+summary(MMA_power.F_RR.approach)$coefficients
+
+# log
+MMA_power.F_RR.approach2 <- lmer(log(power.F_RR) ~ 1 + I(approach_RR) -1 + (1 | studyID_RR) + (1 | stressor_RR), data = individual_est_RR)
+summary(MMA_power.F_RR.approach2)$coefficients %>% exp()
+
+# logit
+MMA_power.F_RR.approach3 <- lmer(car::logit(power.F_RR) ~ 1 + I(approach_RR) -1 + (1 | studyID_RR) + (1 | stressor_RR), data = individual_est_RR)
+summary(MMA_power.F_RR.approach3)$coefficients %>% inv.logit()
+
+
+# make plot
+par(mfrow = c(1, 3))
+residuals(MMA_power.F_RR.approach) %>% hist(main = paste("orignal power (MAOM)"), xlab = "Residual")
+residuals(MMA_power.F_RR.approach2) %>% hist(main = paste("log power (MAOM)"), xlab = "Residual") 
+residuals(MMA_power.F_RR.approach3) %>% hist(main = paste("logit power (MAOM)"), xlab = "Residual") 
+
+#---------------------- (2) type S error -----------------------#
+MMA_power.F.S_RR <- lmer(power.F.S_RR ~ 1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.F.S_RR)$coefficients[1]
+
+# there is a issue in log transformation. some values of Type S are zero. Those can not be log-transformed
+MMA_power.F.S_RR2 <- lmer(log(power.F.S_RR) ~ 1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.F.S_RR2)$coefficients[1] %>% exp()
+
+# logit
+MMA_power.F.S_RR3 <- lmer(car::logit(power.F.S_RR) ~ 1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.F.S_RR3)$coefficients[1] %>% inv.logit()
+
+# make plot
+par(mfrow = c(1, 2))
+residuals(MMA_power.F.S_RR) %>% hist(main = paste("orignal Type S (MAOM)"), xlab = "Residual")
+#residuals(MMA_power.F.S_RR2) %>% hist(main = paste("log Type S (MAOM)"), xlab = "Residual") 
+residuals(MMA_power.F.S_RR3) %>% hist(main = paste("logit Type S (MAOM)"), xlab = "Residual") 
+
+
+
+
+#---------------------- (2) type M error -----------------------#
+# there is a issue in Type M if we use lmer. Type M error in some effect sizes are extremely high, which made lmer() work not well
+ 
+MMA_power.F.M_RR <- lmer(power.F.M_RR ~ 1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.F.M_RR)$coefficients[1] # I checked the raw data and found that some sampling variances of lnRR are very low. This probably makes some of Type M error extremely high. 
+
+# load datset containing 30 meta-analyses with lnRR and sampling variance
+load(here("data","dat_list.RData"))
+# load individual level Type M error
+load(here("data","power.F.M_RR.RData"))
+
+# have a loot at some strange sampling variances and corresponding Type M
+dat_list[[27]]$var.LRR[69:71]
+power.F.M_RR[[27]][69:71]
+
+
+# but log transformation can work
+MMA_power.F.M_RR2 <- lmer(log(power.F.M_RR) ~ 1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.F.M_RR2)$coefficients[1] %>% exp()
+
+# make plot
+par(mfrow = c(1, 2))
+residuals(MMA_power.F.M_RR) %>% hist(main = paste("orignal Type M (MAOM)"), xlab = "Residual")
+residuals(MMA_power.F.M_RR2) %>% hist(main = paste("log Type M (MAOM)"), xlab = "Residual") 
+ 
+
+
+
+#----------------------------------------------------------------#
+#                 (ii) effect size specific effect as true effect
+#----------------------------------------------------------------#
+
+
+#--------------------- (1) two tailed power ---------------------#
+
+MMA_power.R_RR <- lmer(power.R_RR ~ 1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.R_RR)$coefficients[1]
+# log
+MMA_power.R_RR2 <- lmer(log(power.R_RR) ~ 1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.R_RR2)$coefficients[1] %>% exp()
+# logit
+MMA_power.R_RR3 <- lmer(car::logit(power.R_RR) ~ 1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.R_RR3)$coefficients[1] %>% inv.logit()
+
+# make plot
+par(mfrow = c(1, 3))
+residuals(MMA_power.R_RR) %>% hist(main = paste("orignal power (MAOM)"), xlab = "Residual")
+residuals(MMA_power.R_RR2) %>% hist(main = paste("log power (MAOM)"), xlab = "Residual") 
+residuals(MMA_power.R_RR3) %>% hist(main = paste("logit power (MAOM)"), xlab = "Residual") 
+
+
+# include approach_RR as fixed effect and stressor as random effect
+# your example code returned contrast estimates. I used -1 to get non-contrast estimate. -1 is general? It seems that it fits both rma and lmer  
+MMA_power.R_RR.approach <- lmer(power.R_RR ~ 1 + I(approach_RR) -1 + (1 | studyID_RR) + (1 | stressor_RR), data = individual_est_RR)
+summary(MMA_power.R_RR.approach)$coefficients
+
+# log
+MMA_power.R_RR.approach2 <- lmer(log(power.R_RR) ~ 1 + I(approach_RR) -1 + (1 | studyID_RR) + (1 | stressor_RR), data = individual_est_RR)
+summary(MMA_power.R_RR.approach2)$coefficients %>% exp()
+
+# logit
+MMA_power.R_RR.approach3 <- lmer(car::logit(power.R_RR) ~ 1 + I(approach_RR) -1 + (1 | studyID_RR) + (1 | stressor_RR), data = individual_est_RR)
+summary(MMA_power.R_RR.approach3)$coefficients %>% inv.logit()
+
+
+# make plot
+par(mfrow = c(1, 3))
+residuals(MMA_power.R_RR.approach) %>% hist(main = paste("orignal power (MAOM)"), xlab = "Residual")
+residuals(MMA_power.R_RR.approach2) %>% hist(main = paste("log power (MAOM)"), xlab = "Residual") 
+residuals(MMA_power.R_RR.approach3) %>% hist(main = paste("logit power (MAOM)"), xlab = "Residual") 
+
+#---------------------- (2) type S error -----------------------#
+MMA_power.R.S_RR <- lmer(power.R.S_RR ~ 1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.R.S_RR)$coefficients[1]
+
+# there is a issue in log transformation. some values of Type S are zero. Those can not be log-transformed
+MMA_power.R.S_RR2 <- lmer(log(power.R.S_RR) ~ 1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.R.S_RR2)$coefficients[1] %>% exp()
+
+# logit
+MMA_power.R.S_RR3 <- lmer(car::logit(power.R.S_RR) ~ 1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.R.S_RR3)$coefficients[1] %>% inv.logit()
+
+# make plot
+par(mfrow = c(1, 2))
+residuals(MMA_power.R.S_RR) %>% hist(main = paste("orignal Type S (MAOM)"), xlab = "Residual")
+#residuals(MMA_power.R.S_RR2) %>% hist(main = paste("log Type S (MAOM)"), xlab = "Residual") 
+residuals(MMA_power.R.S_RR3) %>% hist(main = paste("logit Type S (MAOM)"), xlab = "Residual") 
+
+
+
+
+#---------------------- (2) type M error -----------------------#
+# there is a issue in Type M if we use lmer. Type M error in some effect sizes are extremely high, which made lmer() work not well
+ 
+MMA_power.R.M_RR <- lmer(power.R.M_RR ~ 1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.R.M_RR)$coefficients[1] # I checked the raw data and found that some sampling variances of lnRR are very low. This probably makes some of Type M error extremely high. 
+
+# load datset containing 30 meta-analyses with lnRR and sampling variance
+load(here("data","dat_list.RData"))
+# load individual level Type M error
+load(here("data","power.R.M_RR.RData"))
+
+# have a loot at some strange sampling variances and corresponding Type M
+dat_list[[27]]$var.LRR[69:71]
+power.R.M_RR[[27]][69:71]
+
+
+# but log transformation can work
+MMA_power.R.M_RR2 <- lmer(log(power.R.M_RR) ~ 1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.R.M_RR2)$coefficients[1] %>% exp()
+
+# make plot
+par(mfrow = c(1, 2))
+residuals(MMA_power.R.M_RR) %>% hist(main = paste("orignal Type M (MAOM)"), xlab = "Residual")
+residuals(MMA_power.R.M_RR2) %>% hist(main = paste("log Type M (MAOM)"), xlab = "Residual") 
+ 
+
+```
+
+
+
+
+
+
