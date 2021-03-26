@@ -88,8 +88,12 @@ residuals(MMA_MA_RR3) %>% hist(main = paste("logit power (MAOM)"), xlab = "Resid
 MMA_MA.S_RR <- lm(MA.power.S~1, weights = k, data = model_est_RR) 
 MMA_MA.S_RR$coefficients
 # log
-MMA_MA.S_RR2 <- lm(log(MA.power.S)~1, weights = k, data = model_est_RR)
-MMA_MA.S_RR2$coefficients %>% exp() 
+MMA_MA.S_RR2 <- lm(log(MA.power.S+0.025) ~ 1, weights = k, data = model_est_RR)
+MMA_MA.S_RR2$coefficients %>% exp() - 0.025
+
+(MMA_MA.S_RR2$coefficients + 0.5*var(log(model_est_RR$MA.power.S + 0.025))) %>% exp() - 0.025
+
+
 
 # logit
 MMA_MA.S_RR3 <- lm(car::logit(MA.power.S)~1, weights = k, data = model_est_RR)
