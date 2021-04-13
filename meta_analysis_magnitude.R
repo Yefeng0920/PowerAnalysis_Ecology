@@ -2,6 +2,7 @@
 
 # load packages
 library(metafor)
+library(orchaRd)
 # Function for caltulating sampling variance of magnitude    
 folded_error <-function(mean, variance){
   mu <- mean
