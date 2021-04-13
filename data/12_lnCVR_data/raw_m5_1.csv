@@ -1,0 +1,76 @@
+,Unit_ID,ID.X,Land.use,NT,NC,meanT,meanC,sdT,sdC,emission,treatment,soil,N.application,Study,LRR,var.LRR,X,scale,col,Land.use,soil,ref,pr.st
+58,58,94,upland,2,2,0.026,0.247,0.012,0.048,NO,PCF,Andosol,150,m5_1_Akiyama et al. 2000,2.251291799,0.125391336,5.010635294,1.316144097,darkgreen,upland,Andosol,Akiyama & Tsuruta 2002,-0.141261934
+57,57,93,upland,2,2,0.337,0.484,0.084,0.102,NO,PCF,Andosol,150,m5_1_Akiyama et al. 2000,0.362001976,0.05327129,5.010635294,1.417462204,darkgreen,upland,Andosol,Akiyama & Tsuruta 2002,-0.141261934
+55,55,91,upland,2,2,0.072,0.097,0.009,0.021,N2O,PCF,Andosol,150,m5_1_Bronson et al. 1992,0.298044859,0.031247509,5.010635294,1.480600395,darkgreen,upland,Andosol,Akiyama & Tsuruta 2002,-0.141261934
+54,54,90,upland,2,2,0.163,0.184,0.019,0.008,N2O,PCF,Andosol,150,m5_1_Bronson et al. 1992,0.121185557,0.007738811,5.010635294,1.645789523,darkgreen,upland,Andosol,Akiyama & Tsuruta 2002,-0.141261934
+2,2,2,upland,2,2,1.52,2.38,0.295,0.04,NO,NI,Andosol,200,m5_1_Bronson et al. 1992,0.448390153,0.018974552,5.298317367,1.539641447,darkgreen,upland,Andosol,Akiyama et al. 2000,0.361652754
+1,1,1,upland,2,2,0.127,0.164,0.008,0.02,N2O,NI,Andosol,200,m5_1_Bronson et al. 1992,0.255679341,0.009420054,5.298317367,1.622521498,darkgreen,upland,Andosol,Akiyama et al. 2000,0.361652754
+59,59,95,upland,2,2,2.31,2.38,0.376,0.04,NO,PCF,Andosol,200,m5_1_Bronson et al. 1992,0.029852963,0.013388361,5.298317367,1.580913882,darkgreen,upland,Andosol,Akiyama et al. 2000,0.361652754
+56,56,92,upland,2,2,0.19,0.164,0.012,0.02,N2O,PCF,Andosol,200,m5_1_Bronson et al. 1992,-0.147157644,0.00943051,5.298317367,1.622390199,darkgreen,upland,Andosol,Akiyama et al. 2000,0.361652754
+62,62,98,grassland,3,3,1.067,15.7,0.305,1.6,N2O,PCF,Gleysol,600,m5_1_Bronson et al. 1992,2.68880974,0.030698332,6.396929655,1.482699013,darkgreen,grassland,Gleysol,Ball et al. 2004,2.282204324
+63,63,99,grassland,3,3,1.067,5.867,0.229,1.6,N2O,PCF,Gleysol,600,m5_1_Bronson et al. 1992,1.704492458,0.040144548,6.396929655,1.450946539,darkgreen,grassland,Gleysol,Ball et al. 2004,2.282204324
+60,60,96,grassland,3,3,0.305,1.6,0,0.61,N2O,PCF,Gleysol,600,m5_1_Bronson et al. 1992,1.657447132,0.048450521,6.396929655,1.428688842,darkgreen,grassland,Gleysol,Ball et al. 2004,2.282204324
+61,61,97,grassland,3,3,0.533,2.21,0.076,0.305,N2O,PCF,Gleysol,600,m5_1_Dittert et al. 2001,1.42222637,0.013126051,6.396929655,1.583255786,darkgreen,grassland,Gleysol,Ball et al. 2004,2.282204324
+64,64,100,grassland,3,3,0.61,0.99,0.152,0.076,N2O,PCF,Gleysol,600,m5_1_Dobbie & Smith 2003,0.484245986,0.022661371,6.396929655,1.518625713,darkgreen,grassland,Gleysol,Ball et al. 2004,2.282204324
+11,11,13,upland,4,4,0.434,1.651,0.192,0.618,N2O,NI,mesic Aridic Argiustoll,218,m5_1_Dobbie & Smith 2003,1.33609191,0.083957227,5.384495063,1.363620672,darkgreen,upland,mesic Aridic Argiustoll,Bronson et al. 1992,0.512305274
+10,10,12,upland,4,4,0.483,1.651,0.128,0.618,N2O,NI,mesic Aridic Argiustoll,218,m5_1_Ghosh et al. 2003,1.22911979,0.052586224,5.384495063,1.418994134,darkgreen,upland,mesic Aridic Argiustoll,Bronson et al. 1992,0.512305274
+8,8,10,upland,4,4,1.005,3.226,0.171,0.965,N2O,NI,mesic Aridic Argiustoll,218,m5_1_Ghosh et al. 2003,1.166255438,0.029607688,5.384495063,1.486980471,darkgreen,upland,mesic Aridic Argiustoll,Bronson et al. 1992,0.512305274
+7,7,9,upland,4,4,1.017,3.226,0.451,0.965,N2O,NI,mesic Aridic Argiustoll,218,m5_1_Ghosh et al. 2003,1.154385863,0.071534446,5.384495063,1.3825729,darkgreen,upland,mesic Aridic Argiustoll,Bronson et al. 1992,0.512305274
+6,6,8,upland,4,4,1.109,3.226,0.188,0.965,N2O,NI,mesic Aridic Argiustoll,218,m5_1_Hadi et al. 2008,1.067784271,0.029554431,5.384495063,1.487193558,darkgreen,upland,mesic Aridic Argiustoll,Bronson et al. 1992,0.512305274
+3,3,5,upland,4,4,1.174,3.362,0.193,0.973,N2O,NI,mesic Aridic Argiustoll,218,m5_1_Kelly et al. 2008,1.052119314,0.027696139,5.384495063,1.494879705,darkgreen,upland,mesic Aridic Argiustoll,Bronson et al. 1992,0.512305274
+9,9,11,upland,4,4,0.98,1.651,0.593,0.618,N2O,NI,mesic Aridic Argiustoll,218,m5_1_Kelly et al. 2008,0.521583872,0.126565723,5.384495063,1.315040756,darkgreen,upland,mesic Aridic Argiustoll,Bronson et al. 1992,0.512305274
+4,4,6,upland,4,4,2.255,3.362,1.223,0.973,N2O,NI,mesic Aridic Argiustoll,218,m5_1_Kumar et al. 2000,0.399386062,0.094475662,5.384495063,1.349650491,darkgreen,upland,mesic Aridic Argiustoll,Bronson et al. 1992,0.512305274
+5,5,7,upland,4,4,2.27,3.362,0.483,0.973,N2O,NI,mesic Aridic Argiustoll,218,m5_1_Kumar et al. 2000,0.392756203,0.032258026,5.384495063,1.476833437,darkgreen,upland,mesic Aridic Argiustoll,Bronson et al. 1992,0.512305274
+66,66,106,upland,4,4,0.182,0.637,0.064,0.137,NO,PCF,Andosol,90,m5_1_Kumar et al. 2000,1.252762968,0.042477986,4.49980967,1.444259478,darkgreen,upland,Andosol,Chu et al. 2007,-1.034267559
+65,65,105,upland,4,4,0.464,0.452,0.035,0.085,N2O,PCF,Andosol,90,m5_1_Macadam et al. 2003,-0.026202372,0.010263452,4.49980967,1.612372619,darkgreen,upland,Andosol,Chu et al. 2007,-1.034267559
+12,12,15,grassland,3,3,1.1,1.62,0.294,0.294,N2O,NI,Halstow series,64,m5_1_Macadam et al. 2003,0.387115969,0.03479008,4.158883083,1.467889782,darkgreen,grassland,Halstow series,Dittert et al. 2001,-1.63026225
+13,13,16,grassland,3,3,1.126,3.882,0.96,4.579,N2O,NI,Gleysol,100,m5_1_Macadam et al. 2003,1.237678955,0.706071735,4.605170186,1.111591299,darkgreen,grassland,Gleysol,Dobbie & Smith 2003,-0.850080375
+14,14,17,grassland,3,3,4.94,9.189,2.651,7.469,N2O,NI,Gleysol,100,m5_1_Macadam et al. 2003,0.620641785,0.316219322,4.605170186,1.206664779,darkgreen,grassland,Gleysol,Dobbie & Smith 2003,-0.850080375
+75,75,119,grassland,3,3,7.773,9.189,5.061,7.469,N2O,other,Gleysol,100,m5_1_Magalhaes et al. 1984,0.167350926,0.361535662,4.605170186,1.190813929,darkgreen,grassland,Gleysol,Dobbie & Smith 2003,-0.850080375
+74,74,118,grassland,3,3,8.491,3.882,8.675,4.579,N2O,other,Gleysol,100,m5_1_Majumdar et al. 2000,-0.782656294,0.811713279,4.605170186,1.095088817,darkgreen,grassland,Gleysol,Dobbie & Smith 2003,-0.850080375
+67,67,108,grassland,3,3,0.569,3.882,0.484,4.579,N2O,PCF,Gleysol,100,m5_1_Majumdar et al. 2000,1.92022533,0.704958771,4.605170186,1.111778009,darkgreen,grassland,Gleysol,Dobbie and Smith 2003,-0.850080375
+68,68,109,grassland,3,3,8.405,9.189,5.061,7.469,N2O,PCF,Gleysol,100,m5_1_Majumdar et al. 2000,0.08918035,0.341083437,4.605170186,1.197706248,darkgreen,grassland,Gleysol,Dobbie et al. 2003,-0.850080375
+15,15,18,paddy,3,3,0.051,0.107,0.007,0.005,N2O,NI,Typic Ustochrept,120,m5_1_Majumdar et al. 2002,0.741003202,0.007007502,4.787491743,1.657538387,darkgreen,paddy,Typic Ustochrept,Ghosh et al. 2003,-0.531352871
+16,16,19,paddy,3,3,0.052,0.096,0.004,0.005,N2O,NI,Typic Ustochrept,120,m5_1_Majumdar et al. 2002,0.613104473,0.002876611,4.787491743,1.762919249,darkgreen,paddy,Typic Ustochrept,Ghosh et al. 2003,-0.531352871
+17,17,20,paddy,3,3,0.107,0.119,0.007,0.013,N2O,NI,Typic Ustochrept,120,m5_1_Majumdar et al. 2002,0.106294659,0.005404678,4.787491743,1.688277505,darkgreen,paddy,Typic Ustochrept,Ghosh et al. 2003,-0.531352871
+18,18,21,upland,3,3,0.211,6.917,0.09,1.097,N2O,NI,Ultisol,90,m5_1_Majumdar et al. 2002,3.489879295,0.069029638,4.49980967,1.386791497,darkgreen,upland,Ultisol,Hadi et al. 2008,-1.034267559
+69,69,110,upland,3,3,0.573,6.917,0.535,1.097,N2O,PCF,Ultisol,90,m5_1_Meijide et al. 2007,2.490851712,0.298971692,4.49980967,1.213303054,darkgreen,upland,Ultisol,Hadi et al. 2008,-1.034267559
+70,70,111,upland,2,2,1.004,0.778,0.117,0.228,N2O,PCF,Andosol,250,m5_1_Meijide et al. 2007,-0.255020776,0.049731896,5.521460918,1.425599335,darkgreen,upland,Andosol,Hou & Tsuruta 2003,0.751743692
+71,71,112,upland,2,2,0.114,0.085,0.001,0.057,NO,PCF,Andosol,250,m5_1_Merino et al. 2002,-0.293547192,0.224882764,5.521460918,1.247007387,darkgreen,upland,Andosol,Hou & Tsuruta 2003,0.751743692
+19,19,23,grassland,3,3,3.52,6.25,0.351,0.325,N2O,NI,yellow-red Sudsol,1000,m5_1_Merino et al. 2002,0.574120474,0.004215754,6.907755279,1.717681562,darkgreen,grassland,yellow-red Sudsol,Kelly et al. 2008,3.175209949
+20,20,24,grassland,3,3,3.72,4.99,0.43,0.245,N2O,NI,yellow-red Sudsol,1000,m5_1_Pathak et al. 2002,0.293712241,0.005257335,6.907755279,1.691548952,darkgreen,grassland,yellow-red Sudsol,Kelly et al. 2008,3.175209949
+23,23,27,paddy,4,4,0.174,0.235,0.019,0.029,N2O,NI,Typic Ustochrept,140,m5_1_Pathak et al. 2002,0.300530215,0.006788062,4.941642423,1.661303994,darkgreen,paddy,Typic Ustochrept,Kumar et al. 2000,-0.261872607
+21,21,25,paddy,4,4,0.142,0.16,0.035,0.053,N2O,NI,Typic Ustochrept,140,m5_1_Pathak et al. 2002,0.119346758,0.042619599,4.941642423,1.443865558,darkgreen,paddy,Typic Ustochrept,Kumar et al. 2000,-0.261872607
+22,22,26,paddy,4,4,0.147,0.16,0.024,0.053,N2O,NI,Typic Ustochrept,140,m5_1_Pathak et al. 2002,0.084741228,0.034095531,4.941642423,1.470276555,darkgreen,paddy,Typic Ustochrept,Kumar et al. 2000,-0.261872607
+27,27,34,grassland,4,4,1.143,2.938,0.023,0.18,N2O,NI,,125,m5_1_Vallejo et al. 2005,0.944072693,0.001039614,4.828313737,1.883378128,darkgreen,grassland,,Macadam et al. 2003,-0.459989437
+25,25,32,grassland,4,4,0.488,1.225,0.08,0.191,N2O,NI,,85,m5_1_Vallejo et al. 2006,0.920380717,0.012796258,4.442651256,1.586267496,darkgreen,grassland,,Macadam et al. 2003,-1.13418969
+26,26,33,grassland,4,4,3.167,7.519,0.161,0.744,N2O,NI,,125,m5_1_Vallejo et al. 2005,0.864648383,0.003093836,4.828313737,1.754303031,darkgreen,grassland,,Macadam et al. 2003,-0.459989437
+24,24,31,grassland,4,4,0.715,1.242,0.048,0.234,N2O,NI,,80,m5_1_Vallejo et al. 2006,0.55219572,0.010000892,4.382026635,1.61543982,darkgreen,grassland,,Macadam et al. 2003,-1.240171312
+28,28,37,fallow,3,3,0.034,0.071,0.001,0.004,N2O,NI,,80,m5_1_Weiske et al. 2001,0.736319352,0.001346342,4.382026635,1.852778034,darkgreen,fallow,,Magalhaes et al. 1984,-1.240171312
+29,29,38,paddy,4,4,0.049,0.06,0.011,0.005,N2O,NI,Typic Ustochrept,140,m5_1_Weiske et al. 2001,0.202524264,0.014335028,4.941642423,1.572827732,darkgreen,paddy,Typic Ustochrept,Majumdar et al. 2000,-0.261872607
+31,31,40,paddy,4,4,0.053,0.06,0.005,0.005,N2O,NI,Typic Ustochrept,140,m5_1_Weiske et al. 2001,0.124052649,0.003961102,4.941642423,1.725055902,darkgreen,paddy,Typic Ustochrept,Majumdar et al. 2000,-0.261872607
+30,30,39,paddy,4,4,0.057,0.06,0.007,0.005,N2O,NI,Typic Ustochrept,140,m5_1_Weiske et al. 2001,0.051293294,0.005506502,4.941642423,1.686068417,darkgreen,paddy,Typic Ustochrept,Majumdar et al. 2000,-0.261872607
+33,33,42,upland,4,4,1,1.43,0.1,0.16,N2O,NI,Typic Ustochrept,120,m5_1_Weiske et al. 2001,0.357674444,0.005629737,4.787491743,1.683448815,darkgreen,upland,Typic Ustochrept,Majumdar et al. 2002,-0.531352871
+32,32,41,upland,4,4,1.09,1.43,0.21,0.16,N2O,NI,Typic Ustochrept,120,m5_1_Weiske et al. 2001,0.271496748,0.012409259,4.787491743,1.589902211,darkgreen,upland,Typic Ustochrept,Majumdar et al. 2002,-0.531352871
+35,35,44,upland,4,4,1.19,1.43,0.12,0.16,N2O,NI,Typic Ustochrept,120,m5_1_Akiyama & Tsuruta 2002,0.183721137,0.005671931,4.787491743,1.68256506,darkgreen,upland,Typic Ustochrept,Majumdar et al. 2002,-0.531352871
+34,34,43,upland,4,4,1.36,1.43,0.19,0.16,N2O,NI,Typic Ustochrept,120,m5_1_Akiyama & Tsuruta 2002,0.050189745,0.008009171,4.787491743,1.641725257,darkgreen,upland,Typic Ustochrept,Majumdar et al. 2002,-0.531352871
+37,37,65,upland,3,3,0.036,0.128,0.007,0.054,NO,NI,Typic Xerofluvent,175,m5_1_Akiyama et al. 2000,1.268511325,0.071929053,5.164785974,1.381921802,darkgreen,upland,Typic Xerofluvent,Meijide et al. 2007,0.128218331
+36,36,64,upland,3,3,6.7,8.27,0.97,0.99,N2O,NI,Typic Xerofluvent,175,m5_1_Akiyama & Tsuruta 2002,0.210526983,0.01176352,5.164785974,1.596227142,darkgreen,upland,Typic Xerofluvent,Meijide et al. 2007,0.128218331
+39,39,69,grassland,4,4,0.488,1.225,0.08,0.191,N2O,NI,Gleysol,174,m5_1_Akiyama & Tsuruta 2002,0.920380717,0.012796258,5.159055299,1.586267496,darkgreen,grassland,Gleysol,Merino et al. 2002,0.118200187
+38,38,68,grassland,4,4,0.715,1.242,0.048,0.234,N2O,NI,Gleysol,80,m5_1_Akiyama et al. 2000,0.55219572,0.010000892,4.382026635,1.61543982,darkgreen,grassland,Gleysol,Merino et al. 2002,-1.240171312
+41,41,73,paddy,3,3,0.54,0.929,0.023,0.076,N2O,NI,Typic Ustochrept,120,m5_1_Ball et al. 2004,0.542539599,0.002835581,4.787491743,1.76461956,darkgreen,paddy,Typic Ustochrept,Pathak et al. 2002,-0.531352871
+40,40,72,paddy,3,3,0.483,0.735,0.041,0.068,N2O,NI,Typic Ustochrept,120,m5_1_Ball et al. 2004,0.419853846,0.005255017,4.787491743,1.691601148,darkgreen,paddy,Typic Ustochrept,Pathak et al. 2002,-0.531352871
+43,43,75,upland,3,3,0.55,0.711,0.027,0.011,N2O,NI,Typic Ustochrept,120,m5_1_Ball et al. 2004,0.256754152,0.000883091,4.787491743,1.902691124,darkgreen,upland,Typic Ustochrept,Pathak et al. 2002,-0.531352871
+42,42,74,upland,3,3,0.619,0.766,0.019,0.036,N2O,NI,Typic Ustochrept,120,m5_1_Ball et al. 2004,0.213076897,0.001050306,4.787491743,1.882167097,darkgreen,upland,Typic Ustochrept,Pathak et al. 2002,-0.531352871
+44,44,79,grassland,3,3,5.6,10.5,1.2,3,N2O,NI,Typic Xerofluvent,200,m5_1_Ball et al. 2004,0.628608659,0.042517007,5.298317367,1.444150804,darkgreen,grassland,Typic Xerofluvent,Vallejo et al. 2005,0.361652754
+46,46,81,grassland,3,3,0.33,0.52,0.19,0.15,NO,NI,Typic Xerofluvent,200,m5_1_Chu et al. 2007,0.454736157,0.138235615,5.298317367,1.304601968,darkgreen,grassland,Typic Xerofluvent,Vallejo et al. 2005,0.361652754
+47,47,82,upland,3,3,0.027,0.103,0.016,0.023,NO,NI,Clcic Haploxerepts,175,m5_1_Chu et al. 2007,1.338892122,0.133676435,5.164785974,1.308571333,darkgreen,upland,Clcic Haploxerepts,Vallejo et al. 2006,0.128218331
+45,45,80,upland,3,3,4.01,5.62,0.42,0.23,N2O,NI,Clcic Haploxerepts,175,m5_1_Dobbie and Smith 2003,0.337540423,0.004214986,5.164785974,1.717703125,darkgreen,upland,Clcic Haploxerepts,Vallejo et al. 2006,0.128218331
+53,53,88,upland,4,4,0.167,0.353,0.006,0.01,N2O,NI,Fluvisol,180,m5_1_Dobbie et al. 2003,0.748474245,0.000523335,5.192956851,1.964615993,darkgreen,upland,Fluvisol,Weiske et al. 2001,0.17746557
+52,52,87,upland,4,4,0.181,0.34,0.007,0.01,N2O,NI,Fluvisol,160,m5_1_Hadi et al. 2008,0.630448586,0.000590183,5.075173815,1.950388259,darkgreen,upland,Fluvisol,Weiske et al. 2001,-0.028438184
+51,51,86,upland,4,4,0.079,0.132,0.004,0.005,N2O,NI,Fluvisol,90,m5_1_Hou & Tsuruta 2003,0.51335407,0.000999624,4.49980967,1.888020727,darkgreen,upland,Fluvisol,Weiske et al. 2001,-1.034267559
+48,48,83,upland,4,4,0.093,0.132,0.004,0.005,N2O,NI,Fluvisol,90,m5_1_Hou & Tsuruta 2003,0.350202429,0.000821182,4.49980967,1.911293685,darkgreen,upland,Fluvisol,Weiske et al. 2001,-1.034267559
+50,50,85,upland,4,4,0.252,0.353,0.01,0.01,N2O,NI,Fluvisol,180,m5_1_Yan et al. 2001,0.337038969,0.000594304,5.192956851,1.949564698,darkgreen,upland,Fluvisol,Weiske et al. 2001,0.17746557
+49,49,84,upland,4,4,0.267,0.34,0.007,0.01,N2O,NI,Fluvisol,160,m5_1_Yan et al. 2001,0.241696959,0.000388099,5.075173815,2,darkgreen,upland,Fluvisol,Weiske et al. 2001,-0.028438184
+73,73,114,upland,4,4,0.031,0.395,0.082,0.199,NO,PCF,Andosol,150,m5_1_Dobbie & Smith 2003,2.54489856,1.812672535,5.010635294,1,darkgreen,upland,Andosol,Yan et al. 2001,-0.141261934
+72,72,113,upland,4,4,0.544,0.537,0.119,0.138,N2O,PCF,Andosol,150,m5_1_Dobbie & Smith 2003,-0.012951152,0.028472987,5.010635294,1.491605634,darkgreen,upland,Andosol,Yan et al. 2001,-0.141261934
