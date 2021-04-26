@@ -1,0 +1,67 @@
+Unit_ID,X,LRR,var.LRR,scale,col,time.since.fire,Fire.treatment,Ecosystem.type,pr.st,Study
+1,0.653926467,0.179,2,1,darkgreen,0.42,Wildfire,Savanna,0.129091439,m13_1_14
+2,0.385662481,0.081,2,1,darkgreen,0.58,Wildfire,Savanna,0.058619211,m13_1_12
+3,0.162518929,0.451,2,1,darkgreen,0.75,Wildfire,Savanna,0,m13_1_11
+4,-0.019802627,0.278,2,1,darkgreen,0.92,Wildfire,Savanna,-0.047895383,m13_1_9
+5,-0.165514438,0.153,2,1,darkgreen,1.08,Wildfire,Savanna,-0.086173484,m13_1_7
+6,-0.300104592,0,2,1,darkgreen,1.25,Wildfire,Savanna,-0.121529955,m13_1_6
+7,0.653926467,0.874,2,1,darkgreen,0.42,Wildfire,Savanna,0.129091439,m13_1_14
+8,0.385662481,0.465,2,1,darkgreen,0.58,Wildfire,Savanna,0.058619211,m13_1_12
+9,0.162518929,0.423,2,1,darkgreen,0.75,Wildfire,Savanna,0,m13_1_11
+10,-0.019802627,0.601,2,1,darkgreen,0.92,Wildfire,Savanna,-0.047895383,m13_1_9
+11,-0.165514438,0.148,2,1,darkgreen,1.08,Wildfire,Savanna,-0.086173484,m13_1_7
+12,-0.300104592,0.306,2,1,darkgreen,1.25,Wildfire,Savanna,-0.121529955,m13_1_6
+13,0.510825624,0.14,0.666666667,1.40469715,darkgreen,0.5,Prescribed burn,Savanna,0.091499232,m13_1_13
+14,0.510825624,0.143,0.666666667,1.40469715,darkgreen,0.5,Prescribed burn,Savanna,0.091499232,m13_1_13
+15,0.510825624,0.176,0.666666667,1.40469715,darkgreen,0.5,Prescribed burn,Savanna,0.091499232,m13_1_13
+16,0.510825624,0.122,0.666666667,1.40469715,darkgreen,0.5,Prescribed burn,Savanna,0.091499232,m13_1_13
+17,0.653926467,0.181,2,1,darkgreen,0.42,Prescribed burn,Temperate forest,0.129091439,m13_1_14
+18,0.653926467,0.097,2,1,darkgreen,0.42,Prescribed burn,Temperate forest,0.129091439,m13_1_14
+19,0.385662481,0.031,0.285714286,1.870366015,darkgreen,0.58,Prescribed burn,Temperate forest,0.058619211,m13_1_12
+20,0.385662481,0.119,0.23255814,2,darkgreen,0.58,Prescribed burn,Temperate forest,0.058619211,m13_1_12
+21,0.385662481,0.151,0.285714286,1.870366015,darkgreen,0.58,Prescribed burn,Temperate forest,0.058619211,m13_1_12
+22,0.072570693,0.232,0.285714286,1.870366015,darkgreen,0.83,Prescribed burn,Temperate forest,-0.02362916,m13_1_10
+23,0.072570693,0.096,0.23255814,2,darkgreen,0.83,Prescribed burn,Temperate forest,-0.02362916,m13_1_10
+24,0.072570693,0.026,0.285714286,1.870366015,darkgreen,0.83,Prescribed burn,Temperate forest,-0.02362916,m13_1_10
+25,0.385662481,0.475,0.285714286,1.870366015,darkgreen,0.58,Prescribed burn,Temperate forest,0.058619211,m13_1_12
+26,0.385662481,0.215,0.23255814,2,darkgreen,0.58,Prescribed burn,Temperate forest,0.058619211,m13_1_12
+27,0.385662481,0.214,0.285714286,1.870366015,darkgreen,0.58,Prescribed burn,Temperate forest,0.058619211,m13_1_12
+28,0.072570693,0.594,0.285714286,1.870366015,darkgreen,0.83,Prescribed burn,Temperate forest,-0.02362916,m13_1_10
+29,0.072570693,0.223,0.23255814,2,darkgreen,0.83,Prescribed burn,Temperate forest,-0.02362916,m13_1_10
+30,0.072570693,-0.135,0.285714286,1.870366015,darkgreen,0.83,Prescribed burn,Temperate forest,-0.02362916,m13_1_10
+31,0.162518929,-0.172,0.416666667,1.648299225,darkgreen,0.75,Wildfire,Temperate grassland,0,m13_1_11
+32,0.162518929,-0.395,0.416666667,1.648299225,darkgreen,0.75,Wildfire,Temperate grassland,0,m13_1_11
+33,0.385662481,-0.104,0.333333333,1.777053431,darkgreen,0.58,Prescribed burn,Savanna,0.058619211,m13_1_12
+34,-0.09531018,0.025,0.333333333,1.777053431,darkgreen,1,Prescribed burn,Savanna,-0.067731014,m13_1_8
+35,0.385662481,-0.075,0.333333333,1.777053431,darkgreen,0.58,Prescribed burn,Savanna,0.058619211,m13_1_12
+36,-0.09531018,0.561,0.333333333,1.777053431,darkgreen,1,Prescribed burn,Savanna,-0.067731014,m13_1_8
+37,0.385662481,0.285,0.333333333,1.777053431,darkgreen,0.58,Prescribed burn,Savanna,0.058619211,m13_1_12
+38,-0.09531018,-0.026,0.333333333,1.777053431,darkgreen,1,Prescribed burn,Savanna,-0.067731014,m13_1_8
+39,0.385662481,-0.392,0.333333333,1.777053431,darkgreen,0.58,Prescribed burn,Savanna,0.058619211,m13_1_12
+40,-0.09531018,-0.159,0.333333333,1.777053431,darkgreen,1,Prescribed burn,Savanna,-0.067731014,m13_1_8
+41,0.385662481,-0.121,0.333333333,1.777053431,darkgreen,0.58,Prescribed burn,Savanna,0.058619211,m13_1_12
+42,-0.09531018,0.073,0.333333333,1.777053431,darkgreen,1,Prescribed burn,Savanna,-0.067731014,m13_1_8
+43,0.385662481,-0.195,0.333333333,1.777053431,darkgreen,0.58,Prescribed burn,Savanna,0.058619211,m13_1_12
+44,-0.09531018,-0.142,0.333333333,1.777053431,darkgreen,1,Prescribed burn,Savanna,-0.067731014,m13_1_8
+45,0.385662481,0.103,0.333333333,1.777053431,darkgreen,0.58,Prescribed burn,Savanna,0.058619211,m13_1_12
+46,-0.09531018,0.388,0.333333333,1.777053431,darkgreen,1,Prescribed burn,Savanna,-0.067731014,m13_1_8
+47,0.385662481,-0.413,0.333333333,1.777053431,darkgreen,0.58,Prescribed burn,Savanna,0.058619211,m13_1_12
+48,-0.09531018,0.086,0.333333333,1.777053431,darkgreen,1,Prescribed burn,Savanna,-0.067731014,m13_1_8
+49,-1.62924054,0.075,0.666666667,1.40469715,darkgreen,5,Slash and burn,Boreal forest,-0.470690395,m13_1_2
+50,-0.741937345,0.05,2,1,darkgreen,2,Prescribed burn,Temperate grassland,-0.237598231,m13_1_3
+51,-2.091864062,0,1,1.227913616,darkgreen,8,Prescribed burn,Mediterranean forest,-0.59222035,m13_1_1
+52,-2.091864062,-0.005,1,1.227913616,darkgreen,8,Prescribed burn,Mediterranean forest,-0.59222035,m13_1_1
+53,-2.091864062,-0.013,1,1.227913616,darkgreen,8,Prescribed burn,Mediterranean forest,-0.59222035,m13_1_1
+54,-2.091864062,0.438,1,1.227913616,darkgreen,8,Prescribed burn,Mediterranean forest,-0.59222035,m13_1_1
+55,1.714798428,0.493,0.666666667,1.40469715,darkgreen,0.08,Prescribed burn,Temperate grassland,0.40777965,m13_1_18
+56,1.049822124,-0.072,0.666666667,1.40469715,darkgreen,0.25,Prescribed burn,Temperate grassland,0.233092163,m13_1_16
+57,0.84397007,-0.134,0.666666667,1.40469715,darkgreen,0.33,Prescribed burn,Temperate grassland,0.179015382,m13_1_15
+58,1.30933332,0.306,2,1,darkgreen,0.17,Wildfire,Temperate forest,0.301265057,m13_1_17
+59,0.84397007,0.43,2,1,darkgreen,0.33,Wildfire,Temperate forest,0.179015382,m13_1_15
+60,0.510825624,0.195,2,1,darkgreen,0.5,Wildfire,Temperate forest,0.091499232,m13_1_13
+61,-0.300104592,-0.083,2,1,darkgreen,1.25,Wildfire,Temperate forest,-0.121529955,m13_1_6
+62,-0.357674444,-0.031,2,1,darkgreen,1.33,Wildfire,Temperate forest,-0.1366534,m13_1_5
+63,-0.418710335,0,2,1,darkgreen,1.42,Wildfire,Temperate forest,-0.152687365,m13_1_4
+64,-0.09531018,0.155,0.666666667,1.40469715,darkgreen,1,Prescribed burn,Savanna,-0.067731014,m13_1_8
+65,-1.62924054,0.123,2,1,darkgreen,5,Slash and burn,Tropical forest,-0.470690395,m13_1_2
+66,1.714798428,0.181,0.4,1.671264348,darkgreen,0.08,Prescribed burn,Savanna,0.40777965,m13_1_18
