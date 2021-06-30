@@ -1,0 +1,788 @@
+---
+title: "Improvements of figures"
+author: "Yefeng"
+date: "2021/6/30"
+output: html_document
+subtitle: "Chat with Losia"
+---
+
+
+## Setup
+
+```{r setup, echo = FALSE}
+# Tidy
+ # rm(list=ls())
+ # graphics.off()
+
+# Preparing workspace
+knitr::opts_chunk$set(echo = TRUE, include = TRUE)
+
+# Loading packages
+pacman::p_load(knitr, # knit markdown
+               readxl, 
+               readr, 
+               metafor, 
+               dplyr, 
+               tidyverse, 
+               janitor, # generate 1-, 2-way table
+               patchwork, # layout of plots
+               cowplot, 
+               ggpubr,
+               gridExtra,
+               orchaRd, # forest-like plot
+               gridGraphics, # Redraw Base Graphics Using 'grid' Graphics. `gridGraphics` is required to handle base-R plots.
+               dabestr,
+               here,
+               retrodesign,
+               lme4,
+               car, # logit transformation, car::logit()
+               boot, # Bootstrap Resampling
+               lmerTest, # get p-valus from lme4 model, but need to re-fit the model lmerTest::lme4
+               ggthemes
+               )
+
+#library(dabestr)
+
+#library(here)
+
+# install.packages("D:/Program Files (x86)/R packages source/retrodesign_0.1.0.zip", repos = NULL, type="source") 
+
+
+
+#simulated_plot <- retrodesign::sim_plot(0.5,1)
+
+#png(filename = "./Figures/simulated_plot.png", width = 8, height = 8, units = "in", type = "windows", res = 400)
+#simulated_plot
+#dev.off()
+
+# Function to calculate power (two-tail) for meta-analysis
+power.ma_Shinichi <- function(mu, SE, alpha = 0.05) {
+  2-pnorm(qnorm(1-alpha/2)-abs(mu)/SE)-pnorm(qnorm(1-alpha/2)+abs(mu)/SE)
+  } # or power.ma_Shinichi1 <- function(mu,SE){1 - pnorm(qnorm(1-0.05/2)-abs(mu)/SE) + pnorm(-qnorm(1-0.05/2)-abs(mu)/SE)}
+
+
+
+# Function for power analysis for empirical data point
+power.individual_Shinichi <- function(mu, se, alpha = 0.05) {
+  2-pnorm(qnorm(1-alpha/2)-abs(mu)/se)-pnorm(qnorm(1-alpha/2)+abs(mu)/se)} # two-tailed power
+
+
+# Function for Type S error for empirical data point
+
+error_S <- function(mu, se, alpha = 0.05){
+  #z <- qnorm(1 - alpha/2) # Z-score or quantile
+  p.u <- 1 - pnorm(qnorm(1 - alpha/2) - abs(mu)/se) # upper-tail probability
+  p.l <- pnorm(-qnorm(1 - alpha/2) - abs(mu)/se) # lower-tail probability
+  power <- p.u + p.l # upper + lower
+  errorS <- p.l/power # percentage of the opposite direction
+  return(errorS)
+} 
+
+
+
+# We also can use t-distribution to estimate error
+# type.S <- function(mu, se, alpha = 0.05){
+#  z <- qt(1 - alpha/2, df=Inf) # Z-score or quantile
+#  p.u <- 1 - pt(z - abs(mu)/se, df=Inf) # upper-tail probability
+#  p.l <- pt(-z - abs(mu)/se, df=Inf) # lower-tail probability
+#  power <- p.u + p.l # upper + lower
+#  typeS <- p.l/power # percentage of the opposite direction
+#  return(data.frame(power=power,
+#                    type_S=typeS))}
+
+
+# Function for Type M error for empirical data point
+error_M <- function(mu, se, alpha = 0.05, N = 10000) {
+    est.random <- rnorm(n=N, mean = mu, sd = se)
+    # est.random <- mu + se*rnorm(n=N, mean=0, sd=1)
+    sig.index <- abs(est.random) > se*qnorm(1 - alpha/2)
+    overestimate <- mean(abs(est.random)[sig.index])/abs(mu) # ratio is regardnesss of sign, so we need absolute value
+    absolute_error <- overestimate*abs(mu) - abs(mu)
+    relative_error <- absolute_error/(overestimate*abs(mu))
+  return(abs(overestimate) %>% round(3))
+}
+
+
+error_M2 <- function(mu, se, alpha = 0.05, N = 10000) {
+    est.random <- rnorm(n=N, mean = mu, sd = se)
+    # est.random <- mu + se*rnorm(n=N, mean=0, sd=1)
+    sig.index <- abs(est.random) > se*qnorm(1 - alpha/2)
+    overestimate <- mean(abs(est.random)[sig.index])/abs(mu) # ratio is regardnesss of sign, so we need absolute value
+    absolute_error <- overestimate*abs(mu) - abs(mu)
+    relative_error <- absolute_error/(overestimate*abs(mu))
+  return(abs(relative_error) %>% round(3))
+} # relative error: (M - 1) / M
+
+
+
+
+#mapply(type.M, effect.R_RR[[5]], sqrt(dat_list[[5]]$vi))
+
+
+
+mapply(type.M, model_est_RR$mu_RR, model_est_RR$SE_RR) -> m.power
+
+    absolute_error <- m.power*abs(model_est_RR$mu_RR) - abs(model_est_RR$mu_RR)
+    relative_error <- absolute_error/(m.power*abs(model_est_RR$mu_RR))
+ 
+       
+    
+# the sampling variance of magnitude    
+folded_error <-function(mean, variance){
+  mu <- mean
+  sigma <- sqrt(variance)
+  fold_mu <- sigma*sqrt(2/pi)*exp((-mu^2)/(2*sigma^2)) + mu*(1 - 2*pnorm(-mu/sigma))
+  fold_se <- sqrt(mu^2 + sigma^2 - fold_mu^2)
+  # adding se to make bigger mean
+  fold_v <-fold_se^2
+  fold_v
+}
+    
+    
+
+#dat <- dat[!is.na(dat$yi) & dat$vi != 0, ]
+
+```
+
+
+
+
+
+
+
+### power heatmaps for lnRR*, SMD and SMDH
+We used heatmaps to show power of lnRR*, SMD and SMDH. Howerver, current version's layout is not good and it took a lot of space
+
+#### figure_3A
+```{r}
+#load data for figure_3A
+power_firepower_RR <- read.csv(file = "data/figure_3A(lnRR_star).csv", header = TRUE)
+
+firepower_plot_RR <- ggplot(data = power_firepower_RR) +
+  geom_tile(aes(x = reorder(effect,number), y = reorder(stressor_RR,es), fill = power)) +
+  theme(aspect.ratio = 0.3) +
+  scale_fill_gradient2(
+    name = "Power",
+    low = "#56B4E9",
+    mid = "white",
+    high = "#CC79A7",
+    midpoint = 0.5,
+    limits = c(0,1),
+    guide = "colourbar",
+  ) + 
+  facet_grid( ~ es_cat, scale = 'free_x', space = "free_x") +
+  theme_tufte(base_family = "Helvetica") +
+  theme(strip.text.x = element_blank()) +  labs(x ="Response magnitude in global change studies (lnRR*)", y = "") + theme(axis.text.x = element_text(size = 10.5, colour = "black"),
+                                         axis.text.y = element_text(size = 10.5, colour = "black"),
+                                         axis.title.x = element_text(size = 12, colour = "black", face = "bold"),
+                                         legend.text = element_text(size=10.5),
+                                         legend.title = element_text(size=10.5),
+                                         #legend.key.width = ,
+                                         legend.key.height = unit(0.5,"in"))
+
+
+png(filename = "./Figures/firepower_plot_RR.png", width = 10, height = 8, units = "in", type = "windows", res = 400)
+firepower_plot_RR 
+dev.off()
+
+```
+
+
+#### figure_3B
+```{r}
+#load data for figure_3B of SMD
+power_firepower_SMD <- read.csv(file = "data/figure_3B(SMD).csv", header = TRUE)
+
+firepower_plot_SMD <- ggplot(data = power_firepower_SMD) +
+  geom_tile(aes(x = reorder(effect,number), y = reorder(stressor_SMD,es),fill = power)) +
+  theme(aspect.ratio = 0.3) +
+  scale_fill_gradient2(
+    name = "Power",
+    low = "#56B4E9",
+    mid = "white",
+    high = "#CC79A7",
+    midpoint = 0.5,
+    limits = c(0,1),
+    guide = "colourbar",
+  ) + 
+  facet_grid( ~ es_cat, scale = 'free_x', space = "free_x") +
+  theme_tufte(base_family = "Helvetica") +
+  theme(strip.text.x = element_blank()) + labs(x ="Response magnitude in global change studies (SMD)", y = "") + theme(axis.text.x = element_text(size = 12, colour = "black"),
+                                         axis.text.y = element_text(size = 14, colour = "black"),
+                                         axis.title.x = element_text(size = 15, colour = "black", face = "bold"),
+                                         legend.text = element_text(size=14),
+                                         legend.title = element_text(size=14),
+                                         #legend.key.width = ,
+                                         legend.key.height = unit(0.5,"in"), legend.position = "none") #+ labs(title = "(A)")
+
+
+
+png(filename = "./Figures/firepower_plot_SMD.png", width = 8, height = 6, units = "in", type = "windows", res = 400)
+firepower_plot_SMD 
+dev.off()
+
+
+
+#load data for figure_3B of SMDH
+power_firepower_SMDH <- read.csv(file = "data/figure_3B(SMDH).csv", header = TRUE)
+
+firepower_plot_SMDH <- ggplot(data = power_firepower_SMDH) +
+  geom_tile(aes(x = reorder(effect,number), y = reorder(stressor_SMDH,es),fill = power)) +
+  theme(aspect.ratio = 0.3) +
+  scale_fill_gradient2(
+    name = "Power",
+    low = "#56B4E9",
+    mid = "white",
+    high = "#CC79A7",
+    midpoint = 0.5,
+    limits = c(0,1),
+    guide = "colourbar",
+  ) + 
+  facet_grid( ~ es_cat, scale = 'free_x', space = "free_x") +
+  theme_tufte(base_family = "Helvetica") +
+  theme(strip.text.x = element_blank()) + labs(x ="Response magnitude in global change studies (SMDH)", y = "") + theme(axis.text.x = element_text(size = 12, colour = "black"),
+                                         axis.text.y = element_text(size = 14, colour = "black"),
+                                         axis.title.x = element_text(size = 15, colour = "black", face = "bold"),
+                                         legend.text = element_text(size=14),
+                                         legend.title = element_text(size=14),
+                                         #legend.key.width = ,
+                                         legend.key.height = unit(0.5,"in")) #+ labs(title = "(B)")
+
+
+png(filename = "./Figures/firepower_plot_SMDH.png", width = 8, height = 6, units = "in", type = "windows", res = 400)
+firepower_plot_SMDH 
+dev.off()
+
+
+# layout for SMD and SMDH
+firepower_plot_SMD_SMDH <- ggarrange(firepower_plot_SMD, firepower_plot_SMDH, heights = c(5,5), widths = c(4.3,5), nrow = 1, ncol = 2, align = "h")
+
+png(filename = "./Figures/firepower_plot_SMD_SMDH.png", width = 16, height = 9, units = "in", type = "windows", res = 400)
+firepower_plot_SMD_SMDH
+dev.off()
+
+
+```
+
+
+
+#### figure_4A
+```{r}
+#load data for figure_4A
+power_firepower_VR <- read.csv(file = "data/figure_4A(lnVR).csv", header = TRUE)
+
+firepower_plot_VR <- ggplot(data = power_firepower_VR) +
+  geom_tile(aes(
+    x = reorder(effect,number), #### I added number, without number, the order of effect is very strange
+    y = reorder(stressor_VR,es),
+    fill = power
+  )) +
+  theme(aspect.ratio = 0.3) +
+  scale_fill_gradient2(
+    name = "Power",
+    low = "#56B4E9",
+    mid = "white",
+    high = "#CC79A7",
+    midpoint = 0.5,
+    limits = c(0,1),
+    guide = "colourbar",
+  ) + 
+  facet_grid( ~ es_cat, scale = 'free_x', space = "free_x") +
+  theme_tufte(base_family = "Helvetica") +
+  theme(strip.text.x = element_blank()) + labs(x ="Response variability in global change studies (lnVR)", y = "") + theme(axis.text.x = element_text(size = 10.5, colour = "black"),
+                                         axis.text.y = element_text(size = 10.5, colour = "black"),
+                                         axis.title.x = element_text(size = 10.5, colour = "black", face = "bold"),
+                                         legend.text = element_text(size=10.5),
+                                         legend.title = element_text(size=10.5),
+                                         legend.key.height = unit(0.5,"in"),legend.position = "none") +
+  labs(title = "(A)") 
+  # theme(#legend.position = "top",
+  #                       #legend.direction = "horizontal",
+  #                       legend.text = element_text(size=10),
+  #                       legend.title = element_text(size=10))
+
+png(filename = "./Figures/firepower_plot_VR.png", width = 6, height = 6, units = "in", type = "windows", res = 400)
+firepower_plot_VR 
+dev.off()
+
+
+
+# layout for lnCVR and lnVR
+firepower_plot_CVR_VR <- ggarrange(firepower_plot_VR, firepower_plot_CVR , heights = c(5,5), widths = c(4.3,5), nrow = 1, ncol = 2, align = "h")
+
+png(filename = "./Figures/firepower_plot_CVR_VR.png", width = 10, height = 6, units = "in", type = "windows", res = 400)
+firepower_plot_CVR_VR
+dev.off()
+```
+
+
+
+
+#### figure_4B
+```{r}
+#load data for figure_4B
+power_firepower_CVR <- read.csv(file = "data/figure_4B(lnCVR).csv", header = TRUE)
+
+firepower_plot_CVR <- ggplot(data = power_firepower_CVR) +
+  geom_tile(aes(
+    x = reorder(effect,number), #### I added number, without number, the order of effect is very strange
+    y = reorder(stressor_CVR,es),
+    fill = power
+  )) +
+  theme(aspect.ratio = 0.3) +
+  scale_fill_gradient2(
+    name = "Power",
+    low = "#56B4E9",
+    mid = "white",
+    high = "#CC79A7",
+    midpoint = 0.5,
+    limits = c(0,1),
+    guide = "colourbar",
+  ) + 
+  facet_grid( ~ es_cat, scale = 'free_x', space = "free_x") +
+  theme_tufte(base_family = "Helvetica") +
+  theme(strip.text.x = element_blank()) + labs(x ="Response variability in global change studies (lnCVR)", y = "") + theme(axis.text.x = element_text(size = 10.5, colour = "black"),
+                                         axis.text.y = element_text(size = 10.5, colour = "black"),
+                                         axis.title.x = element_text(size = 10.5, colour = "black", face = "bold"),
+                                         legend.text = element_text(size=10.5),
+                                         legend.title = element_text(size=10.5),
+                                         #legend.key.width = ,
+                                         legend.key.height = unit(0.5,"in")#,legend.position = "none"
+                                         ) +
+  labs(title = "(B)")
+
+
+
+png(filename = "./Figures/firepower_plot_CVR.png", width = 6, height = 6, units = "in", type = "windows", res = 400)
+firepower_plot_CVR 
+dev.off()
+```
+
+
+
+
+
+
+### Type S heatmaps for lnRR*, SMD and SMDH
+We used heatmaps to show Type S error of lnRR*, SMD and SMDH. Howerver, current version's layout is not good and it took a lot of space
+
+#### figure_6A
+```{r}
+#load data for figure_6A
+power_firepower_RR <- read.csv(file = "data/figure_6A(lnRR_star).csv", header = TRUE)
+
+firepower_plot.typeS_RR <- ggplot(data = power_firepower_RR) +
+  geom_tile(aes(x = reorder(effect,number), y = reorder(stressor_RR,es), fill = power)) +
+  theme(aspect.R.Satio = 0.3) +
+  scale_fill_gradient2(
+    name = "Type S error",
+    low = "#009E73",
+    mid = "#0072B2",
+    high = "yellow",
+    midpoint = 0.5,
+    limits = c(0,1),
+    guide = "colourbar"
+  ) + 
+  facet_grid( ~ es_cat, scale = 'free_x', space = "free_x") +
+  theme_tufte(base_family = "Helvetica") +
+  theme(strip.text.x = element_blank()) +  labs(x ="Response magnitude in global change studies (lnRR*)", y = "") + theme(axis.text.x = element_text(size = 12, colour = "black"),
+                                         axis.text.y = element_text(size = 10.5, colour = "black"),
+                                         axis.title.x = element_text(size = 12, colour = "black", face = "bold"),
+                                         legend.text = element_text(size=10.5),
+                                         legend.title = element_text(size=10.5),
+                                         #legend.key.width = ,
+                                         legend.key.height = unit(0.5,"in"))
+
+
+
+png(filename = "./Figures/firepower_plot.typeS_RR.png", width = 10, height = 8, units = "in", type = "windows", res = 400)
+firepower_plot.typeS_RR 
+dev.off()
+```
+
+
+#### figure_6B
+```{r}
+##load data for figure_6B of SMD
+power_firepower_SMD <- read.csv(file = "data/figure_6B(SMD).csv", header = TRUE)
+
+firepower_plot.typeS_SMD <- ggplot(data = power_firepower_SMD) +
+  geom_tile(aes(x = reorder(effect,number), y = reorder(stressor_SMD,es),fill = power)) +
+  theme(aspect.R.Satio = 0.3) +
+  scale_fill_gradient2(
+    name = "Type S error",
+    low = "#009E73",
+    mid = "#0072B2",
+    high = "yellow",
+    midpoint = 0.5,
+    limits = c(0,1),
+    guide = "colourbar"
+  ) + 
+  facet_grid( ~ es_cat, scale = 'free_x', space = "free_x") +
+  theme_tufte(base_family = "Helvetica") +
+  theme(strip.text.x = element_blank()) + labs(x ="Response magnitude in global change studies (SMD)", y = "") + theme(axis.text.x = element_text(size = 12, colour = "black"),
+                                         axis.text.y = element_text(size = 14, colour = "black"),
+                                         axis.title.x = element_text(size = 15, colour = "black", face = "bold"),
+                                         legend.text = element_text(size=14),
+                                         legend.title = element_text(size=14),
+                                         #legend.key.width = ,
+                                         legend.key.height = unit(0.5,"in"), legend.position = "none")
+
+
+
+png(filename = "./Figures/firepower_plot.typeS_SMD.png", width = 8, height = 6, units = "in", type = "windows", res = 400)
+firepower_plot.typeS_SMD 
+dev.off()
+
+
+##load data for figure_6B of SMDH
+power_firepower_SMDH <- read.csv(file = "data/figure_6B(SMDH).csv", header = TRUE)
+
+firepower_plot.typeS_SMDH <- ggplot(data = power_firepower_SMDH) +
+  geom_tile(aes(x = reorder(effect,number), y = reorder(stressor_SMDH,es),fill = power)) +
+  theme(aspect.R.Satio = 0.3) +
+  scale_fill_gradient2(
+    name = "Type S error",
+    low = "#009E73",
+    mid = "#0072B2",
+    high = "yellow",
+    midpoint = 0.5,
+    limits = c(0,1),
+    guide = "colourbar"
+  ) + 
+  facet_grid( ~ es_cat, scale = 'free_x', space = "free_x") +
+  theme_tufte(base_family = "Helvetica") +
+  theme(strip.text.x = element_blank()) + labs(x ="Response magnitude in global change studies (SMDH)", y = "") + theme(axis.text.x = element_text(size = 12, colour = "black"),
+                                         axis.text.y = element_text(size = 14, colour = "black"),
+                                         axis.title.x = element_text(size = 15, colour = "black", face = "bold"),
+                                         legend.text = element_text(size=14),
+                                         legend.title = element_text(size=14),
+                                         #legend.key.width = ,
+                                         legend.key.height = unit(0.5,"in")) 
+
+
+
+png(filename = "./Figures/firepower_plot.typeS_SMDH.png", width = 8, height = 6, units = "in", type = "windows", res = 400)
+firepower_plot.typeS_SMDH 
+dev.off()
+
+
+
+
+# layout for SMD and SMDH
+firepower_plot.typeS_SMD_SMDH <- ggarrange(firepower_plot.typeS_SMD, firepower_plot.typeS_SMDH, heights = c(5,5), widths = c(4.3,5), nrow = 1, ncol = 2, align = "h")
+
+png(filename = "./Figures/firepower_plot.typeS_SMD_SMDH.png", width = 16, height = 9, units = "in", type = "windows", res = 400)
+firepower_plot.typeS_SMD_SMDH
+dev.off()
+
+
+```
+
+
+
+#### figure_8A
+```{r}
+#load data for figure_8A
+power_firepower_VR <- read.csv(file = "data/figure_8A(lnVR).csv", header = TRUE)
+
+firepower_plot.typeS_VR <- ggplot(data = power_firepower_VR) +
+  geom_tile(aes(
+    x = reorder(effect,number), #### I added number, without number, the order of effect is very strange
+    y = reorder(stressor_VR,es),
+    fill = power
+  )) +
+  theme(aspect.R.Satio = 0.3) +
+  scale_fill_gradient2(
+    name = "Type S error",
+    low = "#009E73",
+    mid = "#0072B2",
+    high = "yellow",
+    midpoint = 0.5,
+    limits = c(0,1),
+    guide = "colourbar"
+  ) + 
+  facet_grid( ~ es_cat, scale = 'free_x', space = "free_x") +
+  theme_tufte(base_family = "Helvetica") +
+  theme(strip.text.x = element_blank()) + labs(x ="Response variability in global change studies (lnVR)", y = "") + theme(axis.text.x = element_text(size = 10.5, colour = "black"),
+                                         axis.text.y = element_text(size = 10.5, colour = "black"),
+                                         axis.title.x = element_text(size = 10.5, colour = "black", face = "bold"),
+                                         legend.text = element_text(size=10.5),
+                                         legend.title = element_text(size=10.5),
+                                         #legend.key.width = ,
+                                         legend.key.height = unit(0.5,"in"),legend.position = "none") + labs(title = "(A)")
+  
+
+
+png(filename = "./Figures/firepower_plot.typeS_VR.png", width = 6, height = 6, units = "in", type = "windows", res = 400)
+firepower_plot.typeS_VR 
+dev.off()
+
+
+
+# layout for lnVR and lnCVR
+firepower_plot.typeS_CVR_VR <- ggarrange(firepower_plot.typeS_VR, firepower_plot.typeS_CVR , heights = c(5,5), widths = c(4.3,5), nrow = 1, ncol = 2, align = "h")
+
+png(filename = "./Figures/firepower_plot.typeS_CVR_VR.png", width = 10, height = 6, units = "in", type = "windows", res = 400)
+firepower_plot.typeS_CVR_VR
+dev.off()
+```
+
+
+
+
+#### figure_8B
+```{r}
+#load data for figure_8B
+power_firepower_CVR <- read.csv(file = "data/figure_8B(lnCVR).csv", header = TRUE)
+
+firepower_plot.typeS_CVR <- ggplot(data = power_firepower_CVR) +
+  geom_tile(aes(
+    x = reorder(effect,number), #### I added number, without number, the order of effect is very strange
+    y = reorder(stressor_CVR,es),
+    fill = power
+  )) +
+  theme(aspect.R.Satio = 0.3) +
+  scale_fill_gradient2(
+    name = "Type S error",
+    low = "#009E73",
+    mid = "#0072B2",
+    high = "yellow",
+    midpoint = 0.5,
+    limits = c(0,1),
+    guide = "colourbar"
+  ) + 
+  facet_grid( ~ es_cat, scale = 'free_x', space = "free_x") +
+  theme_tufte(base_family = "Helvetica") +
+  theme(strip.text.x = element_blank()) + labs(x ="Response variability in global change studies (lnCVR)", y = "") + theme(axis.text.x = element_text(size = 10.5, colour = "black"),
+                                         axis.text.y = element_text(size = 10.5, colour = "black"),
+                                         axis.title.x = element_text(size = 10.5, colour = "black", face = "bold"),
+                                         legend.text = element_text(size=10.5),
+                                         legend.title = element_text(size=10.5),
+                                         #legend.key.width = ,
+                                         legend.key.height = unit(0.5,"in")) + labs(title = "(B)")
+
+
+
+png(filename = "./Figures/firepower_plot.typeS_CVR.png", width = 6, height = 6, units = "in", type = "windows", res = 400)
+firepower_plot.typeS_CVR 
+dev.off()
+```
+
+
+
+
+
+
+
+### Type M heatmaps for lnRR*, SMD and SMDH
+We used heatmaps to show Type M error of lnRR*, SMD and SMDH. Howerver, current version's layout is not good and it took a lot of space
+
+#### figure_5A
+```{r}
+##load data for figure_5A
+power_firepower_RR <- read.csv(file = "data/figure_5A(lnRR_star).csv", header = TRUE)
+
+firepower_plot.typeM_RR <- ggplot(data = power_firepower_RR) +
+  geom_tile(aes(x = reorder(effect,number), y = reorder(stressor_RR,es), fill = power)) +
+  theme(aspect.R.Matio = 0.3) +
+  scale_fill_gradient2(
+    name = "Type M error",
+    low = "#E69F00",
+    mid = "white",
+    high = "purple",
+    midpoint = 13,
+    limits = c(0,26),
+    guide = "colourbar"
+  ) + 
+  facet_grid( ~ es_cat, scale = 'free_x', space = "free_x") +
+  theme_tufte(base_family = "Helvetica") +
+  theme(strip.text.x = element_blank()) +  labs(x ="Response magnitude in global change studies (lnRR*)", y = "") + theme(axis.text.x = element_text(size = 10.5, colour = "black"),
+                                         axis.text.y = element_text(size = 10.5, colour = "black"),
+                                         axis.title.x = element_text(size = 12, colour = "black", face = "bold"),
+                                         legend.text = element_text(size=10.5),
+                                         legend.title = element_text(size=10.5),
+                                         #legend.key.width = ,
+                                         legend.key.height = unit(0.5,"in"))
+
+
+
+png(filename = "./Figures/firepower_plot.typeM_RR.png", width = 10, height = 8, units = "in", type = "windows", res = 400)
+firepower_plot.typeM_RR 
+dev.off()
+```
+
+
+#### figure_5B
+```{r}
+##load data for figure_5B of SMD
+power_firepower_SMD <- read.csv(file = "data/figure_5B(SMD).csv", header = TRUE)
+
+firepower_plot.typeM_SMD <- ggplot(data = power_firepower_SMD) +
+  geom_tile(aes(x = reorder(effect,number), y = reorder(stressor_SMD,es),fill = power)) +
+  theme(aspect.R.Matio = 0.3) +
+  scale_fill_gradient2(
+   name = "Type M error",
+    low = "#E69F00",
+    mid = "white",
+    high = "purple",
+    midpoint = 13,
+    limits = c(0,26),
+    guide = "colourbar"
+  ) + 
+  facet_grid( ~ es_cat, scale = 'free_x', space = "free_x") +
+  theme_tufte(base_family = "Helvetica") +
+  theme(strip.text.x = element_blank()) + labs(x ="Response magnitude in global change studies (SMD)", y = "") + theme(axis.text.x = element_text(size = 12, colour = "black"),
+                                         axis.text.y = element_text(size = 14, colour = "black"),
+                                         axis.title.x = element_text(size = 15, colour = "black", face = "bold"),
+                                         legend.text = element_text(size=14),
+                                         legend.title = element_text(size=14),
+                                         #legend.key.width = ,
+                                         legend.key.height = unit(0.5,"in"), legend.position = "none")
+
+
+
+png(filename = "./Figures/firepower_plot.typeM_SMD.png", width = 8, height = 6, units = "in", type = "windows", res = 400)
+firepower_plot.typeM_SMD 
+dev.off()
+
+
+
+##load data for figure_5B of SMDH
+power_firepower_SMDH <- read.csv(file = "data/figure_5B(SMDH).csv", header = TRUE)
+
+firepower_plot.typeM_SMDH <- ggplot(data = power_firepower_SMDH) +
+  geom_tile(aes(x = reorder(effect,number), y = reorder(stressor_SMDH,es),fill = power)) +
+  theme(aspect.R.Matio = 0.3) +
+  scale_fill_gradient2(
+    name = "Type M error",
+    low = "#E69F00",
+    mid = "white",
+    high = "purple",
+    midpoint = 13,
+    limits = c(0,26),
+    guide = "colourbar"
+  ) + 
+  facet_grid( ~ es_cat, scale = 'free_x', space = "free_x") +
+  theme_tufte(base_family = "Helvetica") +
+  theme(strip.text.x = element_blank()) + labs(x ="Response magnitude in global change studies (SMDH)", y = "") + theme(axis.text.x = element_text(size = 12, colour = "black"),
+                                         axis.text.y = element_text(size = 14, colour = "black"),
+                                         axis.title.x = element_text(size = 15, colour = "black", face = "bold"),
+                                         legend.text = element_text(size=14),
+                                         legend.title = element_text(size=14),
+                                         #legend.key.width = ,
+                                         legend.key.height = unit(0.5,"in")) 
+
+
+
+png(filename = "./Figures/firepower_plot.typeM_SMDH.png", width = 8, height = 6, units = "in", type = "windows", res = 400)
+firepower_plot.typeM_SMDH 
+dev.off()
+
+
+
+
+# layout for SMD and SMDH
+firepower_plot.typeM_SMD_SMDH <- ggarrange(firepower_plot.typeM_SMD, firepower_plot.typeM_SMDH, heights = c(5,5), widths = c(4.3,5), nrow = 1, ncol = 2, align = "h")
+
+png(filename = "./Figures/firepower_plot.typeM_SMD_SMDH.png", width = 16, height = 9, units = "in", type = "windows", res = 400)
+firepower_plot.typeM_SMD_SMDH
+dev.off()
+```
+
+
+#### figure_7A
+```{r}
+##load data for figure_7A
+power_firepower_VR <- read.csv(file = "data/figure_7A(lnVR).csv", header = TRUE)
+
+firepower_plot.typeM_VR <- ggplot(data = power_firepower_VR) +
+  geom_tile(aes(
+    x = reorder(effect,number), #### I added number, without number, the order of effect is very strange
+    y = reorder(stressor_VR,es),
+    fill = power
+  )) +
+  theme(aspect.R.Matio = 0.3) +
+  scale_fill_gradient2(
+    name = "Type M error",
+    low = "#E69F00",
+    mid = "white",
+    high = "purple",
+    midpoint = 13,
+    limits = c(0,26),
+    guide = "colourbar"
+  ) + 
+  facet_grid( ~ es_cat, scale = 'free_x', space = "free_x") +
+  theme_tufte(base_family = "Helvetica") +
+  theme(strip.text.x = element_blank()) + labs(x ="Response variability in global chang studies (lnVR)", y = "") + theme(axis.text.x = element_text(size = 10.5, colour = "black"),
+                                         axis.text.y = element_text(size = 10.5, colour = "black"),
+                                         axis.title.x = element_text(size = 10.5, colour = "black", face = "bold"),
+                                         legend.text = element_text(size=10.5),
+                                         legend.title = element_text(size=10.5),
+                                         #legend.key.width = ,
+                                         legend.key.height = unit(0.5,"in"), legend.position = "none") + labs(title = "(A)")
+  
+
+
+png(filename = "./Figures/firepower_plot.typeM_VR.png", width = 6, height = 6, units = "in", type = "windows", res = 400)
+firepower_plot.typeM_VR 
+dev.off()
+
+
+
+# layout for lnVR and lnCVR
+firepower_plot.typeM_CVR_VR <- ggarrange(firepower_plot.typeM_VR, firepower_plot.typeM_CVR , heights = c(5,5), widths = c(4.3,5), nrow = 1, ncol = 2, align = "h")
+
+png(filename = "./Figures/firepower_plot.typeM_CVR_VR.png", width = 10, height = 6, units = "in", type = "windows", res = 400)
+firepower_plot.typeM_CVR_VR
+dev.off()
+```
+
+
+
+
+#### figure_7B
+```{r}
+##load data for figure_7B
+power_firepower_CVR <- read.csv(file = "data/figure_7B(lnCVR).csv", header = TRUE)
+
+firepower_plot.typeM_CVR <- ggplot(data = power_firepower_CVR) +
+  geom_tile(aes(
+    x = reorder(effect,number), #### I added number, without number, the order of effect is very strange
+    y = reorder(stressor_CVR,es),
+    fill = power
+  )) +
+  theme(aspect.R.Matio = 0.3) +
+  scale_fill_gradient2(
+    name = "Type M error",
+    low = "#E69F00",
+    mid = "white",
+    high = "purple",
+    midpoint = 13,
+    limits = c(0,26),
+    guide = "colourbar"
+  ) + 
+  facet_grid( ~ es_cat, scale = 'free_x', space = "free_x") +
+  theme_tufte(base_family = "Helvetica") +
+  theme(strip.text.x = element_blank()) + labs(x ="Response variability in global change studies (lnCVR)", y = "") + theme(axis.text.x = element_text(size = 10.5, colour = "black"),
+                                         axis.text.y = element_text(size = 10.5, colour = "black"),
+                                         axis.title.x = element_text(size = 10.5, colour = "black", face = "bold"),
+                                         legend.text = element_text(size=10.5),
+                                         legend.title = element_text(size=10.5),
+                                         #legend.key.width = ,
+                                         legend.key.height = unit(0.5,"in")) + labs(title = "(B)")
+
+
+
+png(filename = "./Figures/firepower_plot.typeM_CVR.png", width = 6, height = 6, units = "in", type = "windows", res = 400)
+firepower_plot.typeM_CVR 
+dev.off()
+```
+
+
+
+
+
+
+
+
