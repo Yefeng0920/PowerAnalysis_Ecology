@@ -27,4 +27,4 @@ we added three additional analyses which have not been included in our paper but
 30 lnRR* datasets, 12 lnRR datasets, 12 SMD datasets, 12 SMDH datasets, 12 lnCVR datasets, 12 lnVR datasets
 
 # Figures folder contains:
-Figures 1 - 6 used ini the main text, funnel plots and model residuals in the online supplementary materials
+Figures 1 - 6  reported in the main text; funnel plots and model residuals in the online supplementary materials
