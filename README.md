@@ -1,7 +1,7 @@
 # Low statistical power and overestimated anthropogenic impacts, exacerbated by publication bias, dominate field studies in global change biology
 
 # Citation
-Yefeng Yang, Helmut Hillebrand, Malgorzata Lagisz1, Ian Cleasby, Shinichi Nakagawa. Low statistical power and overestimated anthropogenic impacts, exacerbated by publication bias, dominate field studies in global change biolog. Global Change Biology, in revision 2021.
+Yefeng Yang, Helmut Hillebrand, Malgorzata Lagisz1, Ian Cleasby, Shinichi Nakagawa. *Low statistical power and overestimated anthropogenic impacts, exacerbated by publication bias, dominate field studies in global change biolog*. Global Change Biology, in revision 2021.
 
 # How to use
 This repository houses the code used to reproduce the models, Figures, and Tables in the paper of 'Low statistical power and overestimated anthropogenic impacts, exacerbated by publication bias, dominate field studies in global change biology'.
