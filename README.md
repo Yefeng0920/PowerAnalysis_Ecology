@@ -21,7 +21,7 @@ we used the ‘true’ effects to calculate statistical power, Type M / S errors
 We statistically aggregated power, Type M / S errors across different meta-analyses (by doing so, we can obtain an estimate to represent the overall magnitude of power, Type M / S errors; section 2.5.2). Also, we conducted a secondary synthesis of the overall means (which were obtained from the first step meta-analyses) across different meta-analyses (i.e., a second-order meta-analysis, or meta-meta-analysis; section 2.6). We termed the step three as “between-meta-analysis modelling”.
 
 ### Additional analyses
-we added three additional analyses which have not been included in our paper but have implications for future studies. They are: (i) 'stressor specific' results, which are the additional analysis required by one of Referee, (ii) the empirically-derived effect size interpretation guidelines in global change studies, and (3) false-positive report probability (FPRP) in global change studies. One can easily update our results if one has a “bigger” dataset. 
+We added three additional analyses which have not been included in our paper but have implications for future studies. They are: (i) 'stressor specific' results, which are the additional analysis required by one of Referee, (ii) the empirically-derived effect size interpretation guidelines in global change studies, and (3) false-positive report probability (FPRP) in global change studies. One can easily update our results if one has a “bigger” dataset. 
 
 # data folder contains:
 30 lnRR* datasets, 12 lnRR datasets, 12 SMD datasets, 12 SMDH datasets, 12 lnCVR datasets, 12 lnVR datasets
