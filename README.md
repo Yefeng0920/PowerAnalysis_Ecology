@@ -9,7 +9,7 @@ This repository houses the code used to reproduce the models, Figures, and Table
 To run the analysis and plot the graphs provided in the paper, use: 
 #### PowerAnalysis_Global_Change_Bio.Rmd
 
-The code has detailed annotations for our analysis pipelines. Briefly, the code includes #a three-step modelling procedure#.
+The code has detailed annotations for our analysis pipelines. Briefly, the code includes *a three-step modelling procedure*.
 
 ### In the first step
 We used multilevel meta-analytic approaches to estimate ‘true’ effects for each meta-analysis included in our dataset (for each of the effect sizes: lnRR*, lnRR, SMD, SMDH and their corrected versions). Of note, lnRR, SMD, SMDH quantify the response magnitude of ecological process to environmental stressor (mean difference between a stressor group and a control group).
