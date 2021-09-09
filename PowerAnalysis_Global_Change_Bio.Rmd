@@ -1,9 +1,8 @@
 ---
-title: "Power analysis Helmut's Nature Ecol Evol paper"
-author: "Yefeng"
-date: "2020/9/21"
+title: "The script for the paper 'Low statistical power and overestimated anthropogenic impacts, exacerbated by publication bias, dominate field studies in global change biology'"
+author: "Yefeng Yang | Helmut Hillebrand| Malgorzata Lagisz1 | Ian Cleasby | Shinichi Nakagawa"
+date: "2021/9/27"
 output: html_document
-subtitle: "check for Shinichi"
 ---
 
 
@@ -12239,32 +12238,6 @@ confint(MMA_power.R.M2_VR.approach2) %>% exp() - 0.025
 
 
 
-
-
-
-
-
-
-# Figure S1
-```{r}
-
-
-simulated_figS1_A <- plot_p_M_S(A = 0.1, s = 0.5, alpha = 0.05, df = Inf, n.sims = 1000) + labs(title = 'A', x = 'Replication (mean = 0.1, SD = 0.5)')
-simulated_figS1_B <- plot_p_M_S(A = 2, s = 0.5, alpha = 0.05, df = Inf, n.sims = 1000) + labs(title = 'B', x = 'Replication (mean = 2, SD = 0.5)')
-
-
-png(filename = "./Figures/simulated_figS1.png", width = 5, height = 10, units = "in", type = "windows", res = 400)
-simulated_figS1_A + simulated_figS1_B + patchwork::plot_layout(nrow = 2 , ncol = 1)
-dev.off()
-
-# check the power, Type M and S errors for a normal distribution with meann 0.1 (or 2), and a variance of 0.5 - SMD assumed
-retrodesign::retrodesign(A = 0.1, s = 0.5)
-retrodesign::retrodesign(A = 2, s = 0.5)
-```
-
-
-
-
 ### The calculations of 'sample size'
 This section is used to calculate: (i) replicates of manipulative experiments and non-manipulative observations, and (ii) the number of sample sizes and studies for each type of effect size 
 
@@ -18742,23 +18715,23 @@ summary(MMA_power.F.M_adjusted_SMD.stressor2)$coefficients %>% exp() - 0.025
 #--------------------- lnrr ---------------------#
 
 # include stressor category as a fixed effect 
-MMA_power.F.M_lnrR.Mtressor <- lmer(power.F.M_lnrr ~ 1 + I(stressor_lnrr) -1 + (1 | studyID_lnrr), data = individual_est_lnrr)
-summary(MMA_power.F.M_lnrR.Mtressor)$coefficients
+MMA_power.F.M_lnrr.stressor <- lmer(power.F.M_lnrr ~ 1 + I(stressor_lnrr) -1 + (1 | studyID_lnrr), data = individual_est_lnrr)
+summary(MMA_power.F.M_lnrr.stressor)$coefficients
 # log
-MMA_power.F.M_lnrR.Mtressor2 <- lmer(log(power.F.M_lnrr+ 0.025) ~ 1 + I(stressor_lnrr) -1 + (1 | studyID_lnrr), data = individual_est_lnrr)
+MMA_power.F.M_lnrr.stressor2 <- lmer(log(power.F.M_lnrr+ 0.025) ~ 1 + I(stressor_lnrr) -1 + (1 | studyID_lnrr), data = individual_est_lnrr)
 # this is median
-summary(MMA_power.F.M_lnrR.Mtressor2)$coefficients %>% exp() - 0.025
+summary(MMA_power.F.M_lnrr.stressor2)$coefficients %>% exp() - 0.025
 
 
 #---------------------adjusted_lnrr ---------------------#
 
 # include stressor category as a fixed effect 
-MMA_power.F.M_adjusted_lnrR.Mtressor <- lmer(power.F.M_adjusted_lnrr ~ 1 + I(stressor_adjusted_lnrr) -1 + (1 | studyID_adjusted_lnrr), data = individual_est_adjusted_lnrr)
-summary(MMA_power.F.M_adjusted_lnrR.Mtressor)$coefficients
+MMA_power.F.M_adjusted_lnrr.stressor <- lmer(power.F.M_adjusted_lnrr ~ 1 + I(stressor_adjusted_lnrr) -1 + (1 | studyID_adjusted_lnrr), data = individual_est_adjusted_lnrr)
+summary(MMA_power.F.M_adjusted_lnrr.stressor)$coefficients
 # log
-MMA_power.F.M_adjusted_lnrR.Mtressor2 <- lmer(log(power.F.M_adjusted_lnrr+ 0.025) ~ 1 + I(stressor_adjusted_lnrr) -1 + (1 | studyID_adjusted_lnrr), data = individual_est_adjusted_lnrr)
+MMA_power.F.M_adjusted_lnrr.stressor2 <- lmer(log(power.F.M_adjusted_lnrr+ 0.025) ~ 1 + I(stressor_adjusted_lnrr) -1 + (1 | studyID_adjusted_lnrr), data = individual_est_adjusted_lnrr)
 # this is median
-summary(MMA_power.F.M_adjusted_lnrR.Mtressor2)$coefficients %>% exp() - 0.025
+summary(MMA_power.F.M_adjusted_lnrr.stressor2)$coefficients %>% exp() - 0.025
 
 
 
@@ -18789,47 +18762,47 @@ summary(MMA_power.F.M_adjusted_SMDH.stressor2)$coefficients %>% exp() - 0.025
 #--------------------- lnRR* ---------------------#
 
 # include stressor category as a fixed effect 
-MMA_power.F.M_RR.Mtressor <- lmer(power.F.M_RR ~ 1 + I(stressor_RR) -1 + (1 | studyID_RR), data = individual_est_RR)
-summary(MMA_power.F.M_RR.Mtressor)$coefficients
+MMA_power.F.M_RR.stressor <- lmer(power.F.M_RR ~ 1 + I(stressor_RR) -1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.F.M_RR.stressor)$coefficients
 # log
-MMA_power.F.M_RR.Mtressor2 <- lmer(log(power.F.M_RR+ 0.025) ~ 1 + I(stressor_RR) -1 + (1 | studyID_RR), data = individual_est_RR)
+MMA_power.F.M_RR.stressor2 <- lmer(log(power.F.M_RR+ 0.025) ~ 1 + I(stressor_RR) -1 + (1 | studyID_RR), data = individual_est_RR)
 # this is median
-summary(MMA_power.F.M_RR.Mtressor2)$coefficients %>% exp() - 0.025
+summary(MMA_power.F.M_RR.stressor2)$coefficients %>% exp() - 0.025
 
 
 #---------------------adjusted_lnRR* ---------------------#
 
 # include stressor category as a fixed effect 
-MMA_power.F.M_adjusted_RR.Mtressor <- lmer(power.F.M_adjusted_RR ~ 1 + I(stressor_adjusted_RR) -1 + (1 | studyID_adjusted_RR), data = individual_est_adjusted_RR)
-summary(MMA_power.F.M_adjusted_RR.Mtressor)$coefficients
+MMA_power.F.M_adjusted_RR.stressor <- lmer(power.F.M_adjusted_RR ~ 1 + I(stressor_adjusted_RR) -1 + (1 | studyID_adjusted_RR), data = individual_est_adjusted_RR)
+summary(MMA_power.F.M_adjusted_RR.stressor)$coefficients
 # log
-MMA_power.F.M_adjusted_RR.Mtressor2 <- lmer(log(power.F.M_adjusted_RR+ 0.025) ~ 1 + I(stressor_adjusted_RR) -1 + (1 | studyID_adjusted_RR), data = individual_est_adjusted_RR)
+MMA_power.F.M_adjusted_RR.stressor2 <- lmer(log(power.F.M_adjusted_RR+ 0.025) ~ 1 + I(stressor_adjusted_RR) -1 + (1 | studyID_adjusted_RR), data = individual_est_adjusted_RR)
 # this is median
-summary(MMA_power.F.M_adjusted_RR.Mtressor2)$coefficients %>% exp() - 0.025
+summary(MMA_power.F.M_adjusted_RR.stressor2)$coefficients %>% exp() - 0.025
 
 
 
 #--------------------- CVR ---------------------#
 
 # include stressor category as a fixed effect 
-MMA_power.F.M_CVR.Mtressor <- lmer(power.F.M_CVR ~ 1 + I(stressor_CVR) -1 + (1 | studyID_CVR), data = individual_est_CVR)
-summary(MMA_power.F.M_CVR.Mtressor)$coefficients
+MMA_power.F.M_CVR.stressor <- lmer(power.F.M_CVR ~ 1 + I(stressor_CVR) -1 + (1 | studyID_CVR), data = individual_est_CVR)
+summary(MMA_power.F.M_CVR.stressor)$coefficients
 # log
-MMA_power.F.M_CVR.Mtressor2 <- lmer(log(power.F.M_CVR+ 0.025) ~ 1 + I(stressor_CVR) -1 + (1 | studyID_CVR), data = individual_est_CVR)
+MMA_power.F.M_CVR.stressor2 <- lmer(log(power.F.M_CVR+ 0.025) ~ 1 + I(stressor_CVR) -1 + (1 | studyID_CVR), data = individual_est_CVR)
 # this is median
-summary(MMA_power.F.M_CVR.Mtressor2)$coefficients %>% exp() - 0.025
+summary(MMA_power.F.M_CVR.stressor2)$coefficients %>% exp() - 0.025
 
 
 
 #--------------------- VR ---------------------#
 
 # include stressor category as a fixed effect 
-MMA_power.F.M_VR.Mtressor <- lmer(power.F.M_VR ~ 1 + I(stressor_VR) -1 + (1 | studyID_VR), data = individual_est_VR)
-summary(MMA_power.F.M_VR.Mtressor)$coefficients
+MMA_power.F.M_VR.stressor <- lmer(power.F.M_VR ~ 1 + I(stressor_VR) -1 + (1 | studyID_VR), data = individual_est_VR)
+summary(MMA_power.F.M_VR.stressor)$coefficients
 # log
-MMA_power.F.M_VR.Mtressor2 <- lmer(log(power.F.M_VR+ 0.025) ~ 1 + I(stressor_VR) -1 + (1 | studyID_VR), data = individual_est_VR)
+MMA_power.F.M_VR.stressor2 <- lmer(log(power.F.M_VR+ 0.025) ~ 1 + I(stressor_VR) -1 + (1 | studyID_VR), data = individual_est_VR)
 # this is median
-summary(MMA_power.F.M_VR.Mtressor2)$coefficients %>% exp() - 0.025
+summary(MMA_power.F.M_VR.stressor2)$coefficients %>% exp() - 0.025
 
 
 
@@ -18865,23 +18838,23 @@ summary(MMA_power.R.M_adjusted_SMD.stressor2)$coefficients %>% exp() - 0.025
 #--------------------- lnrr ---------------------#
 
 # include stressor category as a fixed effect 
-MMA_power.R.M_lnrR.Mtressor <- lmer(power.R.M_lnrr ~ 1 + I(stressor_lnrr) -1 + (1 | studyID_lnrr), data = individual_est_lnrr)
-summary(MMA_power.R.M_lnrR.Mtressor)$coefficients
+MMA_power.R.M_lnrr.stressor <- lmer(power.R.M_lnrr ~ 1 + I(stressor_lnrr) -1 + (1 | studyID_lnrr), data = individual_est_lnrr)
+summary(MMA_power.R.M_lnrr.stressor)$coefficients
 # log
-MMA_power.R.M_lnrR.Mtressor2 <- lmer(log(power.R.M_lnrr+ 0.025) ~ 1 + I(stressor_lnrr) -1 + (1 | studyID_lnrr), data = individual_est_lnrr)
+MMA_power.R.M_lnrr.stressor2 <- lmer(log(power.R.M_lnrr+ 0.025) ~ 1 + I(stressor_lnrr) -1 + (1 | studyID_lnrr), data = individual_est_lnrr)
 # this is median
-summary(MMA_power.R.M_lnrR.Mtressor2)$coefficients %>% exp() - 0.025
+summary(MMA_power.R.M_lnrr.stressor2)$coefficients %>% exp() - 0.025
 
 
 #---------------------adjusted_lnrr ---------------------#
 
 # include stressor category as a fixed effect 
-MMA_power.R.M_adjusted_lnrR.Mtressor <- lmer(power.R.M_adjusted_lnrr ~ 1 + I(stressor_adjusted_lnrr) -1 + (1 | studyID_adjusted_lnrr), data = individual_est_adjusted_lnrr)
-summary(MMA_power.R.M_adjusted_lnrR.Mtressor)$coefficients
+MMA_power.R.M_adjusted_lnrr.stressor <- lmer(power.R.M_adjusted_lnrr ~ 1 + I(stressor_adjusted_lnrr) -1 + (1 | studyID_adjusted_lnrr), data = individual_est_adjusted_lnrr)
+summary(MMA_power.R.M_adjusted_lnrr.stressor)$coefficients
 # log
-MMA_power.R.M_adjusted_lnrR.Mtressor2 <- lmer(log(power.R.M_adjusted_lnrr+ 0.025) ~ 1 + I(stressor_adjusted_lnrr) -1 + (1 | studyID_adjusted_lnrr), data = individual_est_adjusted_lnrr)
+MMA_power.R.M_adjusted_lnrr.stressor2 <- lmer(log(power.R.M_adjusted_lnrr+ 0.025) ~ 1 + I(stressor_adjusted_lnrr) -1 + (1 | studyID_adjusted_lnrr), data = individual_est_adjusted_lnrr)
 # this is median
-summary(MMA_power.R.M_adjusted_lnrR.Mtressor2)$coefficients %>% exp() - 0.025
+summary(MMA_power.R.M_adjusted_lnrr.stressor2)$coefficients %>% exp() - 0.025
 
 
 
@@ -18912,50 +18885,49 @@ summary(MMA_power.R.M_adjusted_SMDH.stressor2)$coefficients %>% exp() - 0.025
 #--------------------- lnRR* ---------------------#
 
 # include stressor category as a fixed effect 
-MMA_power.R.M_RR.Mtressor <- lmer(power.R.M_RR ~ 1 + I(stressor_RR) -1 + (1 | studyID_RR), data = individual_est_RR)
-summary(MMA_power.R.M_RR.Mtressor)$coefficients
+MMA_power.R.M_RR.stressor <- lmer(power.R.M_RR ~ 1 + I(stressor_RR) -1 + (1 | studyID_RR), data = individual_est_RR)
+summary(MMA_power.R.M_RR.stressor)$coefficients
 # log
-MMA_power.R.M_RR.Mtressor2 <- lmer(log(power.R.M_RR+ 0.025) ~ 1 + I(stressor_RR) -1 + (1 | studyID_RR), data = individual_est_RR)
+MMA_power.R.M_RR.stressor2 <- lmer(log(power.R.M_RR+ 0.025) ~ 1 + I(stressor_RR) -1 + (1 | studyID_RR), data = individual_est_RR)
 # this is median
-summary(MMA_power.R.M_RR.Mtressor2)$coefficients %>% exp() - 0.025
+summary(MMA_power.R.M_RR.stressor2)$coefficients %>% exp() - 0.025
 
 
 #---------------------adjusted_lnRR* ---------------------#
 
 # include stressor category as a fixed effect 
-MMA_power.R.M_adjusted_RR.Mtressor <- lmer(power.R.M_adjusted_RR ~ 1 + I(stressor_adjusted_RR) -1 + (1 | studyID_adjusted_RR), data = individual_est_adjusted_RR)
-summary(MMA_power.R.M_adjusted_RR.Mtressor)$coefficients
+MMA_power.R.M_adjusted_RR.stressor <- lmer(power.R.M_adjusted_RR ~ 1 + I(stressor_adjusted_RR) -1 + (1 | studyID_adjusted_RR), data = individual_est_adjusted_RR)
+summary(MMA_power.R.M_adjusted_RR.stressor)$coefficients
 # log
-MMA_power.R.M_adjusted_RR.Mtressor2 <- lmer(log(power.R.M_adjusted_RR+ 0.025) ~ 1 + I(stressor_adjusted_RR) -1 + (1 | studyID_adjusted_RR), data = individual_est_adjusted_RR)
+MMA_power.R.M_adjusted_RR.stressor2 <- lmer(log(power.R.M_adjusted_RR+ 0.025) ~ 1 + I(stressor_adjusted_RR) -1 + (1 | studyID_adjusted_RR), data = individual_est_adjusted_RR)
 # this is median
-summary(MMA_power.R.M_adjusted_RR.Mtressor2)$coefficients %>% exp() - 0.025
+summary(MMA_power.R.M_adjusted_RR.stressor2)$coefficients %>% exp() - 0.025
 
 
 
 #--------------------- CVR ---------------------#
 
 # include stressor category as a fixed effect 
-MMA_power.R.M_CVR.Mtressor <- lmer(power.R.M_CVR ~ 1 + I(stressor_CVR) -1 + (1 | studyID_CVR), data = individual_est_CVR)
-summary(MMA_power.R.M_CVR.Mtressor)$coefficients
+MMA_power.R.M_CVR.stressor <- lmer(power.R.M_CVR ~ 1 + I(stressor_CVR) -1 + (1 | studyID_CVR), data = individual_est_CVR)
+summary(MMA_power.R.M_CVR.stressor)$coefficients
 # log
-MMA_power.R.M_CVR.Mtressor2 <- lmer(log(power.R.M_CVR+ 0.025) ~ 1 + I(stressor_CVR) -1 + (1 | studyID_CVR), data = individual_est_CVR)
+MMA_power.R.M_CVR.stressor2 <- lmer(log(power.R.M_CVR+ 0.025) ~ 1 + I(stressor_CVR) -1 + (1 | studyID_CVR), data = individual_est_CVR)
 # this is median
-summary(MMA_power.R.M_CVR.Mtressor2)$coefficients %>% exp() - 0.025
+summary(MMA_power.R.M_CVR.stressor2)$coefficients %>% exp() - 0.025
 
 
 
 #--------------------- VR ---------------------#
 
 # include stressor category as a fixed effect 
-MMA_power.R.M_VR.Mtressor <- lmer(power.R.M_VR ~ 1 + I(stressor_VR) -1 + (1 | studyID_VR), data = individual_est_VR)
-summary(MMA_power.R.M_VR.Mtressor)$coefficients
+MMA_power.R.M_VR.stressor <- lmer(power.R.M_VR ~ 1 + I(stressor_VR) -1 + (1 | studyID_VR), data = individual_est_VR)
+summary(MMA_power.R.M_VR.stressor)$coefficients
 # log
-MMA_power.R.M_VR.Mtressor2 <- lmer(log(power.R.M_VR+ 0.025) ~ 1 + I(stressor_VR) -1 + (1 | studyID_VR), data = individual_est_VR)
+MMA_power.R.M_VR.stressor2 <- lmer(log(power.R.M_VR+ 0.025) ~ 1 + I(stressor_VR) -1 + (1 | studyID_VR), data = individual_est_VR)
 # this is median
-summary(MMA_power.R.M_VR.Mtressor2)$coefficients %>% exp() - 0.025
+summary(MMA_power.R.M_VR.stressor2)$coefficients %>% exp() - 0.025
 
 ```
-
 
 
 
@@ -20237,133 +20209,27 @@ confint(MMA_power.F.M_RR.approach2) %>% exp()
 ```
 
 
-#
-
-
-
-
-
-
-
-
-### Section 3 - original version 
-three weighting schemes (i.e. WAAP, PET-PEESE, http://environmentalcomputing.net/meta-analysis/) to evaluate publication bias
-
-
+## Figure S1
 ```{r}
-#***************************************************************#
-#                          WAAP approach                        #
-#***************************************************************#
-# In our case, my understanding is we should call WAAP as random-effects-WAAP, because we do not want to use fixed effects model
-# Selecting adequately powered studies
-## We only use studies with power >80% or SE < 2.8
-WAAP_dat_m1_1_RR <- dat_m1_1 %>% subset(power_RR > 0.8)
-WAAP_dat_m1_1_CVR <- dat_m1_1 %>% subset(power_CVR > 0.8) # none data
-WAAP_dat_m1_1_VR <- dat_m1_1 %>% subset(power_VR > 0.8) # none data
-# Evaluating publication using adequately powered studies
-WAAP_m1_1_RR <- with(WAAP_dat_m1_1_RR, rma(yi = RR,
-                                         sei = VRR,
-                                         #mods = ~sqrt(VRR),
-                                         random = list(~1|Study, ~1|Unit_ID),
-                                         method = "REML",
-                                         test = "t"))
-
-WAAP_m1_1_RR2 <- with(WAAP_dat_m1_1_RR, rma(yi = RR,
-                                         sei = VRR,
-                                         mods = ~sqrt(VRR),
-                                         random = list(~1|Study, ~1|Unit_ID),
-                                         method = "REML",
-                                         test = "t"))
-#***************************************************************#
-#                       PET-PEESE approach                      #
-#***************************************************************#
-basically if the slope is not sig, use PET but if sig, move on to PEESE
-
-PET’s intercept when slope is not sig but PEEESE’s intercept if PET’s slope is sig
-
-
-# Get precision, i.e. 1/SE
-dat_m1_1$SE <- sqrt(dat_m1_1$vi) # note it is SE rather than variance (V), so we should use sqrt(V)
-# # PET model - specifing 1/se^2 as weights
-# PET.m1_1 <- lm(RR~SE, weights = (1/SE)**2,data=dat_m1_1) # This form (OLS) reverse the intercept and slope coefficient from WLS version. Therefore, intercept from WLS version is the slope from OLS version. So we should not remove intercept (i.e. -1)
-# summary(PET.m1_1) # intercept rather than slope is our expected estimate
-# 
-# # Or we can use two-step approach for PET
-# dat_m1_1$t <- dat_m1_1$RR/sqrt(dat_m1_1$VRR)
-# dat_m1_1$precision <- 1/sqrt(dat_m1_1$VRR)
-# # We got same results with the above
-# PET.m1_1_2 <- lm(t~precision, data=dat_m1_1)
-# 
-# 
-# 
-# # PET-PEESE model - quadratic model rather than linear model
-# PET_PEESE.m1_1 <- lm(RR~VRR, weights =(1/SE)**2,data=dat_m1_1)
-# summary(PET_PEESE.m1_1) 
-# Or we can use meta-regression with variances (i.e. SE^2) as moderator
-PET_PEESE.m1_0 <- rma(data = dat_m1_1, yi = yi, sei = vi, 
-                          #mods = ~SE, # using variance rather than SE
-                          random = list(~1|Study, ~1|Unit_ID),
-                          method = "REML")
-summary(PET_PEESE.m1_0)
-PET_PEESE.m1_1 <- rma(data = dat_m1_1, yi = yi, sei = vi, 
-                          mods = ~SE, # using variance rather than SE
-                          random = list(~1|Study, ~1|Unit_ID),
-                          method = "REML")
-summary(PET_PEESE.m1_1)
-PET_PEESE.m1_2 <- rma(data = dat_m1_1, yi = yi, sei = vi, 
-                          mods = ~ vi, # using variance rather than SE
-                          random = list(~1|Study, ~1|Unit_ID),
-                          method = "REML")
-summary(PET_PEESE.m1_2)
-# Note: I am not sure which approachs you want me to use to evaluate publication bias in this website: http://environmentalcomputing.net/meta-analysis/
-#   
-# Whatever, I used a regular model to evaluate publication, i.e. Egger regression test
-# #***************************************************************#
-#                      Egger regression test                    #
-#***************************************************************#
-# Egger_m1_1_RR <- with(dat_m1_1, rma(yi = RR,
-#                                          sei = VRR,
-#                                          mods = ~sqrt(VRR),
-#                                          random = list(~1|Study, ~1|Unit_ID),
-#                                          method = "REML",
-#                                          test = "t"))
-# 
-# summary(Egger_m1_1_RR) # Note that here we should look at slope, rather than intercept, which is a distinction from PET model
-# alternative model 
-alternative_model <- with(dat_m1_1, rma(yi = yi,
-                                         W = 1/vi,
-                                         sei = vi,
-                                         random = list(~1|Study, ~1|Unit_ID),
-                                         method = "REML"))
-summary(alternative_model) 
 
 
 
 
-# or we can do like this
-alternative_model2 <- with(dat_m1_1, rma(yi = yi,
-                                         W = 1/sqrt(vi),
-                                         sei = vi,
-                                         mods = vi,
-                                         random = list(~1|Study, ~1|Unit_ID),
-                                         method = "REML"))
+simulated_figS1_A <- plot_p_M_S(A = 0.1, s = 0.5, alpha = 0.05, df = Inf, n.sims = 1000) + labs(title = 'A - power = 5%, Type M = 12, Type S = 28% ', x = 'Replication (mean = 0.1, SD = 0.5)') +  annotate("rect", xmin = -Inf, ymin = -0.5*qt(1-0.05/2,df=10000), xmax = Inf, ymax = 0.5*qt(1-0.05/2,df=10000), fill = "green", alpha = 0.05)
 
 
 
+simulated_figS1_B <- plot_p_M_S(A = 2, s = 0.5, alpha = 0.05, df = Inf, n.sims = 1000) + labs(title = 'B - power = 98%, Type M = 1, Type S = 0%', x = 'Replication (mean = 2, SD = 0.5)') + annotate("rect", xmin = -Inf, ymin = -0.5*qt(1-0.05/2,df=10000), xmax = Inf, ymax = 0.5*qt(1-0.05/2,df=10000), fill = "green", alpha = 0.05)
 
-# my way
-alternative_model3 <- with(dat_m1_1, rma(yi = yi,
-                                         W = 1/sqrt(vi),
-                                         sei = vi,
-                                         mods = sqrt(vi),
-                                         random = list(~1|Study, ~1|Unit_ID),
-                                         method = "REML"))
 
+png(filename = "./Figures/simulated_figS1.png", width = 5, height = 10, units = "in", type = "windows", res = 400)
+simulated_figS1_A + simulated_figS1_B + patchwork::plot_layout(nrow = 2 , ncol = 1)
+dev.off()
+
+# check the power, Type M and S errors for a normal distribution with meann 0.1 (or 2), and a variance of 0.5 - SMD assumed
+retrodesign::retrodesign(A = 0.1, s = 0.5)
+retrodesign::retrodesign(A = 2, s = 0.5)
 ```
-
-
-
-
 
 
 
