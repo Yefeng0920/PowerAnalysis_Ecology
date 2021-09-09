@@ -7,7 +7,7 @@ Yefeng Yang, Helmut Hillebrand, Malgorzata Lagisz, Ian Cleasby, Shinichi Nakagaw
 This repository houses the code used to reproduce the models, Figures, and Tables in the paper of 'Low statistical power and overestimated anthropogenic impacts, exacerbated by publication bias, dominate field studies in global change biology'.
 
 To run the analysis and plot the graphs provided in the paper, use: 
-### PowerAnalysis_Global_Change_Bio.Rmd
+#### PowerAnalysis_Global_Change_Bio.Rmd
 
 The code has detailed annotations for our analysis pipelines. Briefly, the code includes #a three-step modelling procedure#.
 
